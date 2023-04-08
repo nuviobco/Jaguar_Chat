@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análisis de conversaciones</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-image: url("https://i.ibb.co/vmQBcNH/fondo-app.jpg"); /* URL de la imagen de fondo */
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center center;
+            font-family: sans-serif;
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 30px;
+            text-align: center;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 30px;
+        }
+        .bg-green {
+            background-color: #008000;
+        }
+        .border-green {
+            border: 1px solid #008000;
+        }
+        a {
+            color: #ffffff;
+            text-decoration: none;
+        }
+
+        .boton-amarillo {
+        display: inline-block;
+        background-color: yellow;
+        color: black;
+        text-decoration: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+        .boton-amarillo:hover {
+        background-color: #f1c40f;
+        color: white;
+    }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="https://i.ibb.co/sPPL3F2/jaguar3.png" alt="Logo de Jaguar Chat" width="200px">
+        <h1>Análisis de conversaciones</h1>
+        <div class="row">
+            <div class="col">
+                <div class="card bg-green text-white">
+                    <div class="card-header">
+                        Temas más consultados
+                    </div>
+                    <div class="card-body">
+                        <ul>
+                            {% for tema, conteo in temas_consultados %}
+                                <li>{{ tema }} ({{ conteo }})</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col">
+                <div class="card bg-green text-white">
+                    <div class="card-header">
+                        Palabras más utilizadas
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-dark table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Palabra</th>
+                                    <th>Cantidad de ocurrencias</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for palabra, conteo in palabras_contadas %}
+                                    <tr>
+                                        <td>{{ palabra }}</td>
+                                        <td>{{ conteo }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col">
+                <div class="card bg-green text-white">
+                    <div class="card-header">
+                        Horario de mayor actividad
+                    </div>
+                    <div class="card-body">
+                        <ul>
+                            {% for hora, conteo in horas_mayor_actividad %}
+                                <li>{{ hora }}:00 ({{ conteo }})</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col">
+                <div class="card bg-green text-white">
+                    <div class="card-header">
+                        Nivel de comprensión
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-dark table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Texto</th>
+                                    <th>Nivel de comprensión</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for resultado in nivel_comprension %}
+                                    <tr>
+                                        <td>{{ resultado.texto }}</td>
+                                        <td>{{ resultado.nivel_comprension }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col">
+                <div class="card bg-green text-white">
+                    <div class="card-header">
+                        Análisis de sentimientos
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-dark table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Texto</th>
+                                    <th>Puntaje de sentimiento</th>
+                                    <th>Etiqueta de sentimiento</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for resultado in sentimientos %}
+                                    <tr>
+                                        <td>{{ resultado.texto }}</td>
+                                        <td>{{ resultado.puntaje_sentimiento }}</td>
+                                        <td>{{ resultado.etiqueta_sentimiento }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <p class="mt-4"><a href="/historial">Ver historial de conversaciones</a></p>
+        <p><a href="/">Volver al inicio</a></p>
+        <a href="{{ url_for('enviar_analisis') }}" class="boton-amarillo">Enviar análisis por correo</a>
+    </div>
+</body>
+</html>
