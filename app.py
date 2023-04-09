@@ -19,7 +19,7 @@ from flask import Flask, request, session
 import json
 from datetime import datetime
 from flask import render_template, request
-from analisis import obtener_datos, analizar_temas_mas_consultados, contar_palabras, analizar_nivel_comprension, analizar_sentimientos, obtener_horario_mayor_actividad
+from utils.analisis import obtener_datos, analizar_temas_mas_consultados, contar_palabras, analizar_nivel_comprension, analizar_sentimientos, obtener_horario_mayor_actividad
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.interval import IntervalTrigger
 from datetime import datetime, timedelta
