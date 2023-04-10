@@ -312,7 +312,7 @@ tokens = nltk.word_tokenize(texto)
 
 print(tokens)
 
-openai.api_key = "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"
+openai.api_key = "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"
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
