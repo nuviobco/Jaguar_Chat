@@ -1,4 +1,4 @@
-FROM python:3.8-slim
+FROM python:3.8
 
 # Establecer un directorio de trabajo
 WORKDIR /app
@@ -15,10 +15,10 @@ RUN python -m venv /opt/venv && chmod +x /opt/venv/bin/activate && . /opt/venv/b
 COPY . .
 
 # Establecer la variable de entorno para el puerto
-ENV PORT 8000
+ENV PORT 5000
 
 # Exponer el puerto en el contenedor
-EXPOSE 8000
+EXPOSE 5000
 
 # Ejecutar el comando para iniciar la aplicación
 CMD ["python", "app.py"]
