@@ -1,13 +1,13 @@
 FROM python:3.8
 
 # Establecer un directorio de trabajo
-WORKDIR /jaguarchat
+WORKDIR /app
 
 # Copiar el archivo requirements.txt al contenedor
 COPY requirements.txt .
 
 # Instalar las dependencias del proyecto
-RUN python -m venv /opt/venv && chmod +x /opt/venv/bin/activate && . /opt/venv/bin/activate && pip install --upgrade pip && pip install -r requirements.txt
+RUN pip install --upgrade pip && pip install -r requirements.txt
 
 # Copiar el resto del código del proyecto al contenedor
 COPY . .
