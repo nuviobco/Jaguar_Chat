@@ -35,7 +35,6 @@ textstat==0.7.3
 tqdm==4.65.0
 urllib3==1.26.15
 virtualenv==20.21.0
-Werkzeug>=2.2.2
 WTForms
 yarl==1.8.2
 
