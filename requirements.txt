@@ -22,7 +22,7 @@ joblib==1.2.0
 MarkupSafe==2.1.2
 multidict==6.0.4
 nltk==3.8.1
-oauthlib==3.1.2
+oauthlib
 openai==0.27.2
 platformdirs==3.1.1
 pypiwin32==223
