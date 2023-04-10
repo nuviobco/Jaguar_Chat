@@ -316,7 +316,7 @@ print(tokens)
 
 import openai
 
-openai.api_key = "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"
+openai.api_key = "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"
 print("API Key:", api_key)
 
 
