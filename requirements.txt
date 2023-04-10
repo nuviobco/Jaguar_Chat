@@ -26,7 +26,6 @@ oauthlib
 openai==0.27.2
 platformdirs==3.1.1
 pyttsx3==2.90
-pywin32==305
 python-dotenv==1.2.0
 regex==2023.3.23
 requests==2.28.2
