@@ -7,7 +7,7 @@ WORKDIR /app
 COPY requirements.txt .
 
 # Instalar las dependencias del proyecto
-RUN pip install --upgrade pip && pip install -r requirements.txt
+RUN pip install --upgrade pip && pip install -r requirements.txt 
 
 # Copiar el resto del código del proyecto al contenedor
 COPY . .
