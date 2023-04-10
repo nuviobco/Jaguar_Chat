@@ -43,6 +43,8 @@ scheduler.start()
 
 
 os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
+api_key = os.getenv("OPENAI_API_KEY")
+
 
 mongo_uri = os.environ.get("MONGO_URI")
 mongo_client = pymongo.MongoClient(mongo_uri)
@@ -312,7 +314,11 @@ tokens = nltk.word_tokenize(texto)
 
 print(tokens)
 
-openai.api_key = "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"
+import openai
+
+openai.api_key = "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"
+print("API Key:", api_key)
+
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():

@@ -9,6 +9,8 @@ COPY requirements.txt .
 # Instalar las dependencias del proyecto
 RUN pip install --upgrade pip && pip install -r requirements.txt 
 
+RUN python -m nltk.downloader punkt
+
 RUN pip install https://github.com/explosion/spacy-models/releases/download/es_core_news_sm-3.1.0/es_core_news_sm-3.1.0.tar.gz && python -m spacy link es_core_news_sm es_core_news_sm
 
 
