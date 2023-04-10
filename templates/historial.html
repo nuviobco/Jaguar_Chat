@@ -61,18 +61,22 @@
         <table>
             <thead>
                 <tr>
-                    <th>fecha</th>
+                    <th>Fecha</th>
+                    <th>User ID</th>
                     <th>Prompt</th>
                     <th>Respuesta</th>
                 </tr>
             </thead>
+            
+            </thead>
             <tbody>
                 {% for conversacion in historial %}
-                    <tr>
-                        <td>{{ conversacion.fecha }}</td>
-                        <td>{{ conversacion.pregunta }}</td>
-                        <td>{{ conversacion.respuesta }}</td>
-                    </tr>
+                <tr>
+                    <td>{{ conversacion.fecha }}</td>
+                    <td>{{ conversacion.user_id }}</td>
+                    <td>{{ conversacion.pregunta }}</td>
+                    <td>{{ conversacion.respuesta }}</td>
+                </tr>
                 {% endfor %}
             </tbody> 
         </table>
