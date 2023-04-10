@@ -294,7 +294,7 @@ def auth_callback():
 
     return redirect(url_for("home"))
 
-nlp = spacy.load('es_core_news_sm-3.1.0')
+nlp = spacy.load('es_core_news_sm')
 
 texto = "Este es un ejemplo de texto para tokenizar."
 doc = nlp(texto)
