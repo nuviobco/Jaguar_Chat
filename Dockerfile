@@ -7,7 +7,8 @@ WORKDIR /app
 COPY requirements.txt .
 
 # Instalar las dependencias del proyecto
-RUN python -m venv /opt/venv && /opt/venv/bin/activate && pip install --upgrade pip && pip install -r requirements.txt
+RUN python -m venv /opt/venv && chmod +x /opt/venv/bin/activate && . /opt/venv/bin/activate && pip install --upgrade pip && pip install -r requirements.txt
+
 
 
 # Copiar el resto del código del proyecto al contenedor
