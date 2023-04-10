@@ -1,7 +1,7 @@
 FROM python:3.8
 
 # Establecer un directorio de trabajo
-WORKDIR /app
+WORKDIR /jaguarchat
 
 # Copiar el archivo requirements.txt al contenedor
 COPY requirements.txt .
