@@ -25,7 +25,6 @@ nltk==3.8.1
 oauthlib
 openai==0.27.2
 platformdirs==3.1.1
-pypiwin32==305
 pyttsx3==2.90
 pywin32==305
 python-dotenv==1.2.0
