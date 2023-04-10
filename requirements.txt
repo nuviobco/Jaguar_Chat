@@ -24,6 +24,7 @@ multidict==6.0.4
 nltk==3.8.1
 oauthlib
 openai
+pandas==1.4.0
 platformdirs==3.1.1
 pymongo==3.12.1
 pyttsx3==2.90
