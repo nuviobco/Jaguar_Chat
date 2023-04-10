@@ -316,8 +316,8 @@ print(tokens)
 
 import openai
 
-openai.api_key = "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"
-print("API Key:", api_key)
+load_dotenv()
+openai.api_key = api_key
 
 
 @app.route("/login", methods=['GET', 'POST'])
