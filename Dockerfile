@@ -18,10 +18,10 @@ RUN pip install https://github.com/explosion/spacy-models/releases/download/es_c
 COPY . .
 
 # Establecer la variable de entorno para el puerto
-ENV PORT 5000
+ENV PORT ${PORT}
 
 # Exponer el puerto en el contenedor
-EXPOSE 5000
+EXPOSE ${PORT}
 
 # Ejecutar el comando para iniciar la aplicación
 CMD ["python", "app.py"]
