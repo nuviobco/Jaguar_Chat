@@ -40,6 +40,7 @@ def contar_palabras(prompts, campo='prompt'):
             for token in doc:
                 if token.is_alpha:
                     conteo_palabras[token.text.lower()] += 1
+    conteo_palabras = dict(sorted(conteo_palabras.items(), key=lambda x: x[1], reverse=True)[:10])
 
     return dict(conteo_palabras)
 
@@ -60,6 +61,7 @@ def obtener_horario_mayor_actividad(prompts):
             print(f"No se encontró 'timestamp' ni 'tamp' en el prompt: {prompt}")
 
     horas_mayor_actividad = [(i, conteo) for i, conteo in enumerate(conteo_horas)]
+    horas_mayor_actividad = sorted(horas_mayor_actividad, key=lambda x: x[1], reverse=True)[:10]
 
     return horas_mayor_actividad
 
@@ -73,6 +75,7 @@ def analizar_nivel_comprension(prompts):
             doc = nlp(texto)
             nivel_comprension = textstat.flesch_kincaid_grade(texto)
             resultados.append({'texto': texto, 'nivel_comprension': nivel_comprension})
+    resultados = sorted(resultados, key=lambda x: x['nivel_comprension'], reverse=True)[:10]
 
     return resultados
 
@@ -96,7 +99,7 @@ def analizar_sentimientos(prompts):
                 etiqueta_sentimiento = "Neutral"
 
             resultados.append({'texto': texto, 'puntaje_sentimiento': puntaje_sentimiento, 'etiqueta_sentimiento': etiqueta_sentimiento})
-
+    resultados = sorted(resultados, key=lambda x: abs(x['puntaje_sentimiento']), reverse=True)[:10]
     return resultados
 
 def analizar_temas_mas_consultados(prompts):
@@ -111,6 +114,6 @@ def analizar_temas_mas_consultados(prompts):
                 temas_contados[tema] = 1
 
     temas_ordenados = sorted(temas_contados.items(), key=lambda x: x[1], reverse=True)
-
+    temas_ordenados = temas_ordenados[:10]
     return temas_ordenados
 
