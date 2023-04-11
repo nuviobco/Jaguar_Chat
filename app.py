@@ -41,8 +41,6 @@ app.config["SESSION_PROTECTION"] = "strong"
 scheduler = BackgroundScheduler()
 scheduler.start()
 
-
-os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
 api_key = os.getenv("OPENAI_API_KEY")
 
 
