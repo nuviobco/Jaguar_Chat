@@ -43,7 +43,6 @@ scheduler.start()
 
 api_key = os.getenv("OPENAI_API_KEY")
 
-
 mongo_uri = os.environ.get("MONGO_URI")
 mongo_client = pymongo.MongoClient(mongo_uri)
 
