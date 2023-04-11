@@ -1,10 +1,8 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
     <title>Iniciar sesión</title>
     <style>
         body {
@@ -41,6 +39,19 @@
             font-size: 1rem;
             cursor: pointer;
         }
+        
+        input[type="submit"] {
+            background-color: #e9b118;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+        input[type="submit"]:active {
+            background-color: #0fa81c;
+        }
     </style>
 </head>
 <body>
@@ -71,6 +82,13 @@
         {% endwith %}
         <p>¿No tienes una cuenta? <a href="{{ url_for('signup') }}">Registrarse</a></p>
         <a href="/recuperar_contraseña">¿Olvidaste tu contraseña?</a>
+        <script>
+            document.body.addEventListener("keydown", function(event) {
+                if (event.key === "Enter") {
+                    document.getElementById("login-button").click();
+                }
+            });
+        </script>
     </div>
 </body>
 </html>
