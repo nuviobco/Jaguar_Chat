@@ -120,7 +120,6 @@ def enviar_email_mailgun(asunto, contenido, destinatario):
 
     return response
 
-
 def get_db_connection():
     mongo_uri = os.environ.get("MONGO_URI")
     mongo_client = pymongo.MongoClient(mongo_uri)
@@ -137,7 +136,7 @@ def obtener_usuario_por_email(email):
 def guardar_token(_id, token):
     db = get_db_connection()
     db.usuarios.update_one({"_id": _id}, {"$set": {"token": token}})
-
+ 
 def obtener_id_usuario_por_token(token):
     db = get_db_connection()
     usuario = db.usuarios.find_one({"token": token})
@@ -230,7 +229,7 @@ def validar_credenciales(email, password):
 
 def get_google_auth_url():
     google_auth_base_url = "https://accounts.google.com/o/oauth2/v2/auth"
-    redirect_uri = "http://localhost:5000/auth/callback"
+    redirect_uri = "https://web-production-7ac0e.up.railway.app/auth/callback"
     scope = "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile"
 
     auth_url = client.prepare_request_uri(
@@ -251,7 +250,8 @@ def login_google():
 def auth_callback():
     code = request.args.get("code")
     token_url = "https://oauth2.googleapis.com/token"
-    redirect_uri = "http://localhost:5000/auth/callback"
+    redirect_uri = "https://web-production-7ac0e.up.railway.app/auth/callback"
+
 
     token_response = client.prepare_token_request(
         token_url,
