@@ -80,7 +80,8 @@ class RegistrationForm(FlaskForm):
     submit = SubmitField('Registrarse')
 
 def get_db_connection():
-    client = MongoClient("mongodb://usuario:contraseña@host:27017/jaguar_chat")
+    mongodb_uri = os.environ.get('MONGODB_URI')
+    client = MongoClient(mongodb_uri)
     db = client["jaguar_chat"]
     return db
 
