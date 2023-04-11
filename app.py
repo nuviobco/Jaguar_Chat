@@ -77,8 +77,8 @@ class RegistrationForm(FlaskForm):
     submit = SubmitField('Registrarse')
 
 def get_db_connection():
-    mongodb_uri = os.environ.get('MONGODB_URI')
-    client = MongoClient(mongodb_uri)
+    mongodb_uri = os.environ.get('MONGO_URI')
+    client = MongoClient(mongo_uri)
     db = client["jaguar_chat"]
     return db
 
