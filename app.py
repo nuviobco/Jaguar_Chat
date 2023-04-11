@@ -379,7 +379,7 @@ def generate_response():
 
     guardar_historial(current_user.id, prompt, response)
     intentos = 0
-    while not es_tema_educacion_basica(response) and intentos < 5:
+    while not es_tema_educacion_basica(response) and intentos < 1:
         response = openai.Completion.create(
             engine="text-davinci-003",
             prompt=f"En el contexto de la educación básica en matemáticas (suma, resta, multiplicación, división, álgebra, geometría, etc.), lengua y literatura (gramática, ortografía, vocabulario, lectura, etc.), ciencias naturales (biología, física, química, etc.), estudios sociales (historia, geografía, civismo, etc.), y saludar, gracias, saludos y agradecimientos responde: {prompt}",
@@ -559,6 +559,10 @@ def reset_password(token):
 
     return render_template('reset_password.html', error=False)
 
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('login'))
 
 @app.route("/<path:path>")
 def catch_all(path):
