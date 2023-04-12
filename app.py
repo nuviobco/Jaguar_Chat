@@ -546,7 +546,7 @@ def recuperar_contraseña():
         return render_template('recuperar_contraseña.html', success=True)
     return render_template('recuperar_contraseña.html', success=False)
 
-@app.route('/reset_password/<token>', methods=['POST'])
+@app.route('/reset_password/<token>', methods=['GET', 'POST'])
 def reset_password(token):
     user_id = obtener_id_usuario_por_token(token)
     if not user_id:
