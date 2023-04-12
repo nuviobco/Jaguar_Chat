@@ -548,13 +548,13 @@ def recuperar_contraseña():
 
 @app.route('/reset_password/<token>', methods=['GET', 'POST'])
 def reset_password(token):
-    user_id = obtener_id_usuario_por_token(token)
-    if not user_id:
+    _id = obtener_id_usuario_por_token(token)
+    if not _id:
         return render_template('reset_password.html', error=True)
 
     if request.method == 'POST':
         new_password = request.form['new_password']
-        actualizar_contraseña(user_id, new_password)
+        actualizar_contraseña(_id, new_password)
         return redirect(url_for('login'))
     else:
         abort(405, description="Método HTTP no permitido.")
