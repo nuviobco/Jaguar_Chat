@@ -150,7 +150,7 @@ def generar_token():
     return str(uuid.uuid4())
 
 def enviar_email_recuperacion(email, token):
-    link = f'http://your_app_domain/reset_password/{token}'
+    link = f'https://web-production-7ac0e.up.railway.app/reset_password/{token}'
     subject = 'Recuperación de contraseña'
     html_content = f'<p>Para restablecer tu contraseña, por favor haz clic en el siguiente enlace:</p><p><a href="{link}">{link}</a></p>'
     
