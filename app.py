@@ -555,9 +555,10 @@ def reset_password(token):
     if request.method == 'POST':
         new_password = request.form['new_password']
         actualizar_contraseña(_id, new_password)
-        return redirect(url_for('login'))
+        
+    return redirect(url_for('login'))
 
-    app.logger.debug('Reached end of reset_password function without returning a valid response')
+
 
 @app.route('/logout')
 def logout():
