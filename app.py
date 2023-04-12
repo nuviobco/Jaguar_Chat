@@ -138,7 +138,7 @@ def obtener_id_usuario_por_token(token):
     db = get_db_connection()
     usuario = db.usuarios.find_one({"token": token})
     if usuario:
-        return usuario["user_id"]
+        return usuario["_id"]
     return None
 
 def actualizar_contraseña(user_id, new_password):
