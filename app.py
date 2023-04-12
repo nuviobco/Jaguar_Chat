@@ -556,8 +556,7 @@ def reset_password(token):
         new_password = request.form['new_password']
         actualizar_contraseña(_id, new_password)
         return redirect(url_for('login'))
-    else:
-        abort(405, description="Método HTTP no permitido.")
+
 
 @app.route('/logout')
 def logout():
