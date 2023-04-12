@@ -15,7 +15,7 @@ import pymongo
 import requests
 import os
 import bcrypt
-from flask import Flask, request, session
+from flask import Flask, request, session, abort
 import json
 from datetime import datetime
 from flask import render_template, request
@@ -138,7 +138,7 @@ def obtener_id_usuario_por_token(token):
     db = get_db_connection()
     usuario = db.usuarios.find_one({"token": token})
     if usuario:
-        return usuario["_id"]
+        return usuario["user_id"]
     return None
 
 def actualizar_contraseña(user_id, new_password):
@@ -556,8 +556,8 @@ def reset_password(token):
         new_password = request.form['new_password']
         actualizar_contraseña(user_id, new_password)
         return redirect(url_for('login'))
-
-    return render_template('reset_password.html', error=False)
+    else:
+        abort(405, description="Método HTTP no permitido.")
 
 @app.route('/logout')
 def logout():
