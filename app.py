@@ -77,7 +77,7 @@ class RegistrationForm(FlaskForm):
     submit = SubmitField('Registrarse')
 
 def get_db_connection():
-    mongodb_uri = os.environ.get('MONGO_URI')
+    mongo_uri = os.environ.get('MONGO_URI')
     client = MongoClient(mongo_uri)
     db = client["jaguar_chat"]
     return db
@@ -141,10 +141,10 @@ def obtener_id_usuario_por_token(token):
         return usuario["_id"]
     return None
 
-def actualizar_contraseña(user_id, new_password):
+def actualizar_contraseña(_id, new_password):
     db = get_db_connection()
     hashed_password = bcrypt.hashpw(new_password.encode('utf-8'), bcrypt.gensalt())
-    db.usuarios.update_one({"_id": user_id}, {"$set": {"password": hashed_password}})
+    db.usuarios.update_one({"_id": _id}, {"$set": {"password": hashed_password}})
 
 def generar_token():
     return str(uuid.uuid4())
