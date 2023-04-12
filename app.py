@@ -557,6 +557,7 @@ def reset_password(token):
         actualizar_contraseña(_id, new_password)
         return redirect(url_for('login'))
 
+    app.logger.debug('Reached end of reset_password function without returning a valid response')
 
 @app.route('/logout')
 def logout():
