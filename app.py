@@ -138,13 +138,13 @@ def obtener_id_usuario_por_token(token):
     db = get_db_connection()
     usuario = db.usuarios.find_one({"token": token})
     if usuario:
-        return usuario["user_id"]
+        return usuario["_id"]
     return None
 
 def actualizar_contraseña(user_id, new_password):
     db = get_db_connection()
     hashed_password = bcrypt.hashpw(new_password.encode('utf-8'), bcrypt.gensalt())
-    db.usuarios.update_one({"user_id": user_id}, {"$set": {"password": hashed_password}})
+    db.usuarios.update_one({"_id": user_id}, {"$set": {"password": hashed_password}})
 
 def generar_token():
     return str(uuid.uuid4())
