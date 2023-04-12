@@ -554,11 +554,14 @@ def reset_password(token):
         return render_template('reset_password.html', error=True)
 
     if request.method == 'POST':
+        app.logger.debug(f'Reset password POST request received for URL: {request.url}')
+        app.logger.debug(f'Reset password POST request content: {request.data}')
+        
         new_password = request.form['new_password']
         actualizar_contraseña(_id, new_password)
         return redirect(url_for('login'))
 
-    return render_template('reset_password.html', error=False)
+    app.logger.debug('Reached end of reset_password function without returning a valid response')
 
 
 @app.route('/logout')
