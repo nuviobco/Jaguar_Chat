@@ -141,10 +141,14 @@ def obtener_id_usuario_por_token(token):
         return usuario["_id"]
     return None
 
-def actualizar_contraseña(_id, new_password):
+def actualizar_contraseña(_id, new_password, confirm_password):
+    if new_password != confirm_password:
+        raise ValueError("Las contraseñas no coinciden")
+    
     db = get_db_connection()
     hashed_password = bcrypt.hashpw(new_password.encode('utf-8'), bcrypt.gensalt())
     db.usuarios.update_one({"_id": _id}, {"$set": {"password": hashed_password}})
+
 
 @app.route('/recuperar_contraseña', methods=['GET','POST'])
 def recuperar_contraseña():
