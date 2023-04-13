@@ -146,6 +146,33 @@ def actualizar_contraseña(_id, new_password):
     hashed_password = bcrypt.hashpw(new_password.encode('utf-8'), bcrypt.gensalt())
     db.usuarios.update_one({"_id": _id}, {"$set": {"password": hashed_password}})
 
+@app.route('/recuperar_contraseña', methods=['GET', 'POST'])
+def recuperar_contraseña():
+    if request.method == 'POST':
+        email = request.form['email']
+        user = obtener_usuario_por_email(email)
+        if user:
+            token = generar_token()
+            guardar_token(user['_id'], token)
+            enviar_email_recuperacion(email, token)
+        return render_template('recuperar_contraseña.html', success=True)
+    return render_template('recuperar_contraseña.html', success=False)
+
+
+@app.route('/reset_password/<token>', methods=['GET', 'POST'])
+def reset_password(token):
+    _id = obtener_id_usuario_por_token(token)
+    if not _id:
+        return render_template('reset_password.html', error=True)
+
+    if request.method == 'POST':  
+        new_password = request.form['new_password']
+        actualizar_contraseña(_id, new_password)
+        return redirect(url_for('login'))
+    
+    return render_template('reset_password.html', error=False)
+
+
 def generar_token():
     return str(uuid.uuid4())
 
@@ -533,34 +560,6 @@ def enviar_analisis():
             return render_template('resultado_envio.html', enviado=False)
 
     return render_template('enviar_analisis.html')
-
-@app.route('/recuperar_contraseña', methods=['GET', 'POST'])
-def recuperar_contraseña():
-    if request.method == 'POST':
-        email = request.form['email']
-        user = obtener_usuario_por_email(email)
-        if user:
-            token = generar_token()
-            guardar_token(user['_id'], token)
-            enviar_email_recuperacion(email, token)
-        return render_template('recuperar_contraseña.html', success=True)
-    return render_template('recuperar_contraseña.html', success=False)
-
-
-@app.route('/reset_password/<token>', methods=['GET', 'POST'])
-def reset_password(token):
-    _id = obtener_id_usuario_por_token(token)
-    if not _id:
-        return render_template('reset_password.html', error=True)
-
-    if request.method == 'GET':  
-        new_password = request.form['new_password']
-        actualizar_contraseña(_id, new_password)
-        return redirect(url_for('login'))
-    
-    return render_template('reset_password.html', error=False)
-
-
 
 @app.route('/logout')
 def logout():
