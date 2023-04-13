@@ -146,9 +146,9 @@ def actualizar_contraseña(_id, new_password):
     hashed_password = bcrypt.hashpw(new_password.encode('utf-8'), bcrypt.gensalt())
     db.usuarios.update_one({"_id": _id}, {"$set": {"password": hashed_password}})
 
-@app.route('/recuperar_contraseña', methods=['GET'])
+@app.route('/recuperar_contraseña', methods=['GET','POST'])
 def recuperar_contraseña():
-    if request.method == 'GET':
+    if request.method == 'POST':
         email = request.form['email']
         user = obtener_usuario_por_email(email)
         if user:
@@ -159,7 +159,7 @@ def recuperar_contraseña():
     return render_template('recuperar_contraseña.html', success=False)
 
 
-@app.route('/reset_password/<token>', methods=['GET'])
+@app.route('/reset_password/<token>', methods=['GET','POST'])
 def reset_password(token):
     _id = obtener_id_usuario_por_token(token)
     if not _id:

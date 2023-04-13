@@ -37,7 +37,7 @@
     {% if success %}
         <p>Se ha enviado un correo electrónico con instrucciones para restablecer tu contraseña. Por favor, revisa tu bandeja de entrada.</p>
     {% else %}
-        <form action="/recuperar_contraseña" method="GET">
+        <form action="/recuperar_contraseña" method="post">
             <div>
                 <label for="email">Correo electrónico:</label>
                 <input type="email" id="email" name="email" required>
