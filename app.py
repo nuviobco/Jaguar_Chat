@@ -170,7 +170,7 @@ def reset_password(token):
     if not _id:
         return render_template('reset_password.html', error=True)
 
-    if request.method == 'POST':  
+    if request.method == 'OPTIONS':  
         new_password = request.form['new_password']
         actualizar_contraseña(_id, new_password)
         return redirect(url_for('login'))
