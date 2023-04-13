@@ -174,7 +174,7 @@ def reset_password(token):
     if not _id:
         return render_template('reset_password.html', error=True)
 
-    if request.method in ['GET','PUT', 'PATCH']:
+    if request.method in ['PUT', 'PATCH']:
         new_password = request.form['new_password']
         confirm_password = request.form['confirm_password']
         try:
@@ -184,8 +184,6 @@ def reset_password(token):
         return render_template('reset_password.html', success=True)
 
     return render_template('reset_password.html', error=False)
-
-
 
 def generar_token():
     return str(uuid.uuid4())
