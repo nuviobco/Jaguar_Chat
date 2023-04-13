@@ -176,11 +176,14 @@ def reset_password(token):
 
     if request.method in ['PUT', 'PATCH']:
         new_password = request.form['new_password']
-        actualizar_contraseña(_id, new_password)
+        confirm_password = request.form['confirm_password']
+        try:
+            actualizar_contraseña(_id, new_password, confirm_password)
+        except ValueError as e:
+            return render_template('reset_password.html', error=True, message=str(e))
         return render_template('reset_password.html', success=True)
 
     return render_template('reset_password.html', error=False)
-
 
 
 
