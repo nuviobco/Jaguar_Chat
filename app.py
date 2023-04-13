@@ -15,7 +15,7 @@ import pymongo
 import requests
 import os
 import bcrypt
-from flask import Flask, request, session, abort
+from flask import Flask, request, session, make_response
 import json
 from datetime import datetime
 from flask import render_template, request
@@ -159,13 +159,18 @@ def recuperar_contraseña():
     return render_template('recuperar_contraseña.html', success=False)
 
 
-@app.route('/reset_password/<token>', methods=['GET','POST'])
+@app.route('/reset_password/<token>', methods=['GET', 'POST', 'OPTIONS'])
 def reset_password(token):
+    if request.method == 'OPTIONS':
+        response = make_response()
+        response.headers['Allow'] = 'GET, POST, OPTIONS'
+        return response
+
     _id = obtener_id_usuario_por_token(token)
     if not _id:
         return render_template('reset_password.html', error=True)
 
-    if request.method == 'HEAD':  
+    if request.method == 'POST':  
         new_password = request.form['new_password']
         actualizar_contraseña(_id, new_password)
         return redirect(url_for('login'))
