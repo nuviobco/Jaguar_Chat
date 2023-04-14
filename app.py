@@ -333,13 +333,12 @@ def generate_response():
     prompt = request.json["prompt"]
     response = openai.Completion.create(
         engine="text-davinci-003",
-        prompt=f"Chatbot amigable enfocado en educación básica y niños. Contexto: matemáticas, lengua y literatura, ciencias naturales, estudios sociales, habilidades comunicativas en inglés. Responde: {prompt}",
-        max_tokens=100,
+        prompt=f"Hola, Buenos dias, Buenas tardes, Buenas noches, saludos, expresiones de fraternidad, en el contexto de la educación básica en matemáticas (suma, resta, multiplicación, división, álgebra, geometría, fracciones, decimales, porcentajes, resolución de problemas, estadística, etc.), lengua y literatura (gramática, ortografía, vocabulario, lectura, escritura creativa, análisis de textos literarios, poesía, etc.), ciencias naturales (biología, física, química, medio ambiente, cambio climático, energía, tecnología, salud, etc.), estudios sociales (historia, geografía, civismo, cultura, derechos humanos, democracia, economía, etc.), y habilidades comunicativas en inglés (vocabulario, gramática, conversación, lectura, escritura, pronunciación, etc.) saludar, gracias, felicitar, agradecer, responde: {prompt}",
+        max_tokens=300,
         n=1,
         stop=None,
-        temperature=0.8,
+        temperature=0.6,
     ).choices[0].text.strip()
-    
 
     guardar_historial(current_user.id, prompt, response)
     intentos = 0
