@@ -10,7 +10,6 @@ import tempfile
 import nltk
 import spacy
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
-from oauthlib.oauth2 import WebApplicationClient
 import pymongo
 import requests
 import os
@@ -18,7 +17,6 @@ import bcrypt
 from flask import Flask, request, session, make_response
 import json
 from datetime import datetime
-from flask import render_template, request
 from analisis import obtener_datos, analizar_temas_mas_consultados, contar_palabras, analizar_nivel_comprension, analizar_sentimientos, obtener_horario_mayor_actividad
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.interval import IntervalTrigger
@@ -34,8 +32,7 @@ from pymongo import MongoClient
 from dotenv import load_dotenv
 load_dotenv()
 
-
-app = Flask(__name__)
+app = Flask(__name__, static_folder="static")
 app.secret_key = os.environ.get("FLASK_SECRET_KEY", "unsecretoaleatorio")
 app.config["SESSION_PROTECTION"] = "strong"
 scheduler = BackgroundScheduler()
@@ -53,10 +50,6 @@ col_historial = db["historial"]
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "login"
-
-client_id = "836684526994-int362jsg2860o9nichmmglajn7ls2ik.apps.googleusercontent.com"
-client_secret = "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"
-client = WebApplicationClient(client_id)
 
 class Usuario(UserMixin):
     def __init__(self, user_data):
@@ -163,7 +156,7 @@ def recuperar_contraseña():
     return render_template('recuperar_contraseña.html', success=False)
 
 
-@app.route('/reset_password/<token>', methods=['GET', 'PUT', 'PATCH', 'OPTIONS'])
+@app.route('/reset_password/<token>', methods=['GET', 'POST', 'PATCH', 'OPTIONS'])
 def reset_password(token):
     if request.method == 'OPTIONS':
         response = make_response()
@@ -174,7 +167,7 @@ def reset_password(token):
     if not _id:
         return render_template('reset_password.html', error=True)
 
-    if request.method in ['PUT', 'PATCH']:
+    if request.method in ['POST', 'PATCH']:
         new_password = request.form['new_password']
         confirm_password = request.form['confirm_password']
         try:
@@ -263,75 +256,6 @@ def validar_credenciales(email, password):
             return True
     return False
 
-def get_google_auth_url():
-    google_auth_base_url = "https://accounts.google.com/o/oauth2/v2/auth"
-    redirect_uri = "https://web-production-7ac0e.up.railway.app/auth/callback"
-    scope = "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile"
-
-    auth_url = client.prepare_request_uri(
-        google_auth_base_url,
-        redirect_uri=redirect_uri,
-        scope=scope,
-    )
-    return auth_url
-
-
-@app.route("/login/google")
-def login_google():
-    auth_url = get_google_auth_url()
-    return redirect(auth_url)
-
-
-@app.route("/auth/callback")
-def auth_callback():
-    code = request.args.get("code")
-    token_url = "https://oauth2.googleapis.com/token"
-    redirect_uri = "https://web-production-7ac0e.up.railway.app/auth/callback"
-
-
-    token_response = client.prepare_token_request(
-        token_url,
-        authorization_response=request.url,
-        redirect_url=redirect_uri,
-        client_secret=client_secret,
-    )
-    token_response = requests.post(
-        token_url,
-        data={
-            'grant_type': 'authorization_code',
-            'code': code,
-            'redirect_uri': redirect_uri,
-            'client_id': client_id,
-            'client_secret': client_secret
-
-        }
-    )
-
-    session["token"] = token_response.json()["access_token"]
-    print(f"Token de acceso: {session['token']}")  
-
-    userinfo_url = "https://www.googleapis.com/oauth2/v1/userinfo"
-    headers = {"Authorization": f"Bearer {session['token']}"}
-    userinfo_response = requests.get(userinfo_url, headers=headers)
-    userinfo_data = userinfo_response.json()
-    print(f"Información del usuario: {userinfo_data}")  
-
-
-    user_data = col_usuarios.find_one({"email": userinfo_data["email"]})
-    if not user_data:
-        user_data = {
-            "_id": userinfo_data["id"],
-            "email": userinfo_data["email"],
-            "name": userinfo_data["name"],
-        }
-        col_usuarios.insert_one(user_data)
-    else:
-        print(f"Usuario ya registrado: {user_data}") 
-
-    user = Usuario(user_data)
-    login_user(user)
-
-    return redirect(url_for("home"))
 
 nlp = spacy.load('es_core_news_sm')
 
@@ -387,7 +311,7 @@ def es_saludo(texto):
     return False
 
 def es_tema_educacion_basica(texto):
-    palabras_clave_educacion_basica = ["explicar", "decir en qué consiste", "concepto", "ayudar", "qué es", "socializar", "teoremas", "matemáticas", "suma", "resta", "multiplicación", "división", "matemática general", "aritmética", "álgebra", "geometría", "trigonometría", "estadística", "probabilidad","lengua", "ciencias naturales", "sociales", "presidentes", "historia de Ecuador", "geografía de Ecuador", "cívica", "teorema", "valores", "literatura", "escritura", "gramática", "ortografía", "vocabulario", "fauna", "flora"]
+    palabras_clave_educacion_basica = ["explicar", "decir en qué consiste", "concepto", "ayudar", "qué es", "socializar", "teoremas", "matemáticas", "suma", "resta", "multiplicación", "división", "matemática general", "aritmética", "álgebra", "geometría", "trigonometría", "estadística", "probabilidad","lengua", "ciencias naturales", "sociales", "presidentes", "historia de Ecuador", "geografía de Ecuador", "cívica", "teorema", "valores", "literatura", "escritura", "gramática", "ortografía", "vocabulario", "fauna", "flora", "Álgebra", "Aritmética", "Cálculo", "Fracciones", "Geometría", "Medidas", "Multiplicación", "Operaciones combinadas", "Problemas de palabras", "Proporciones", "Regla de tres", "Suma", "Sustracción", "Teorema de Pitágoras", "Teoría de conjuntos", "Teoría de números", "Transformaciones geométricas", "Ángulos", "Decimales", "División", "Ecuaciones", "Funciones", "Geometría analítica", "Números enteros", "Porcentajes", "Potencias", "Razones", "Sistemas de ecuaciones", "Sistemas de numeración", "Trigonometría", "Unidades de medida", "Vectores", "Área", "Perímetro", "Estadística", "Probabilidad", "Gráficas", "Simetría", "Transformaciones en el plano", "Algoritmos", "Patrones numéricos", "Geometría espacial", "Fracciones equivalentes", "Números mixtos", "Redondeo de números", "Suma de fracciones", "Sustracción de fracciones", "Multiplicación de fracciones", "División de fracciones", "Fracciones impropias", "Líneas paralelas", "Líneas perpendiculares", "Mediana", "Moda", "Media aritmética", "Diagramas de Venn", "Números romanos", "Cilindro", "Cono", "Esfera", "Poliedros", "Polígonos", "Propiedades de las operaciones", "Fracciones y números mixtos", "Porcentajes simples", "Porcentajes múltiples", "Relaciones de proporcionalidad", "Notación científica", "Desigualdades", "Funciones lineales", "Funciones cuadráticas", "Ecuaciones de segundo grado", "Matrices", "Sistemas de matrices", "Gráficos circulares", "Gráficos de barras", "Gráficos de línea", "Gráficos de puntos", "Estadísticas de dispersión", "Regresión lineal", "Geometría fractal","comprensión lectora", "ortografía", "redacción", "gramática", "vocabulario", "lectura", "escritura", "literatura infantil", "expresión oral", "interpretación de textos", "tipos de texto", "figuras literarias", "géneros literarios", "análisis literario", "literatura universal", "literatura hispanoamericana", "poesía", "cuento", "novela", "drama", "tragedia", "comedia", "ensayo", "fábula", "leyenda", "mito", "personajes literarios", "técnicas narrativas", "ambiente literario", "contexto literario", "lectura comprensiva", "comprensión auditiva", "estrategias de lectura", "interpretación de poemas", "análisis de textos", "lectura crítica", "literatura clásica", "literatura contemporánea", "literatura fantástica", "literatura de terror", "literatura juvenil", "literatura infantil y juvenil", "literatura gótica", "literatura romántica", "literatura realista", "literatura modernista", "literatura vanguardista", "lenguaje figurado", "uso de la coma", "uso del punto", "uso del punto y coma", "uso de los dos puntos", "uso de las comillas", "uso del paréntesis", "uso del guión", "uso del diéresis", "uso del apóstrofe", "uso del acento", "uso de la tilde", "tipos de palabras", "sinónimos", "antónimos", "homónimos", "polisemia", "paronimia", "afijos", "sufijos", "prefijos", "palabras compuestas", "adjetivos", "adverbios", "verbos", "sustantivos", "pronombres", "artículos", "conjunciones", "preposiciones", "materia", "energía", "átomo", "molécula", "elemento", "compuesto", "reacción química", "periodicidad", "fuerzas", "movimiento", "velocidad", "aceleración", "fricción", "leyes de Newton", "gravitación", "termodinámica", "ciclos biogeoquímicos", "ecosistemas", "cadenas alimentarias", "biodiversidad", "evolución", "clasificación de los seres vivos", "adaptación", "mutación", "genes", "herencia", "ADN", "mitosis", "meiosis", "organización celular", "órganos", "sistemas", "respiración", "nutrición", "circulación", "excreción", "homeostasis", "órganos sensoriales", "reflejos", "nervios", "sinapsis", "sistema nervioso", "hormonas", "glándulas", "sistema endocrino", "órganos reproductores", "fecundación", "embarazo", "parto", "desarrollo humano", "enfermedades infecciosas", "vacunas", "antibióticos", "enfermedades crónicas", "cáncer", "contaminación", "efecto invernadero", "cambio climático", "energías renovables", "recursos naturales", "ecología", "biotecnología", "nanotecnología", "óptica", "ondas electromagnéticas", "sonido", "electricidad", "magnetismo", "leyes de la electricidad", "circuitos eléctricos", "electrónica", "tecnología", "innovación", "anatomía", "Geografía", "Historia", "Política", "Economía", "Cultura", "Derechos humanos", "Democracia", "Globalización", "Migración", "Identidad", "Nacionalismo", "Multiculturalismo", "Racismo", "Discriminación", "Equidad", "Género", "Familia", "Sociedad", "Estado", "Ciudadanía", "Poder", "Participación ciudadana", "Organización social", "Comunidad", "Desigualdad social", "Desarrollo sostenible", "Recursos naturales", "Contaminación", "Cambio climático", "Biodiversidad", "Ecosistemas", "Ciencias políticas", "Antropología", "Sociología", "Psicología social", "Educación cívica", "Patrimonio cultural", "Arte", "Literatura", "Música", "Cine", "Deporte", "Turismo", "Religión", "Secularismo", "Laicidad", "Globalismo", "Identidades culturales", "Interdependencia global", "Diversidad cultural", "Globalidad", "Movimientos sociales", "Derecho internacional", "Comercio internacional", "Mundo contemporáneo", "Crisis migratorias", "Conflicto armado", "Sistemas políticos", "Sistema electoral", "Sistema de gobierno", "Ciudadanía global", "Desarrollo humano", "Justicia social", "Bienestar social", "Relaciones internacionales", "Geopolítica", "Demografía", "Desarrollo económico", "Cambio social", "Desarrollo social", "Derecho internacional humanitario", "Terrorismo", "Violencia de género", "Salud pública", "Desastres naturales", "Acción humanitaria", "Solidaridad", "Desarrollo rural", "Gobernanza", "Política pública", "Política exterior", "Política social", "Política cultural", "Política económica", "Relaciones de poder", "Participación política", "Justicia", "Etnografía", "Criminología", "Diversidad funcional", "Diversidad sexual", "Derechos de autor", "Vocabulary building", "Grammar rules", "Reading comprehension", "Listening skills", "Pronunciation practice", "Conversation practice", "Writing practice", "Idioms and expressions", "Verb tenses", "Phrasal verbs", "Conditional sentences", "Modal verbs", "Prepositions usage", "Adjectives and adverbs", "Nouns and pronouns", "Articles usage", "Irregular verbs", "Comparative and superlative forms", "Question formation", "Passive voice", "Present continuous tense", "Past simple tense", "Future tense", "Conditionals type 1 and 2", "Reported speech", "historia y geografía de Ecuador"]
     
     doc = nlp(texto.lower())
     tokens = [token.lemma_ for token in doc]
@@ -409,7 +333,7 @@ def generate_response():
     prompt = request.json["prompt"]
     response = openai.Completion.create(
         engine="text-davinci-003",
-        prompt=f"En el contexto de la educación básica en matemáticas (suma, resta, multiplicación, división, álgebra, geometría, etc.), lengua y literatura (gramática, ortografía, vocabulario, lectura, etc.), ciencias naturales (biología, física, química, etc.), estudios sociales (historia, geografía, civismo, etc.), y saludar, gracias, saludos y agradecimientos responde: {prompt}",
+        prompt=f"En el contexto de la educación básica en matemáticas (suma, resta, multiplicación, división, álgebra, geometría, fracciones, decimales, porcentajes, resolución de problemas, estadística, etc.), lengua y literatura (gramática, ortografía, vocabulario, lectura, escritura creativa, análisis de textos literarios, poesía, etc.), ciencias naturales (biología, física, química, medio ambiente, cambio climático, energía, tecnología, salud, etc.), estudios sociales (historia, geografía, civismo, cultura, derechos humanos, democracia, economía, etc.), y habilidades comunicativas en inglés (vocabulario, gramática, conversación, lectura, escritura, pronunciación, etc.) saludar, gracias, felicitar, agradecer, responde: {prompt}",
         max_tokens=300,
         n=1,
         stop=None,
@@ -421,7 +345,7 @@ def generate_response():
     while not es_tema_educacion_basica(response) and intentos < 1:
         response = openai.Completion.create(
             engine="text-davinci-003",
-            prompt=f"En el contexto de la educación básica en matemáticas (suma, resta, multiplicación, división, álgebra, geometría, etc.), lengua y literatura (gramática, ortografía, vocabulario, lectura, etc.), ciencias naturales (biología, física, química, etc.), estudios sociales (historia, geografía, civismo, etc.), y saludar, gracias, saludos y agradecimientos responde: {prompt}",
+            prompt=f"En el contexto de la educación básica en matemáticas (suma, resta, multiplicación, división, álgebra, geometría, fracciones, decimales, porcentajes, resolución de problemas, estadística, etc.), lengua y literatura (gramática, ortografía, vocabulario, lectura, escritura creativa, análisis de textos literarios, poesía, etc.), ciencias naturales (biología, física, química, medio ambiente, cambio climático, energía, tecnología, salud, etc.), estudios sociales (historia, geografía, civismo, cultura, derechos humanos, democracia, economía, etc.), y habilidades comunicativas en inglés (vocabulario, gramática, conversación, lectura, escritura, pronunciación, etc.) {prompt}",
             max_tokens=300,
             n=1,
             stop=None,
