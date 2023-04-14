@@ -350,7 +350,7 @@ def generate_response():
 
     guardar_historial(current_user.id, prompt, response)
     intentos = 0
-    while not es_tema_educacion_basica(response) and intentos < 1:
+    while not es_tema_educacion_basica(response) and intentos < 3:
         response = openai.Completion.create(
             engine="text-davinci-003",
             prompt=f"hola, buenos días, buenas tardes, buenas noches, saludos, expresiones de fraternidad. en el contexto de la educación básica en: 1. matemáticas (suma, resta, multiplicación, división, álgebra, geometría, fracciones, decimales, porcentajes, resolución de problemas, estadística, etc.), 2. lengua y literatura (gramática, ortografía, vocabulario, lectura, escritura creativa, análisis de textos literarios, poesía, etc.), 3. ciencias naturales (biología, física, química, medio ambiente, cambio climático, energía, tecnología, salud, etc.), 4. estudios sociales (historia, geografía, civismo, cultura, derechos humanos, democracia, economía, etc.), 5. habilidades comunicativas en inglés (vocabulario, gramática, conversación, lectura, escritura, pronunciación, etc.). saludar, agradecer, felicitar, agradecer. responde: {prompt}",
