@@ -410,11 +410,13 @@ def historial():
     user_id = str(current_user.get_id()) 
     historial_usuario = list(col_historial.find({"user_id": user_id}))
 
-    historial_usuario = historial_usuario[-12:]
+    historial_usuario = historial_usuario[-15:]
+
+    ecuador_tz = pytz.timezone('America/Guayaquil')
 
     historial = [
         {
-            "fecha": item["timestamp"] if "timestamp" in item else "N/A",
+            "fecha": ecuador_tz.localize(item["timestamp"]) if "timestamp" in item else "N/A",
             "pregunta": item["prompt"],
             "respuesta": item["response"],
         }
@@ -423,13 +425,15 @@ def historial():
 
     print("Objeto historial:", historial)
 
-    return render_template('historial.html', historial=historial, user_id=user_id)  
+    return render_template('historial.html') 
+
 @app.route("/speak/<text>")
 def speak(text):
     tts = gTTS(text=text, lang="es")
     with tempfile.NamedTemporaryFile(delete=True) as fp:
         tts.save(fp.name)
         return send_file(fp.name, mimetype="audio/mpeg")
+    
 
 @app.route('/analisis/<user_id>')
 def analisis(user_id):
