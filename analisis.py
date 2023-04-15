@@ -103,17 +103,15 @@ def analizar_sentimientos(prompts):
     return resultados
 
 def analizar_temas_mas_consultados(prompts):
-    temas_contados = {}
+    conteo_temas = defaultdict(int)
 
     for prompt in prompts:
-        tema = prompt.get('prompt')
-        if tema is not None:
-            if tema in temas_contados:
-                temas_contados[tema] += 1
-            else:
-                temas_contados[tema] = 1
+        if prompt is not None:
+            tema = prompt.get('prompt')
+            if tema:
+                conteo_temas[tema] += 1
 
-    temas_ordenados = sorted(temas_contados.items(), key=lambda x: x[1], reverse=True)
+    temas_ordenados = sorted(conteo_temas.items(), key=lambda x: x[1], reverse=True)
     temas_ordenados = temas_ordenados[:10]
     return temas_ordenados
 
