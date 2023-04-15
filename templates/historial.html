@@ -57,13 +57,12 @@
 </head>
 <body>
     <div class="container">
-        <img src="https://i.ibb.co/sPPL3F2/jaguar3.png" alt="Jaguar Chat Logo"width="200px"> <!-- URL del logo de Jaguar Chat -->
+        <img src="https://i.ibb.co/sPPL3F2/jaguar3.png" alt="Jaguar Chat Logo"width="200px"> 
         <h1>Historial de conversaciones</h1>
         <table>
             <thead>
                 <tr>
                     <th>Fecha</th>
-                    <th>User ID</th>
                     <th>Prompt</th>
                     <th>Respuesta</th>
                 </tr>
@@ -74,7 +73,6 @@
                 {% for conversacion in historial %}
                 <tr>
                     <td>{{ conversacion.fecha }}</td>
-                    <td>{{ conversacion.user_id }}</td>
                     <td>{{ conversacion.pregunta }}</td>
                     <td>{{ conversacion.respuesta }}</td>
                 </tr>
