@@ -454,7 +454,7 @@ def speak(text):
 
 @app.route('/analisis/<user_id>')
 def analisis(user_id):
-    prompts = obtener_datos_usuario(user_id)
+    prompts = obtener_datos(user_id)
 
     temas_consultados = analizar_temas_mas_consultados(prompts)
     print("Temas consultados:", temas_consultados)
@@ -486,6 +486,7 @@ def analisis(user_id):
                            grado=usuario['grado'],
                            profesor=usuario['profesor'])
 
+
 def obtener_credenciales_email(user_id):
     ...
 
@@ -506,7 +507,7 @@ def obtener_datos_usuario(user_id):
             'profesor': usuario['profesor']
         }
     else:
-        return None, None
+        return None
 
 @app.route('/enviar_analisis', methods=['GET', 'POST'])
 def enviar_analisis():
