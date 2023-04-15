@@ -499,7 +499,7 @@ def obtener_credenciales_email(user_id):
     usuario = col_usuarios.find_one({'user_id': user_id})
 
     if usuario:
-        # Reemplazar "email" y "password" con los campos apropiados en tu colección de usuarios
+        
         return usuario['email'], usuario['password']
     else:
         return None, None
