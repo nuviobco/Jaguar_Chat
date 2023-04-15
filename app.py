@@ -92,13 +92,17 @@ def guardar_historial(user_id, prompt, response):
     }
     col_historial.insert_one(conversacion)
 
+scheduler = BackgroundScheduler()
+
 def limpiar_historial():
     print("Limpiando historial...")
-    fecha_limite = datetime.now(pytz.utc) - timedelta(days=1)
+    fecha_limite = datetime.now(pytz.utc) - timedelta(weeks=1)
     db.historial.delete_many({"timestamp": {"$lt": fecha_limite}})
     print("Historial limpiado.")
-trigger = IntervalTrigger(days=1)
+
+trigger = IntervalTrigger(weeks=1)
 scheduler.add_job(limpiar_historial, trigger)
+scheduler.start()
 
 def enviar_email_mailgun(asunto, contenido, destinatario):
     mailgun_api_key = os.environ.get('MAILGUN_API_KEY')  
@@ -442,8 +446,6 @@ def historial():
 
     return render_template('historial.html', historial=historial, user_id=user_id, nombre=nombre_completo, colegio=colegio, grado=grado, profesor=profesor)
  
-
-
 @app.route("/speak/<text>")
 def speak(text):
     tts = gTTS(text=text, lang="es")

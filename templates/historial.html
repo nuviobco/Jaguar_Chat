@@ -48,7 +48,12 @@
             text-decoration: none;
         }
 
-        
+        .user-info-container {
+            background-color: rgba(0, 128, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+        }
+
         .new-style {
             font-size: 18px;
             font-weight: bold;
@@ -57,9 +62,9 @@
 </head>
 <body>
     <div class="container">
-        <img src="https://i.ibb.co/sPPL3F2/jaguar3.png" alt="Jaguar Chat Logo"width="200px"> 
+        <img src="https://i.ibb.co/sPPL3F2/jaguar3.png" alt="Jaguar Chat Logo" width="200px">
         <h1>Historial de conversaciones</h1>
-        <div class="info-usuario">
+        <div class="user-info-container">
             <h2>Información del estudiante</h2>
             <p>Nombre: {{ nombre }}</p>
             <p>Colegio: {{ colegio }}</p>
@@ -82,7 +87,7 @@
                     <td>{{ conversacion.respuesta }}</td>
                 </tr>
                 {% endfor %}
-            </tbody> 
+            </tbody>
         </table>
         <p class="new-style"></p>
         <p><a href="/">Volver al inicio</a></p>

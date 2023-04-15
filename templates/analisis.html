@@ -40,27 +40,33 @@
         }
 
         .boton-amarillo {
-        display: inline-block;
-        background-color: rgb(255, 187, 0);
-        color: rgb(253, 252, 252);
-        text-decoration: none;
-        padding: 10px 20px;
-        font-size: 16px;
-        border-radius: 5px;
-        cursor: pointer;
-    }
+            display: inline-block;
+            background-color: rgb(255, 187, 0);
+            color: rgb(253, 252, 252);
+            text-decoration: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
 
         .boton-amarillo:hover {
-        background-color: #29f10f;
-        color: white;
-    }
+            background-color: #29f10f;
+            color: white;
+        }
+
+        .user-info-container {
+            background-color: rgba(0, 128, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <img src="https://i.ibb.co/sPPL3F2/jaguar3.png" alt="Logo de Jaguar Chat" width="200px">
         <h1>Análisis de conversaciones</h1>
-        <div class="info-usuario">
+        <div class="user-info-container">
             <h2>Información del estudiante</h2>
             <p>Nombre: {{ nombre_completo }}</p>
             <p>Colegio: {{ colegio }}</p>
