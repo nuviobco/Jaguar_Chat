@@ -339,7 +339,7 @@ def generate_response():
     prompt = input_text
     prompt = request.json["prompt"]
     response = openai.Completion.create(
-        engine="text-davinci-003",
+        engine="davinci",
         prompt=f"hola, buenos días, buenas tardes, buenas noches, saludos, qué, cómo, donde, cuándo, calcula, cuanto, por qué, quien, de qué forma, de qué manera, dame, ejercicios, concepto, definición, cuál, cuales, figurar, desarrolar,  ser muy amigable en el contexto de la educación básica en: 1. matemáticas (suma, resta, multiplicación, división, álgebra, geometría, fracciones, decimales, porcentajes, resolución de problemas, estadística, cómo se calcula, como se escribe, cúal es la fórmula, que ejercicos, resolver, etc.), 2. lengua y literatura (gramática, ortografía, vocabulario, lectura, escritura creativa, análisis de textos literarios, poesía, etc.), 3. ciencias naturales (biología, física, química, medio ambiente, cambio climático, energía, tecnología, salud, etc.), 4. estudios sociales (historia, geografía, ciudades, capitales, paises, continentes, américa latina, civismo, cultura, derechos humanos, democracia, economía, etc.), 5. habilidades comunicativas en inglés (vocabulario, gramática, conversación, lectura, escritura, pronunciación, etc.). saludar, agradecer, felicitar, agradecer. responde: {prompt}",
         max_tokens=300,
         n=1,
@@ -355,7 +355,7 @@ def generate_response():
     intentos = 0
     while not es_tema_educacion_basica(response) and intentos < 1:
         response = openai.Completion.create(
-            engine="text-davinci-003",
+            engine="davinci",
             prompt=f"hola, buenos días, buenas tardes, buenas noches, saludos, expresiones de fraternidad. en el contexto de la educación básica en: 1. matemáticas (suma, resta, multiplicación, división, álgebra, geometría, fracciones, decimales, porcentajes, resolución de problemas, estadística, etc.), 2. lengua y literatura (gramática, ortografía, vocabulario, lectura, escritura creativa, análisis de textos literarios, poesía, etc.), 3. ciencias naturales (biología, física, química, medio ambiente, cambio climático, energía, tecnología, salud, etc.), 4. estudios sociales (historia, geografía, civismo, cultura, derechos humanos, democracia, economía, etc.), 5. habilidades comunicativas en inglés (vocabulario, gramática, conversación, lectura, escritura, pronunciación, etc.). saludar, agradecer, felicitar, agradecer. responde: {prompt}",           max_tokens=300,
             n=1,
             stop=None,
