@@ -60,121 +60,74 @@
     <div class="container">
         <img src="https://i.ibb.co/sPPL3F2/jaguar3.png" alt="Logo de Jaguar Chat" width="200px">
         <h1>Análisis de conversaciones</h1>
-        <div class="row">
-            <div class="col">
-                <div class="card bg-green text-white">
-                    <div class="card-header">
-                        Temas más consultados
-                    </div>
-                    <div class="card-body">
+        <div class="info-usuario">
+            <h2>Información del estudiante</h2>
+            <p>Nombre: {{ nombre_completo }}</p>
+            <p>Colegio: {{ colegio }}</p>
+            <p>Grado: {{ grado }}</p>
+            <p>Profesor: {{ profesor }}</p>
+        </div>
+        <h2>Resultados del análisis</h2>
+        <table class="table table-dark table-bordered mt-3">
+            <thead>
+                <tr>
+                    <th>Categoría</th>
+                    <th>Resultado</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Temas más consultados</td>
+                    <td>
                         <ul>
                             {% for tema, conteo in temas_consultados %}
                                 <li>{{ tema }} ({{ conteo }})</li>
                             {% endfor %}
                         </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row mt-4">
-            <div class="col">
-                <div class="card bg-green text-white">
-                    <div class="card-header">
-                        Palabras más utilizadas
-                    </div>
-                    <div class="card-body">
-                        <table class="table table-dark table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Palabra</th>
-                                    <th>Cantidad de ocurrencias</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for palabra, conteo in palabras_contadas %}
-                                    <tr>
-                                        <td>{{ palabra }}</td>
-                                        <td>{{ conteo }}</td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row mt-4">
-            <div class="col">
-                <div class="card bg-green text-white">
-                    <div class="card-header">
-                        Horario de mayor actividad
-                    </div>
-                    <div class="card-body">
+                    </td>
+                </tr>
+                <tr>
+                    <td>Palabras más utilizadas</td>
+                    <td>
+                        <ul>
+                            {% for palabra, conteo in palabras_contadas %}
+                                <li>{{ palabra }} ({{ conteo }})</li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Horario de mayor actividad</td>
+                    <td>
                         <ul>
                             {% for hora, conteo in horas_mayor_actividad %}
                                 <li>{{ hora }}:00 ({{ conteo }})</li>
                             {% endfor %}
                         </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row mt-4">
-            <div class="col">
-                <div class="card bg-green text-white">
-                    <div class="card-header">
-                        Nivel de comprensión
-                    </div>
-                    <div class="card-body">
-                        <table class="table table-dark table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Texto</th>
-                                    <th>Nivel de comprensión</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for resultado in nivel_comprension %}
-                                    <tr>
-                                        <td>{{ resultado.texto }}</td>
-                                        <td>{{ resultado.nivel_comprension }}</td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row mt-4">
-            <div class="col">
-                <div class="card bg-green text-white">
-                    <div class="card-header">
-                        Análisis de sentimientos
-                    </div>
-                    <div class="card-body">
-                        <table class="table table-dark table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Texto</th>
-                                    <th>Puntaje de sentimiento</th>
-                                    <th>Etiqueta de sentimiento</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for resultado in sentimientos %}
-                                    <tr>
-                                        <td>{{ resultado.texto }}</td>
-                                        <td>{{ resultado.puntaje_sentimiento }}</td>
-                                        <td>{{ resultado.etiqueta_sentimiento }}</td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Nivel de comprensión</td>
+                    <td>
+                        <ul>
+                            {% for resultado in nivel_comprension %}
+                                <li>{{ resultado.texto }}: {{ resultado.nivel_comprension }}</li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Análisis de sentimientos</td>
+                    <td>
+                        <ul>
+                            {% for resultado in sentimientos %}
+                                <li>{{ resultado.texto }}: {{ resultado.puntaje_sentimiento }} ({{ resultado.etiqueta_sentimiento }})</li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
         <p class="mt-4"><a href="/historial">Ver historial de conversaciones</a></p>
         <p><a href="/">Volver al inicio</a></p>
         <a href="{{ url_for('enviar_analisis') }}" class="boton-amarillo">Enviar análisis por correo</a>

@@ -471,16 +471,25 @@ def analisis(user_id):
     sentimientos = analizar_sentimientos(prompts)
     print("Sentimientos:", sentimientos)
 
+    # Obtener la información del usuario
+    usuario = obtener_usuario(user_id)
+
     return render_template('analisis.html',
                            temas_consultados=temas_consultados,
                            palabras_contadas=palabras_contadas,
                            horas_mayor_actividad=horas_mayor_actividad,
                            nivel_comprension=nivel_comprension,
                            sentimientos=sentimientos,
-                           user_id=user_id)
+                           user_id=user_id,
+                           nombre=usuario['nombre'],
+                           colegio=usuario['colegio'],
+                           grado=usuario['grado'],
+                           profesor=usuario['profesor'])
 
 def obtener_credenciales_email(user_id):
-  
+    ...
+
+def obtener_usuario(user_id):
     mongo_uri = os.environ.get("MONGO_URI")
     mongo_client = pymongo.MongoClient(mongo_uri)
     db = mongo_client["jaguar_chat"]
