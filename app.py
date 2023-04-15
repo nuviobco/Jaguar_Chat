@@ -474,20 +474,35 @@ def analisis(user_id):
     # Obtener la información del usuario
     usuario = obtener_datos_usuario(user_id)
 
-    return render_template('analisis.html',
-                           temas_consultados=temas_consultados,
-                           palabras_contadas=palabras_contadas,
-                           horas_mayor_actividad=horas_mayor_actividad,
-                           nivel_comprension=nivel_comprension,
-                           sentimientos=sentimientos,
-                           user_id=user_id,
-                           nombre=usuario['nombre'],
-                           colegio=usuario['colegio'],
-                           grado=usuario['grado'],
-                           profesor=usuario['profesor'])
-
+    if usuario:
+        return render_template('analisis.html',
+                            temas_consultados=temas_consultados,
+                            palabras_contadas=palabras_contadas,
+                            horas_mayor_actividad=horas_mayor_actividad,
+                            nivel_comprension=nivel_comprension,
+                            sentimientos=sentimientos,
+                            user_id=user_id,
+                            nombre=usuario['nombre'],
+                            colegio=usuario['colegio'],
+                            grado=usuario['grado'],
+                            profesor=usuario['profesor'])
+    else:
+        return "Usuario no encontrado", 404
 
 def obtener_credenciales_email(user_id):
+    mongo_uri = os.environ.get("MONGO_URI")
+    mongo_client = pymongo.MongoClient(mongo_uri)
+    db = mongo_client["jaguar_chat"]
+
+    col_usuarios = db["usuarios"]
+
+    usuario = col_usuarios.find_one({'user_id': user_id})
+
+    if usuario:
+        # Reemplazar "email" y "password" con los campos apropiados en tu colección de usuarios
+        return usuario['email'], usuario['password']
+    else:
+        return None, None
     ...
 
 def obtener_datos_usuario(user_id):
@@ -507,7 +522,7 @@ def obtener_datos_usuario(user_id):
             'profesor': usuario['profesor']
         }
     else:
-        return None
+        return None, None
 
 @app.route('/enviar_analisis', methods=['GET', 'POST'])
 def enviar_analisis():
@@ -537,6 +552,7 @@ def enviar_analisis():
             return render_template('resultado_envio.html', enviado=False)
 
     return render_template('enviar_analisis.html')
+
 
 @app.route('/logout')
 def logout():
