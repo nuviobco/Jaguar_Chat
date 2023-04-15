@@ -426,14 +426,13 @@ def historial():
     ecuador_tz = pytz.timezone('America/Guayaquil')
 
     historial = [
-    {
-        "fecha": ecuador_tz.localize(item["timestamp"]).strftime("%Y-%m-%d %H:%M") if "timestamp" in item else "N/A",
-        "pregunta": item["prompt"],
-        "respuesta": item["response"],
-    }
-    for item in historial_usuario
-]
-
+        {
+            "fecha": ecuador_tz.localize(item["timestamp"]).strftime('%Y-%m-%d %H:%M:%S') if "timestamp" in item else "N/A",
+            "pregunta": item["prompt"],
+            "respuesta": item["response"],
+        }
+        for item in historial_usuario
+    ]
     nombre_completo = f"{current_user.first_name} {current_user.last_name}"
     colegio = current_user.school
     grado = current_user.grade
