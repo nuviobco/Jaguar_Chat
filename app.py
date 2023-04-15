@@ -520,7 +520,7 @@ def obtener_datos_usuario(user_id):
             'profesor': usuario['profesor']
         }
     else:
-        return None, None
+        return {}
 
 @app.route('/enviar_analisis', methods=['GET', 'POST'])
 def enviar_analisis():
