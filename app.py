@@ -484,10 +484,11 @@ def analisis(user_id):
                            nivel_comprension=nivel_comprension,
                            sentimientos=sentimientos,
                            user_id=user_id,
-                           nombre=nombre_completo,
+                           nombre_completo=nombre_completo, 
                            colegio=colegio,
                            grado=grado,
                            profesor=profesor)
+
 
 def obtener_credenciales_email(user_id):
     mongo_uri = os.environ.get("MONGO_URI")
