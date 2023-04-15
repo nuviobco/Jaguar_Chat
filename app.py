@@ -454,7 +454,7 @@ def speak(text):
 
 @app.route('/analisis/<user_id>')
 def analisis(user_id):
-    prompts = obtener_datos(user_id)
+    prompts = obtener_datos_usuario(user_id)
 
     temas_consultados = analizar_temas_mas_consultados(prompts)
     print("Temas consultados:", temas_consultados)
@@ -472,7 +472,7 @@ def analisis(user_id):
     print("Sentimientos:", sentimientos)
 
     # Obtener la información del usuario
-    usuario = obtener_usuario(user_id)
+    usuario = obtener_datos_usuario(user_id)
 
     return render_template('analisis.html',
                            temas_consultados=temas_consultados,
@@ -489,7 +489,7 @@ def analisis(user_id):
 def obtener_credenciales_email(user_id):
     ...
 
-def obtener_usuario(user_id):
+def obtener_datos_usuario(user_id):
     mongo_uri = os.environ.get("MONGO_URI")
     mongo_client = pymongo.MongoClient(mongo_uri)
     db = mongo_client["jaguar_chat"]
@@ -499,7 +499,12 @@ def obtener_usuario(user_id):
     usuario = col_usuarios.find_one({'user_id': user_id})
 
     if usuario:
-        return usuario['email'], usuario['email_contrasena']
+        return {
+            'nombre': usuario['first_name'] + ' ' + usuario['last_name'],
+            'colegio': usuario['colegio'],
+            'grado': usuario['grado'],
+            'profesor': usuario['profesor']
+        }
     else:
         return None, None
 
