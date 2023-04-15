@@ -410,6 +410,8 @@ def historial():
     user_id = str(current_user.get_id()) 
     historial_usuario = list(col_historial.find({"user_id": user_id}))
 
+    historial_usuario = historial_usuario[-12:]
+
     historial = [
         {
             "fecha": item["timestamp"] if "timestamp" in item else "N/A",
@@ -422,7 +424,6 @@ def historial():
     print("Objeto historial:", historial)
 
     return render_template('historial.html', historial=historial, user_id=user_id)  
-
 @app.route("/speak/<text>")
 def speak(text):
     tts = gTTS(text=text, lang="es")
