@@ -481,10 +481,10 @@ def analisis(user_id):
                            nivel_comprension=nivel_comprension,
                            sentimientos=sentimientos,
                            user_id=user_id,
-                           nombre=usuario['nombre'],
-                           colegio=usuario['colegio'],
-                           grado=usuario['grado'],
-                           profesor=usuario['profesor'])
+                           nombre=usuario.get('nombre', ''),
+                           colegio=usuario.get('colegio', ''),
+                           grado=usuario.get('grado', ''),
+                           profesor=usuario.get('profesor', ''))
 
 
 def obtener_credenciales_email(user_id):
