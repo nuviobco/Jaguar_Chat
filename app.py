@@ -453,6 +453,7 @@ def speak(text):
         return send_file(fp.name, mimetype="audio/mpeg")
 
 @app.route('/analisis/<user_id>')
+@login_required
 def analisis(user_id):
     prompts = obtener_datos(user_id)
 
@@ -471,8 +472,10 @@ def analisis(user_id):
     sentimientos = analizar_sentimientos(prompts)
     print("Sentimientos:", sentimientos)
 
-    # Obtener la información del usuario
-    usuario = obtener_datos_usuario(user_id)
+    nombre_completo = f"{current_user.first_name} {current_user.last_name}"
+    colegio = current_user.school
+    grado = current_user.grade
+    profesor = current_user.teacher
 
     return render_template('analisis.html',
                            temas_consultados=temas_consultados,
@@ -481,11 +484,10 @@ def analisis(user_id):
                            nivel_comprension=nivel_comprension,
                            sentimientos=sentimientos,
                            user_id=user_id,
-                           nombre=usuario.get('nombre', ''),
-                           colegio=usuario.get('colegio', ''),
-                           grado=usuario.get('grado', ''),
-                           profesor=usuario.get('profesor', ''))
-
+                           nombre=nombre_completo,
+                           colegio=colegio,
+                           grado=grado,
+                           profesor=profesor)
 
 def obtener_credenciales_email(user_id):
     mongo_uri = os.environ.get("MONGO_URI")
