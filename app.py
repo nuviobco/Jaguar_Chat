@@ -56,7 +56,13 @@ class Usuario(UserMixin):
     def __init__(self, user_data):
         self.id = user_data["_id"]
         self.email = user_data["email"]
-        self.name = user_data.get("name", "")  
+        self.name = user_data.get("name", "")
+        self.first_name = user_data.get("first_name", "")
+        self.last_name = user_data.get("last_name", "")
+        self.grade = user_data.get("grade", "")
+        self.school = user_data.get("school", "")
+        self.teacher = user_data.get("teacher", "")
+
 
 class RegistrationForm(FlaskForm):
     first_name = StringField('Nombre', validators=[DataRequired()])
@@ -213,17 +219,22 @@ def signup():
 
     if form.validate_on_submit():
         if form.accept_terms.data:
-        
             email = form.email.data
             password = form.password.data
 
             user_data = col_usuarios.find_one({"email": email})
             hashed_password = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
+
             if not user_data:
                 user_data = {
-                    "_id": str(uuid.uuid4()),  
+                    "_id": str(uuid.uuid4()),
                     "email": email,
-                    "password": hashed_password.decode("utf-8") 
+                    "password": hashed_password.decode("utf-8"),
+                    "first_name": form.first_name.data,
+                    "last_name": form.last_name.data,
+                    "grade": form.grade.data,
+                    "school": form.school.data,
+                    "teacher": form.teacher.data,
                 }
                 col_usuarios.insert_one(user_data)
                 flash("Usuario registrado exitosamente. Por favor, inicie sesión.", "success")
@@ -407,7 +418,7 @@ def update_session():
 @app.route('/historial')
 @login_required
 def historial():
-    user_id = str(current_user.get_id()) 
+    user_id = str(current_user.get_id())
     historial_usuario = list(col_historial.find({"user_id": user_id}))
 
     historial_usuario = historial_usuario[-15:]
@@ -423,9 +434,16 @@ def historial():
         for item in historial_usuario
     ]
 
+    nombre_completo = f"{current_user.first_name} {current_user.last_name}"
+    colegio = current_user.school
+    grado = current_user.grade
+    profesor = current_user.teacher
+
     print("Objeto historial:", historial)
 
-    return render_template('historial.html') 
+    return render_template('historial.html', historial=historial, user_id=user_id, nombre=nombre_completo, colegio=colegio, grado=grado, profesor=profesor)
+ 
+
 
 @app.route("/speak/<text>")
 def speak(text):
@@ -433,7 +451,6 @@ def speak(text):
     with tempfile.NamedTemporaryFile(delete=True) as fp:
         tts.save(fp.name)
         return send_file(fp.name, mimetype="audio/mpeg")
-    
 
 @app.route('/analisis/<user_id>')
 def analisis(user_id):
