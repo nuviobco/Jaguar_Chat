@@ -305,6 +305,7 @@ def home():
         return redirect(url_for("login"))
 
 def es_saludo(texto):
+
     saludos = ["hola", "saludos", "buenos días", "buenas tardes", "buenas noches", "bienvenidos"]
     texto = texto.lower()
     
@@ -344,7 +345,7 @@ def generate_response():
         max_tokens=300,
         n=1,
         stop=None,
-        temperature=0.5,
+        temperature=0.6,
     ).choices[0].text.strip()
 
     col_historial.insert_one({
@@ -353,13 +354,13 @@ def generate_response():
         "response": response
     })
     intentos = 0
-    while not es_tema_educacion_basica(response) and intentos < 1:
+    while not es_tema_educacion_basica(response) and intentos < 3:
         response = openai.Completion.create(
             engine="davinci",
             prompt=f"hola, buenos días, buenas tardes, buenas noches, saludos, expresiones de fraternidad. en el contexto de la educación básica en: 1. matemáticas (suma, resta, multiplicación, división, álgebra, geometría, fracciones, decimales, porcentajes, resolución de problemas, estadística, etc.), 2. lengua y literatura (gramática, ortografía, vocabulario, lectura, escritura creativa, análisis de textos literarios, poesía, etc.), 3. ciencias naturales (biología, física, química, medio ambiente, cambio climático, energía, tecnología, salud, etc.), 4. estudios sociales (historia, geografía, civismo, cultura, derechos humanos, democracia, economía, etc.), 5. habilidades comunicativas en inglés (vocabulario, gramática, conversación, lectura, escritura, pronunciación, etc.). saludar, agradecer, felicitar, agradecer. responde: {prompt}",           max_tokens=300,
             n=1,
             stop=None,
-            temperature=0.5,
+            temperature=0.6,
         ).choices[0].text.strip()
         guardar_historial(current_user.id, prompt, response)
         intentos += 1
