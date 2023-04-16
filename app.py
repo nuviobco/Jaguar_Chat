@@ -71,7 +71,7 @@ class RegistrationForm(FlaskForm):
     password = PasswordField('Contraseña', validators=[DataRequired()])
     confirm_password = PasswordField('Confirmar contraseña', validators=[DataRequired(), EqualTo('password')])
     grade = SelectField('Grado de estudio', choices=[('1', 'Primero'), ('2', 'Segundo'), ('3', 'Tercero')], validators=[DataRequired()])
-    school = StringField('Escuela', validators=[DataRequired()])
+    school = StringField('Colegio', validators=[DataRequired()])
     teacher = StringField('Profesor', validators=[DataRequired()])
     accept_terms = BooleanField('Acepto los términos y condiciones', validators=[DataRequired()])
     submit = SubmitField('Registrarse')
