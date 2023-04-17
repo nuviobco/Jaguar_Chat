@@ -9,7 +9,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1"></script>
     <style>
         body {
-            background-image: url("https://i.ibb.co/vmQBcNH/fondo-app.jpg"); /* URL de la imagen de fondo */
+            background-image: url("https://i.ibb.co/vmQBcNH/fondo-app.jpg"); 
             background-size: cover;
             background-repeat: no-repeat;
             background-position: center center;
@@ -73,19 +73,27 @@
         .tabla-verde tbody tr:nth-child(odd) {
             background-color: #265e22; 
         }
-        .grafico-container fondo-verde {
+        .grafico-container-fondo-verde {
             background-color: #265e22;
             margin-bottom: 1.5rem;
+            padding: 20px;
+            border-radius: 10px;
             min-width: 600px;
             min-height: 400px;
         }
         
-        .grafico-pie-container {
+        .grafico-pie {
             width: 100px;
             height: 100px;
-            margin-bottom: 1.5rem;
-            
         }
+        
+        .grafico-barra-container,
+        .grafico-linea-container,
+        .grafico-pie-container {
+            margin-bottom: 1.5rem;
+        }
+            
+        
         .text-center {
             text-align: center;
                 
@@ -165,19 +173,18 @@
                 </tr>
             </tbody>
         </table>
-        <div class="grafico-container fondo-verde">
+        <div class="grafico-container-fondo-verde">
             <div class="grafico-barra-container">
                 <canvas id="temasConsultadosChart"></canvas>
             </div>
             <div class="grafico-pie-container">
-                <canvas id="horariosActividadChart"></canvas>
+                <canvas id="horariosActividadChart" class="grafico-pie"></canvas>
             </div>
             <div class="grafico-linea-container">
                 <canvas id="nivelComprensionChart"></canvas>
             </div>
         </div>
     <script>
-    
         const temasConsultadosData = {{ temas_consultados|tojson }};
         const temasConsultadosLabels = temasConsultadosData.map(item => item[0]);
         const temasConsultadosCounts = temasConsultadosData.map(item => item[1]);
@@ -229,7 +236,8 @@
 </div>
 <p class="mt-4 text-center"><a href="/historial">Ver historial de conversaciones</a></p>
 <p class="text-center"><a href="/">Volver al inicio</a></p>
-<a href=           "{{ url_for('enviar_analisis') }}" class="boton-amarillo text-center">Enviar análisis por correo</a>
+<div class="text-center">
+    <a href="{{ url_for('enviar_analisis') }}" class="boton-amarillo">Enviar análisis por correo</a>
 </div>
 </body>
 </html>
