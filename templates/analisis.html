@@ -75,6 +75,16 @@
         }
         .grafico-container fondo-verde {
             background-color: #265e22;
+            margin-bottom: 1.5rem;
+            min-width: 600px;
+            min-height: 400px;
+        }
+        
+        .grafico-pie-container {
+            width: 100px;
+            height: 100px;
+            margin-bottom: 1.5rem;
+            
         }
         .text-center {
             text-align: center;
@@ -155,10 +165,17 @@
                 </tr>
             </tbody>
         </table>
-        <canvas id="temasConsultadosChart" class="mb-4"></canvas>
-        <canvas id="horariosActividadChart" style="width: 50px; height: 50px;" class="mb-4"></canvas>
-        <canvas id="nivelComprensionChart" class="mb-4"></canvas>
-    </div>
+        <div class="grafico-container fondo-verde">
+            <div class="grafico-barra-container">
+                <canvas id="temasConsultadosChart"></canvas>
+            </div>
+            <div class="grafico-pie-container">
+                <canvas id="horariosActividadChart"></canvas>
+            </div>
+            <div class="grafico-linea-container">
+                <canvas id="nivelComprensionChart"></canvas>
+            </div>
+        </div>
     <script>
     
         const temasConsultadosData = {{ temas_consultados|tojson }};
