@@ -149,10 +149,9 @@
                     <td>{{ temas_consultados[0][1] }}</td>
                 </tr>
                 {% for tema, conteo in temas_consultados[1:] %}
-                <tr>
-                    <tr class="fila-verde">
-                        <td>{{ tema }}</td>
-                        <td>{{ conteo }}</td>
+                <tr class="fila-verde">
+                    <td>{{ tema }}</td>
+                    <td>{{ conteo }}</td>
                 </tr>
                 {% endfor %}
                 <tr>
@@ -161,10 +160,9 @@
                     <td>{{ palabras_contadas[0][1] }}</td>
                 </tr>
                 {% for palabra, conteo in palabras_contadas[1:] %}
-                <tr>
-                    <tr class="fila-verde"></tr>
-                        <td>{{ palabra }}</td>
-                        <td>{{ conteo }}</td>
+                <tr class="fila-verde">
+                    <td>{{ palabra }}</td>
+                    <td>{{ conteo }}</td>
                 </tr>
                 {% endfor %}
                 <tr>
@@ -173,10 +171,9 @@
                     <td>{{ horas_mayor_actividad[0][1] }}</td>
                 </tr>
                 {% for hora, conteo in horas_mayor_actividad[1:] %}
-                <tr>
-                    <tr class="fila-verde">
-                        <td>{{ hora }}:00</td>
-                        <td>{{ conteo }}</td>
+                <tr class="fila-verde">
+                    <td>{{ hora }}:00</td>
+                    <td>{{ conteo }}</td>
                 </tr>
                 {% endfor %}
                 <tr>
@@ -185,10 +182,9 @@
                     <td>{{ nivel_comprension[0].nivel_comprension }}</td>
                 </tr>
                 {% for resultado in nivel_comprension[1:] %}
-                <tr>
-                    <tr class="fila-verde">
-                        <td>{{ resultado.texto }}</td>
-                        <td>{{ resultado.nivel_comprension }}</td>
+                <tr class="fila-verde">
+                    <td>{{ resultado.texto }}</td>
+                    <td>{{ resultado.nivel_comprension }}</td>
                 </tr>
                 {% endfor %}
                 <tr>
@@ -197,14 +193,13 @@
                     <td>{{ sentimientos[0].puntaje_sentimiento }} ({{ sentimientos[0].etiqueta_sentimiento }})</td>
                 </tr>
                 {% for resultado in sentimientos[1:] %}
-                <tr>
-                    <tr class="fila-verde"></tr>
-                        <td>{{ resultado.texto }}</td>
-                        <td>{{ resultado.puntaje_sentimiento }} ({{ resultado.etiqueta_sentimiento }})</td>
+                <tr class="fila-verde">
+                    <td>{{ resultado.texto }}</td>
+                    <td>{{ resultado.puntaje_sentimiento }} ({{ resultado.etiqueta_sentimiento }})</td>
                 </tr>
                 {% endfor %}
             </tbody>
-        </table>
+        </table>        
     <script>
         const temasConsultadosData = {{ temas_consultados|tojson }};
         const temasConsultadosLabels = temasConsultadosData.map(item => item[0]);
