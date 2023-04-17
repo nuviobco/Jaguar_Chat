@@ -82,13 +82,18 @@
             min-height: 400px;
         }
         
-        .grafico-pie {
-            width: 350px !important;
-            height: 350px !important;
-            padding: 30px;
-            text-align: center
-        
+        .grafico-pie-contenedor {
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
+        
+        .grafico-pie {
+            width: 400px !important;
+            height: 400px !important;
+        }
+        
+        
         
         
         .grafico-barra-container,
@@ -123,7 +128,9 @@
                 <canvas id="temasConsultadosChart"></canvas>
             </div>
             <div class="grafico-pie-container">
-                <canvas id="horariosActividadChart" class="grafico-pie"></canvas>
+                <div class="grafico-pie-contenedor">
+                    <canvas id="horariosActividadChart" class="grafico-pie"></canvas>
+                </div>
             </div>
             <div class="grafico-linea-container">
                 <canvas id="nivelComprensionChart"></canvas>
@@ -138,37 +145,57 @@
                 </tr>
             </thead>
             <tbody>
-                {% for tema, conteo in temas_consultados %}
                 <tr>
-                    <td>Temas más consultados</td>
+                    <td rowspan="{{ temas_consultados|length }}">Temas más consultados</td>
+                    <td>{{ temas_consultados[0][0] }}</td>
+                    <td>{{ temas_consultados[0][1] }}</td>
+                </tr>
+                {% for tema, conteo in temas_consultados[1:] %}
+                <tr>
                     <td>{{ tema }}</td>
                     <td>{{ conteo }}</td>
                 </tr>
                 {% endfor %}
-                {% for palabra, conteo in palabras_contadas %}
                 <tr>
-                    <td>Palabras más utilizadas</td>
+                    <td rowspan="{{ palabras_contadas|length }}">Palabras más utilizadas</td>
+                    <td>{{ palabras_contadas[0][0] }}</td>
+                    <td>{{ palabras_contadas[0][1] }}</td>
+                </tr>
+                {% for palabra, conteo in palabras_contadas[1:] %}
+                <tr>
                     <td>{{ palabra }}</td>
                     <td>{{ conteo }}</td>
                 </tr>
                 {% endfor %}
-                {% for hora, conteo in horas_mayor_actividad %}
                 <tr>
-                    <td>Horario de mayor actividad</td>
+                    <td rowspan="{{ horas_mayor_actividad|length }}">Horario de mayor actividad</td>
+                    <td>{{ horas_mayor_actividad[0][0] }}:00</td>
+                    <td>{{ horas_mayor_actividad[0][1] }}</td>
+                </tr>
+                {% for hora, conteo in horas_mayor_actividad[1:] %}
+                <tr>
                     <td>{{ hora }}:00</td>
                     <td>{{ conteo }}</td>
                 </tr>
                 {% endfor %}
-                {% for resultado in nivel_comprension %}
                 <tr>
-                    <td>Nivel de comprensión</td>
+                    <td rowspan="{{ nivel_comprension|length }}">Nivel de comprensión</td>
+                    <td>{{ nivel_comprension[0].texto }}</td>
+                    <td>{{ nivel_comprension[0].nivel_comprension }}</td>
+                </tr>
+                {% for resultado in nivel_comprension[1:] %}
+                <tr>
                     <td>{{ resultado.texto }}</td>
                     <td>{{ resultado.nivel_comprension }}</td>
                 </tr>
                 {% endfor %}
-                {% for resultado in sentimientos %}
                 <tr>
-                    <td>Análisis de sentimientos</td>
+                    <td rowspan="{{ sentimientos|length }}">Análisis de sentimientos</td>
+                    <td>{{ sentimientos[0].texto }}</td>
+                    <td>{{ sentimientos[0].puntaje_sentimiento }} ({{ sentimientos[0].etiqueta_sentimiento }})</td>
+                </tr>
+                {% for resultado in sentimientos[1:] %}
+                <tr>
                     <td>{{ resultado.texto }}</td>
                     <td>{{ resultado.puntaje_sentimiento }} ({{ resultado.etiqueta_sentimiento }})</td>
                 </tr>
@@ -186,7 +213,7 @@
                     labels: temasConsultadosLabels,
                     datasets: [{
                         data: temasConsultadosCounts,
-                        backgroundColor: 'rgba(245, 188, 73 , 0.2)',
+                        backgroundColor: 'rgba(255, 230, 87 , 0.2)',
                     }]
                 },
                 options: {
