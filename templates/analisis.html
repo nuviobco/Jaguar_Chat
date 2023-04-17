@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Análisis de conversaciones</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body {
             background-image: url("https://i.ibb.co/vmQBcNH/fondo-app.jpg"); /* URL de la imagen de fondo */
@@ -59,10 +60,8 @@
             background-color: rgba(0, 128, 0, 0.7);
             padding: 20px;
             border-radius: 10px;
-    
         }
         
-
         .tabla-verde thead {
             background-color: #137c13; 
         }
@@ -75,7 +74,6 @@
             background-color: #265e22; 
         }
 
-</style>
     </style>
 </head>
 <body>
@@ -88,30 +86,133 @@
             <p>Colegio: {{ colegio }}</p>
             <p>Grado: {{ grado }}</p>
             <p>Profesor: {{ profesor }}</p>
-        </div>
+</div>
         <h2>Resultados del análisis</h2>
-        {% for categoria, resultados in [('Temas más consultados', temas_consultados), ('Palabras más utilizadas', palabras_contadas), ('Horario de mayor actividad', horas_mayor_actividad), ('Nivel de comprensión', nivel_comprension), ('Análisis de sentimientos', sentimientos)] %}
-            <h3>{{ categoria }}</h3>
-            <table class="table table-dark table-bordered mt-3 tabla-verde">
-                <thead>
-                    <tr>
-                        <th>{{ categoria }}</th>
-                        <th>Resultado</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for resultado in resultados %}
-                        <tr>
-                            <td>{{ resultado[1] if categoria in ['Temas más consultados', 'Palabras más utilizadas', 'Horario de mayor actividad'] else resultado.nivel_comprension if categoria == 'Nivel de comprensión' else '{} ({})'.format(resultado.puntaje_sentimiento, resultado.etiqueta_sentimiento) }}</td>
-                            <td>{{ resultado[1] if categoria in ['Temas más consultados', 'Palabras más utilizadas', 'Horario de mayor actividad'] else resultado.nivel_comprension if categoria == 'Nivel de comprensión' else f"{resultado.puntaje_sentimiento} ({resultado.etiqueta_sentimiento})" }}</td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        {% endfor %}
+        <table class="table table-dark table-bordered mt-3 tabla-verde">
+            <thead>
+                <tr>
+                    <th>Categoría</th>
+                    <th>Resultado</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Temas más consultados</td>
+                    <td>
+                        <ul>
+                            {% for tema, conteo in temas_consultados %}
+                                <li>{{ tema }} ({{ conteo }})</li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Palabras más utilizadas</td>
+                    <td>
+                        <ul>
+                            {% for palabra, conteo in palabras_contadas %}
+                                <li>{{ palabra }} ({{ conteo }})</li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Horario de mayor actividad</td>
+                    <td>
+                        <ul>
+                            {% for hora, conteo in horas_mayor_actividad %}
+                                <li>{{ hora }}:00 ({{ conteo }})</li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Nivel de comprensión</td>
+                    <td>
+                        <ul>
+                            {% for resultado in nivel_comprension %}
+                                <li>{{ resultado.texto }}: {{ resultado.nivel_comprension }}</li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Análisis de sentimientos</td>
+                    <td>
+                        <ul>
+                            {% for resultado in sentimientos %}
+                                <li>{{ resultado.texto }}: {{ resultado.puntaje_sentimiento }} ({{ resultado.etiqueta_sentimiento }})</li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
         <p class="mt-4"><a href="/historial">Ver historial de conversaciones</a></p>
         <p><a href="/">Volver al inicio</a></p>
         <a href="{{ url_for('enviar_analisis') }}" class="boton-amarillo">Enviar análisis por correo</a>
     </div>
+    <div class="container">
+        <!-- Gráfico de barras para temas más consultados -->
+        <canvas id="temasConsultadosChart"></canvas>
+
+        <!-- Gráfico de torta para horarios de mayor actividad -->
+        <canvas id="horariosActividadChart"></canvas>
+
+        <!-- Gráfico de línea para nivel de comprensión -->
+        <canvas id="nivelComprensionChart"></canvas>
+    </div>
+    <script>
+        // Gráfico de barras para temas más consultados
+        const temasConsultadosData = {{ temas_consultados|tojson }};
+        const temasConsultadosLabels = temasConsultadosData.map(item => item[0]);
+        const temasConsultadosCounts = temasConsultadosData.map(item => item[1]);
+        const temasConsultadosCtx = document.getElementById('temasConsultadosChart').getContext('2d');
+        const temasConsultadosChart = new Chart(temasConsultadosCtx, {
+            type: 'bar',
+            data: {
+                labels: temasConsultadosLabels,
+                datasets: [{
+                    data: temasConsultadosCounts,
+                    backgroundColor: /* Colores de las barras */,
+                }]
+            }
+        });
+    
+        // Gráfico de torta para horarios de mayor actividad
+        const horariosActividadData = {{ horas_mayor_actividad|tojson }};
+        const horariosActividadLabels = horariosActividadData.map(item => item[0]);
+        const horariosActividadCounts = horariosActividadData.map(item => item[1]);
+        const horariosActividadCtx = document.getElementById('horariosActividadChart').getContext('2d');
+        const horariosActividadChart = new Chart(horariosActividadCtx, {
+            type: 'pie',
+            data: {
+                labels: horariosActividadLabels,
+                datasets: [{
+                    data: horariosActividadCounts,
+                    backgroundColor: /* Colores de las porciones */,
+                }]
+            }
+        });
+    
+        // Gráfico de línea para nivel de comprensión
+        const nivelComprensionData = {{ nivel_comprension|tojson }};
+        const nivelComprensionLabels = nivelComprensionData.map(item => item.texto);
+        const nivelComprensionCounts = nivelComprensionData.map(item => item.nivel_comprension);
+        const nivelComprensionCtx = document.getElementById('nivelComprensionChart').getContext('2d');
+        const nivelComprensionChart = new Chart(nivelComprensionCtx, {
+            type: 'line',
+            data: {
+                labels: nivelComprensionLabels,
+                datasets: [{
+                    label: 'Nivel de comprensión',
+                    data: nivelComprensionCounts,
+                    backgroundColor: /* Color de fondo */,
+                    borderColor: /* Color del borde */,
+                    borderWidth: /* Ancho del borde */,
+                }]
+            }
+        });
+    </script>
 </body>
 </html>
