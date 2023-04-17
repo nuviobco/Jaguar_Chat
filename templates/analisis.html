@@ -102,7 +102,7 @@
                 <tbody>
                     {% for resultado in resultados %}
                         <tr>
-                            <td>{{ resultado[0] if categoria in ['Temas más consultados', 'Palabras más utilizadas', 'Horario de mayor actividad'] else resultado.texto }}</td>
+                            <td>{{ resultado[1] if categoria in ['Temas más consultados', 'Palabras más utilizadas', 'Horario de mayor actividad'] else resultado.nivel_comprension if categoria == 'Nivel de comprensión' else '{} ({})'.format(resultado.puntaje_sentimiento, resultado.etiqueta_sentimiento) }}</td>
                             <td>{{ resultado[1] if categoria in ['Temas más consultados', 'Palabras más utilizadas', 'Horario de mayor actividad'] else resultado.nivel_comprension if categoria == 'Nivel de comprensión' else f"{resultado.puntaje_sentimiento} ({resultado.etiqueta_sentimiento})" }}</td>
                         </tr>
                     {% endfor %}
