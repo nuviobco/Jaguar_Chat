@@ -89,20 +89,18 @@
         }
         
         .grafico-pie {
-            width: 400px !important;
-            height: 400px !important;
+            width: 450px !important;
+            height: 450px !important;
         }
-        
-        
-        
         
         .grafico-barra-container,
         .grafico-linea-container,
         .grafico-pie-container {
             margin-bottom: 1.5rem;
         }
-            
-        
+        .fila-verde {
+            background-color: rgba(0, 128, 0, 0.3);     
+        }
         .text-center {
             text-align: center;
                 
@@ -152,8 +150,9 @@
                 </tr>
                 {% for tema, conteo in temas_consultados[1:] %}
                 <tr>
-                    <td>{{ tema }}</td>
-                    <td>{{ conteo }}</td>
+                    <tr class="fila-verde">
+                        <td>{{ tema }}</td>
+                        <td>{{ conteo }}</td>
                 </tr>
                 {% endfor %}
                 <tr>
@@ -163,8 +162,9 @@
                 </tr>
                 {% for palabra, conteo in palabras_contadas[1:] %}
                 <tr>
-                    <td>{{ palabra }}</td>
-                    <td>{{ conteo }}</td>
+                    <tr class="fila-verde"></tr>
+                        <td>{{ palabra }}</td>
+                        <td>{{ conteo }}</td>
                 </tr>
                 {% endfor %}
                 <tr>
@@ -174,8 +174,9 @@
                 </tr>
                 {% for hora, conteo in horas_mayor_actividad[1:] %}
                 <tr>
-                    <td>{{ hora }}:00</td>
-                    <td>{{ conteo }}</td>
+                    <tr class="fila-verde">
+                        <td>{{ hora }}:00</td>
+                        <td>{{ conteo }}</td>
                 </tr>
                 {% endfor %}
                 <tr>
@@ -185,8 +186,9 @@
                 </tr>
                 {% for resultado in nivel_comprension[1:] %}
                 <tr>
-                    <td>{{ resultado.texto }}</td>
-                    <td>{{ resultado.nivel_comprension }}</td>
+                    <tr class="fila-verde">
+                        <td>{{ resultado.texto }}</td>
+                        <td>{{ resultado.nivel_comprension }}</td>
                 </tr>
                 {% endfor %}
                 <tr>
@@ -196,8 +198,9 @@
                 </tr>
                 {% for resultado in sentimientos[1:] %}
                 <tr>
-                    <td>{{ resultado.texto }}</td>
-                    <td>{{ resultado.puntaje_sentimiento }} ({{ resultado.etiqueta_sentimiento }})</td>
+                    <tr class="fila-verde"></tr>
+                        <td>{{ resultado.texto }}</td>
+                        <td>{{ resultado.puntaje_sentimiento }} ({{ resultado.etiqueta_sentimiento }})</td>
                 </tr>
                 {% endfor %}
             </tbody>
