@@ -83,9 +83,14 @@
         }
         
         .grafico-pie {
-            width: 100px;
-            height: 100px;
+            width: 50px;
+            height: 50px;
+        }    
+        .grafico-pie {
+            width: 100px !important;
+            height: 100px !important;
         }
+        
         
         .grafico-barra-container,
         .grafico-linea-container,
@@ -190,15 +195,43 @@
         const temasConsultadosCounts = temasConsultadosData.map(item => item[1]);
         const temasConsultadosCtx = document.getElementById('temasConsultadosChart').getContext('2d');
         const temasConsultadosChart = new Chart(temasConsultadosCtx, {
-            type: 'bar',
-            data: {
-                labels: temasConsultadosLabels,
-                datasets: [{
-                    data: temasConsultadosCounts,
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                }]
-            }
-        });
+                type: 'bar',
+                data: {
+                    labels: temasConsultadosLabels,
+                    datasets: [{
+                        data: temasConsultadosCounts,
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    }]
+                },
+                options: {
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Temas más consultados',
+                            font: {
+                                size: 24,
+                                weight: 'bold',
+                            },
+                            color: 'white',
+                        },
+                        legend: {
+                            display: false,
+                        },
+                    },
+                    scales: {
+                        x: {
+                            ticks: {
+                                color: 'white',
+                            },
+                        },
+                        y: {
+                            ticks: {
+                                color: 'white',
+                            },
+                        },
+                    },
+                },
+            });
     
         const horariosActividadData = {{ horas_mayor_actividad|tojson }};
         const horariosActividadLabels = horariosActividadData.map(item => item[0]);
@@ -207,13 +240,31 @@
         const horariosActividadChart = new Chart(horariosActividadCtx, {
             type: 'pie',
             data: {
-                labels: horariosActividadLabels,
-                datasets: [{
-                    data: horariosActividadCounts,
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                }]
-            }
-        });
+            labels: horariosActividadLabels,
+            datasets: [{
+                data: horariosActividadCounts,
+                backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc', '#f6c23e', '#e74a3b'], // Cambie los colores aquí
+            }],
+        },
+        options: {
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Horario de mayor actividad',
+                    font: {
+                        size: 24,
+                        weight: 'bold',
+                    },
+                    color: 'white',
+                },
+                legend: {
+                    labels: {
+                        color: 'white',
+                    },
+                },
+            },
+        },
+    });
     
         const nivelComprensionData = {{ nivel_comprension|tojson }};
         const nivelComprensionLabels = nivelComprensionData.map(item => item.texto);
@@ -229,8 +280,38 @@
                     backgroundColor: 'rgba(255, 255, 255, 0.2)',
                     borderColor: 'rgba(255, 255, 255, 1)', 
                     borderWidth: 1,
-                }]
-            }
+                }],
+            },
+            options: {
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Nivel de comprensión',
+                        font: {
+                            size: 24,
+                            weight: 'bold',
+                        },
+                        color: 'white',
+                    },
+                    legend: {
+                        labels: {
+                            color: 'white',
+                        },
+                    },
+                },
+                scales: {
+                    x: {
+                        ticks: {
+                            color: 'white',
+                        },
+                    },
+                    y: {
+                        ticks: {
+                            color: 'white',
+                        },
+                    },
+                },
+            },
         });
     </script>
 </div>
