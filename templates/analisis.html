@@ -90,66 +90,25 @@
             <p>Profesor: {{ profesor }}</p>
         </div>
         <h2>Resultados del análisis</h2>
-        <table class="table table-dark table-bordered mt-3 tabla-verde">
-            <thead>
-                <tr>
-                    <th>Categoría</th>
-                    <th>Resultado</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Temas más consultados</td>
-                    <td>
-                        <ul>
-                            {% for tema, conteo in temas_consultados %}
-                                <li>{{ tema }} ({{ conteo }})</li>
-                            {% endfor %}
-                        </ul>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Palabras más utilizadas</td>
-                    <td>
-                        <ul>
-                            {% for palabra, conteo in palabras_contadas %}
-                                <li>{{ palabra }} ({{ conteo }})</li>
-                            {% endfor %}
-                        </ul>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Horario de mayor actividad</td>
-                    <td>
-                        <ul>
-                            {% for hora, conteo in horas_mayor_actividad %}
-                                <li>{{ hora }}:00 ({{ conteo }})</li>
-                            {% endfor %}
-                        </ul>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Nivel de comprensión</td>
-                    <td>
-                        <ul>
-                            {% for resultado in nivel_comprension %}
-                                <li>{{ resultado.texto }}: {{ resultado.nivel_comprension }}</li>
-                            {% endfor %}
-                        </ul>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Análisis de sentimientos</td>
-                    <td>
-                        <ul>
-                            {% for resultado in sentimientos %}
-                                <li>{{ resultado.texto }}: {{ resultado.puntaje_sentimiento }} ({{ resultado.etiqueta_sentimiento }})</li>
-                            {% endfor %}
-                        </ul>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        {% for categoria, resultados in [('Temas más consultados', temas_consultados), ('Palabras más utilizadas', palabras_contadas), ('Horario de mayor actividad', horas_mayor_actividad), ('Nivel de comprensión', nivel_comprension), ('Análisis de sentimientos', sentimientos)] %}
+            <h3>{{ categoria }}</h3>
+            <table class="table table-dark table-bordered mt-3 tabla-verde">
+                <thead>
+                    <tr>
+                        <th>{{ categoria }}</th>
+                        <th>Resultado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for resultado in resultados %}
+                        <tr>
+                            <td>{{ resultado[0] if categoria in ['Temas más consultados', 'Palabras más utilizadas', 'Horario de mayor actividad'] else resultado.texto }}</td>
+                            <td>{{ resultado[1] if categoria in ['Temas más consultados', 'Palabras más utilizadas', 'Horario de mayor actividad'] else resultado.nivel_comprension if categoria == 'Nivel de comprensión' else f"{resultado.puntaje_sentimiento} ({resultado.etiqueta_sentimiento})" }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endfor %}
         <p class="mt-4"><a href="/historial">Ver historial de conversaciones</a></p>
         <p><a href="/">Volver al inicio</a></p>
         <a href="{{ url_for('enviar_analisis') }}" class="boton-amarillo">Enviar análisis por correo</a>
