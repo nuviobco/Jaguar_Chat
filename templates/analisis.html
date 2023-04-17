@@ -133,66 +133,46 @@
             <thead>
                 <tr>
                     <th>Categoría</th>
-                    <th>Prompt/texto</th>
+                    <th>Texto</th>
                     <th>Resultado</th>
                 </tr>
             </thead>
             <tbody>
+                {% for tema, conteo in temas_consultados %}
                 <tr>
                     <td>Temas más consultados</td>
-                    <td></td>
-                    <td>
-                        <ul>
-                            {% for tema, conteo in temas_consultados %}
-                                <li>{{ tema }}: {{ conteo }}</li>
-                            {% endfor %}
-                        </ul>
-                    </td>
+                    <td>{{ tema }}</td>
+                    <td>{{ conteo }}</td>
                 </tr>
+                {% endfor %}
+                {% for palabra, conteo in palabras_contadas %}
                 <tr>
                     <td>Palabras más utilizadas</td>
-                    <td></td>
-                    <td>
-                        <ul>
-                            {% for palabra, conteo in palabras_contadas %}
-                                <li>{{ palabra }}: {{ conteo }}</li>
-                            {% endfor %}
-                        </ul>
-                    </td>
+                    <td>{{ palabra }}</td>
+                    <td>{{ conteo }}</td>
                 </tr>
+                {% endfor %}
+                {% for hora, conteo in horas_mayor_actividad %}
                 <tr>
                     <td>Horario de mayor actividad</td>
-                    <td></td>
-                    <td>
-                        <ul>
-                            {% for hora, conteo in horas_mayor_actividad %}
-                                <li>{{ hora }}:00: {{ conteo }}</li>
-                            {% endfor %}
-                        </ul>
-                    </td>
+                    <td>{{ hora }}:00</td>
+                    <td>{{ conteo }}</td>
                 </tr>
+                {% endfor %}
+                {% for resultado in nivel_comprension %}
                 <tr>
                     <td>Nivel de comprensión</td>
-                    <td></td>
-                    <td>
-                        <ul>
-                            {% for resultado in nivel_comprension %}
-                                <li>{{ resultado.texto }}: {{ resultado.nivel_comprension }}</li>
-                            {% endfor %}
-                        </ul>
-                    </td>
+                    <td>{{ resultado.texto }}</td>
+                    <td>{{ resultado.nivel_comprension }}</td>
                 </tr>
+                {% endfor %}
+                {% for resultado in sentimientos %}
                 <tr>
                     <td>Análisis de sentimientos</td>
-                    <td></td>
-                    <td>
-                        <ul>
-                            {% for resultado in sentimientos %}
-                                <li>{{ resultado.texto }}: {{ resultado.puntaje_sentimiento }} ({{ resultado.etiqueta_sentimiento }})</li>
-                            {% endfor %}
-                        </ul>
-                    </td>
+                    <td>{{ resultado.texto }}</td>
+                    <td>{{ resultado.puntaje_sentimiento }} ({{ resultado.etiqueta_sentimiento }})</td>
                 </tr>
+                {% endfor %}
             </tbody>
         </table>
     <script>
