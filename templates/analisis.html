@@ -155,10 +155,9 @@
                 </tr>
             </tbody>
         </table>
-        <div class="grafico-container fondo-verde">
-        <canvas id="temasConsultadosChart"></canvas>
-        <canvas id="horariosActividadChart" style="width: 100px; height: 100px;"></canvas>
-        <canvas id="nivelComprensionChart"></canvas>
+        <canvas id="temasConsultadosChart" class="mb-4"></canvas>
+        <canvas id="horariosActividadChart" style="width: 50px; height: 50px;" class="mb-4"></canvas>
+        <canvas id="nivelComprensionChart" class="mb-4"></canvas>
     </div>
     <script>
     
@@ -213,7 +212,7 @@
 </div>
 <p class="mt-4 text-center"><a href="/historial">Ver historial de conversaciones</a></p>
 <p class="text-center"><a href="/">Volver al inicio</a></p>
-<a href="{{ url_for('enviar_analisis') }}" class="boton-amarillo text-center">Enviar análisis por correo</a>
+<a href=           "{{ url_for('enviar_analisis') }}" class="boton-amarillo text-center">Enviar análisis por correo</a>
 </div>
 </body>
 </html>
