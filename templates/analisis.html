@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Análisis de conversaciones</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1"></script>
     <style>
         body {
             background-image: url("https://i.ibb.co/vmQBcNH/fondo-app.jpg"); /* URL de la imagen de fondo */
@@ -153,13 +153,8 @@
         <a href="{{ url_for('enviar_analisis') }}" class="boton-amarillo">Enviar análisis por correo</a>
     </div>
     <div class="container">
-        <!-- Gráfico de barras para temas más consultados -->
         <canvas id="temasConsultadosChart"></canvas>
-
-        <!-- Gráfico de torta para horarios de mayor actividad -->
         <canvas id="horariosActividadChart"></canvas>
-
-        <!-- Gráfico de línea para nivel de comprensión -->
         <canvas id="nivelComprensionChart"></canvas>
     </div>
     <script>
@@ -174,7 +169,7 @@
                 labels: temasConsultadosLabels,
                 datasets: [{
                     data: temasConsultadosCounts,
-                    backgroundColor: /* Colores de las barras */,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
                 }]
             }
         });
@@ -190,7 +185,7 @@
                 labels: horariosActividadLabels,
                 datasets: [{
                     data: horariosActividadCounts,
-                    backgroundColor: /* Colores de las porciones */,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
                 }]
             }
         });
@@ -207,9 +202,9 @@
                 datasets: [{
                     label: 'Nivel de comprensión',
                     data: nivelComprensionCounts,
-                    backgroundColor: /* Color de fondo */,
-                    borderColor: /* Color del borde */,
-                    borderWidth: /* Ancho del borde */,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)', // Color de fondo
+                    borderColor: 'rgba(75, 192, 192, 1)', // Color del borde
+                    borderWidth: 1,
                 }]
             }
         });
