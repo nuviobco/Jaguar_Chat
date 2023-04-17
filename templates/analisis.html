@@ -133,8 +133,8 @@
             <thead>
                 <tr>
                     <th>Categoría</th>
+                    <th>Prompt/texto</th>
                     <th>Resultado</th>
-                    <th>Nueva columna</th>
                 </tr>
             </thead>
             <tbody>
@@ -144,7 +144,7 @@
                     <td>
                         <ul>
                             {% for tema, conteo in temas_consultados %}
-                                <li>{{ tema }} ({{ conteo }})</li>
+                                <li>{{ tema }}: {{ conteo }}</li>
                             {% endfor %}
                         </ul>
                     </td>
@@ -155,7 +155,7 @@
                     <td>
                         <ul>
                             {% for palabra, conteo in palabras_contadas %}
-                                <li>{{ palabra }} ({{ conteo }})</li>
+                                <li>{{ palabra }}: {{ conteo }}</li>
                             {% endfor %}
                         </ul>
                     </td>
@@ -166,7 +166,7 @@
                     <td>
                         <ul>
                             {% for hora, conteo in horas_mayor_actividad %}
-                                <li>{{ hora }}:00 ({{ conteo }})</li>
+                                <li>{{ hora }}:00: {{ conteo }}</li>
                             {% endfor %}
                         </ul>
                     </td>
@@ -206,7 +206,7 @@
                     labels: temasConsultadosLabels,
                     datasets: [{
                         data: temasConsultadosCounts,
-                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        backgroundColor: 'rgba(245, 188, 73 , 0.2)',
                     }]
                 },
                 options: {
