@@ -98,9 +98,14 @@
         .grafico-pie-container {
             margin-bottom: 1.5rem;
         }
-        .fila-verde {
-            background-color: rgba(0, 128, 0, 0.3);     
+        .fila-verde-oscuro {
+            background-color: #28a745; /* Puedes cambiar este color al tono de verde oscuro que prefieras */
         }
+        
+        .fila-verde-claro {
+            background-color: #73d16c; /* Puedes cambiar este color al tono de verde claro que prefieras */
+        }    
+        
         .text-center {
             text-align: center;
                 
@@ -143,57 +148,57 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
+                <tr class="fila-verde-oscuro">
                     <td rowspan="{{ temas_consultados|length }}">Temas más consultados</td>
                     <td>{{ temas_consultados[0][0] }}</td>
                     <td>{{ temas_consultados[0][1] }}</td>
                 </tr>
                 {% for tema, conteo in temas_consultados[1:] %}
-                <tr class="fila-verde">
+                <tr class="fila-verde-oscuro">
                     <td>{{ tema }}</td>
                     <td>{{ conteo }}</td>
                 </tr>
                 {% endfor %}
-                <tr>
+                <tr class="fila-verde-claro">
                     <td rowspan="{{ palabras_contadas|length }}">Palabras más utilizadas</td>
                     <td>{{ palabras_contadas[0][0] }}</td>
                     <td>{{ palabras_contadas[0][1] }}</td>
                 </tr>
                 {% for palabra, conteo in palabras_contadas[1:] %}
-                <tr class="fila-verde">
+                <tr class="fila-verde-claro">
                     <td>{{ palabra }}</td>
                     <td>{{ conteo }}</td>
                 </tr>
                 {% endfor %}
-                <tr>
+                <tr class="fila-verde-oscuro">
                     <td rowspan="{{ horas_mayor_actividad|length }}">Horario de mayor actividad</td>
                     <td>{{ horas_mayor_actividad[0][0] }}:00</td>
                     <td>{{ horas_mayor_actividad[0][1] }}</td>
                 </tr>
                 {% for hora, conteo in horas_mayor_actividad[1:] %}
-                <tr class="fila-verde">
+                <tr class="fila-verde-oscuro">
                     <td>{{ hora }}:00</td>
                     <td>{{ conteo }}</td>
                 </tr>
                 {% endfor %}
-                <tr>
+                <tr class="fila-verde-claro">
                     <td rowspan="{{ nivel_comprension|length }}">Nivel de comprensión</td>
                     <td>{{ nivel_comprension[0].texto }}</td>
                     <td>{{ nivel_comprension[0].nivel_comprension }}</td>
                 </tr>
                 {% for resultado in nivel_comprension[1:] %}
-                <tr class="fila-verde">
+                <tr class="fila-verde-claro">
                     <td>{{ resultado.texto }}</td>
                     <td>{{ resultado.nivel_comprension }}</td>
                 </tr>
                 {% endfor %}
-                <tr>
+                <tr class="fila-verde-oscuro">
                     <td rowspan="{{ sentimientos|length }}">Análisis de sentimientos</td>
                     <td>{{ sentimientos[0].texto }}</td>
                     <td>{{ sentimientos[0].puntaje_sentimiento }} ({{ sentimientos[0].etiqueta_sentimiento }})</td>
                 </tr>
                 {% for resultado in sentimientos[1:] %}
-                <tr class="fila-verde">
+                <tr class="fila-verde-oscuro">
                     <td>{{ resultado.texto }}</td>
                     <td>{{ resultado.puntaje_sentimiento }} ({{ resultado.etiqueta_sentimiento }})</td>
                 </tr>
