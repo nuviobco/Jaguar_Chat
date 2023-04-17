@@ -148,17 +148,13 @@
                 </tr>
             </tbody>
         </table>
-        <p class="mt-4"><a href="/historial">Ver historial de conversaciones</a></p>
-        <p><a href="/">Volver al inicio</a></p>
-        <a href="{{ url_for('enviar_analisis') }}" class="boton-amarillo">Enviar análisis por correo</a>
-    </div>
-    <div class="container">
+    <div class="grafico-container">
         <canvas id="temasConsultadosChart"></canvas>
-        <canvas id="horariosActividadChart"></canvas>
+        <canvas id="horariosActividadChart" style="width: 300px; height: 300px;"></canvas>
         <canvas id="nivelComprensionChart"></canvas>
     </div>
     <script>
-        // Gráfico de barras para temas más consultados
+    
         const temasConsultadosData = {{ temas_consultados|tojson }};
         const temasConsultadosLabels = temasConsultadosData.map(item => item[0]);
         const temasConsultadosCounts = temasConsultadosData.map(item => item[1]);
@@ -174,7 +170,6 @@
             }
         });
     
-        // Gráfico de torta para horarios de mayor actividad
         const horariosActividadData = {{ horas_mayor_actividad|tojson }};
         const horariosActividadLabels = horariosActividadData.map(item => item[0]);
         const horariosActividadCounts = horariosActividadData.map(item => item[1]);
@@ -190,7 +185,6 @@
             }
         });
     
-        // Gráfico de línea para nivel de comprensión
         const nivelComprensionData = {{ nivel_comprension|tojson }};
         const nivelComprensionLabels = nivelComprensionData.map(item => item.texto);
         const nivelComprensionCounts = nivelComprensionData.map(item => item.nivel_comprension);
@@ -202,12 +196,17 @@
                 datasets: [{
                     label: 'Nivel de comprensión',
                     data: nivelComprensionCounts,
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)', // Color de fondo
-                    borderColor: 'rgba(75, 192, 192, 1)', // Color del borde
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)', 
+                    borderColor: 'rgba(75, 192, 192, 1)', 
                     borderWidth: 1,
                 }]
             }
         });
     </script>
+</div>
+    <p class="mt-4"><a href="/historial">Ver historial de conversaciones</a></p>
+    <p><a href="/">Volver al inicio</a></p>
+    <a href="{{ url_for('enviar_analisis') }}" class="boton-amarillo">Enviar análisis por correo</a>
+</div>
 </body>
 </html>
