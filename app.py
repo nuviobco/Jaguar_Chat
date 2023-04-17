@@ -427,7 +427,7 @@ def historial():
 
     historial_usuario = historial_usuario[-15:]
 
-    ecuador_tz = pytz.timezone('America/Quito') 
+    ecuador_tz = pytz.timezone('America/Guayaquil') 
 
     historial = [
         {

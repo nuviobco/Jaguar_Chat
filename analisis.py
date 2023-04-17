@@ -48,7 +48,7 @@ def contar_palabras(prompts, campo='prompt'):
 
 def obtener_horario_mayor_actividad(prompts):
     conteo_horas = [0] * 24
-    zona_horaria = pytz.timezone('America/Quito')  
+    zona_horaria = pytz.timezone('America/Guayaquil')  
 
     for prompt in prompts:
         try:
