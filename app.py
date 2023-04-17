@@ -427,11 +427,11 @@ def historial():
 
     historial_usuario = historial_usuario[-15:]
 
-    ecuador_tz = pytz.timezone('America/Guayaquil')
+    ecuador_tz = pytz.timezone('America/Quito') 
 
     historial = [
         {
-            "fecha": ecuador_tz.localize(item["timestamp"]).strftime('%Y-%m-%d %H:%M:%S') if "timestamp" in item else "N/A",
+            "fecha": item["timestamp"].astimezone(ecuador_tz).strftime('%Y-%m-%d %H:%M:%S') if "timestamp" in item else "N/A",
             "pregunta": item["prompt"],
             "respuesta": item["response"],
         }

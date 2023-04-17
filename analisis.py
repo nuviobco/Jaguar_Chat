@@ -5,6 +5,7 @@ import os
 import spacy
 from textblob import TextBlob
 from collections import defaultdict
+import pytz 
 from datetime import datetime
 from textstat import textstat
 
@@ -47,6 +48,7 @@ def contar_palabras(prompts, campo='prompt'):
 
 def obtener_horario_mayor_actividad(prompts):
     conteo_horas = [0] * 24
+    zona_horaria = pytz.timezone('America/Quito')  
 
     for prompt in prompts:
         try:
@@ -55,7 +57,9 @@ def obtener_horario_mayor_actividad(prompts):
                 fecha_hora = datetime.strptime(fecha, "%Y-%m-%d %H:%M:%S.%f")
             else:
                 fecha_hora = fecha
-            hora = fecha_hora.hour
+
+            fecha_hora_local = fecha_hora.astimezone(zona_horaria)  
+            hora = fecha_hora_local.hour
             conteo_horas[hora] += 1
         except KeyError:
             print(f"No se encontró 'timestamp' ni 'tamp' en el prompt: {prompt}")
