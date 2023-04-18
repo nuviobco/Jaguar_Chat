@@ -402,7 +402,6 @@ def generate_response():
     if usuario['tokens_usados'] >= limite_tokens:
         return redirect(url_for('pago'))
 
-    response = generate_response(prompt)
     tokens_usados = contar_tokens(prompt) + contar_tokens(response)
     col_usuarios.update_one({"_id": current_user.id}, {"$inc": {"tokens_usados": tokens_usados}})
 
