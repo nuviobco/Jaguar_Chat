@@ -1,18 +1,17 @@
 import pandas as pd
 import spacy
-from pymongo import MongoClient
 import os
 import spacy
-from textblob import TextBlob
-from collections import defaultdict
 import pytz 
 from datetime import datetime
 from textstat import textstat
+import pymongo 
+from pymongo import MongoClient
+from textblob import TextBlob
+from collections import defaultdict
 
 nlp = spacy.load('es_core_news_sm')
 
-
-import pymongo
 
 def obtener_datos(user_id):
 
@@ -30,7 +29,7 @@ def obtener_datos(user_id):
     print("Datos obtenidos:", prompts)  
     return prompts
 
-def contar_palabras(prompts, campo='prompt'):
+def contar_palabras(prompts, campo='prompt', limit=10):
     nlp = spacy.load("es_core_news_sm")
     conteo_palabras = defaultdict(int)
 
@@ -41,10 +40,9 @@ def contar_palabras(prompts, campo='prompt'):
             for token in doc:
                 if token.is_alpha:
                     conteo_palabras[token.text.lower()] += 1
-    conteo_palabras = dict(sorted(conteo_palabras.items(), key=lambda x: x[1], reverse=True)[:10])
+    conteo_palabras = dict(sorted(conteo_palabras.items(), key=lambda x: x[1], reverse=True)[:limit])
 
     return dict(conteo_palabras)
-
 
 def obtener_horario_mayor_actividad(prompts):
     conteo_horas = [0] * 24
@@ -70,7 +68,7 @@ def obtener_horario_mayor_actividad(prompts):
     return horas_mayor_actividad
 
 
-def analizar_nivel_comprension(prompts):
+def analizar_nivel_comprension(prompts, limit=10):
     resultados = []
 
     for prompt in prompts:
@@ -79,12 +77,12 @@ def analizar_nivel_comprension(prompts):
             doc = nlp(texto)
             nivel_comprension = textstat.flesch_kincaid_grade(texto)
             resultados.append({'texto': texto, 'nivel_comprension': nivel_comprension})
-    resultados = sorted(resultados, key=lambda x: x['nivel_comprension'], reverse=True)[:10]
+    resultados = sorted(resultados, key=lambda x: x['nivel_comprension'], reverse=True)[:limit]
 
     return resultados
 
 
-def analizar_sentimientos(prompts):
+def analizar_sentimientos(prompts, limit=10):
     resultados = []
 
     for prompt in prompts:
@@ -94,7 +92,6 @@ def analizar_sentimientos(prompts):
 
             puntaje_sentimiento = TextBlob(texto).sentiment.polarity
 
-        
             if puntaje_sentimiento > 0:
                 etiqueta_sentimiento = "Positivo"
             elif puntaje_sentimiento < 0:
@@ -103,10 +100,11 @@ def analizar_sentimientos(prompts):
                 etiqueta_sentimiento = "Neutral"
 
             resultados.append({'texto': texto, 'puntaje_sentimiento': puntaje_sentimiento, 'etiqueta_sentimiento': etiqueta_sentimiento})
-    resultados = sorted(resultados, key=lambda x: abs(x['puntaje_sentimiento']), reverse=True)[:10]
+    resultados = sorted(resultados, key=lambda x: abs(x['puntaje_sentimiento']), reverse=True)[:limit]
     return resultados
 
-def analizar_temas_mas_consultados(prompts):
+
+def analizar_temas_mas_consultados(prompts, limit=10):
     conteo_temas = defaultdict(int)
 
     for prompt in prompts:
@@ -116,6 +114,7 @@ def analizar_temas_mas_consultados(prompts):
                 conteo_temas[tema] += 1
 
     temas_ordenados = sorted(conteo_temas.items(), key=lambda x: x[1], reverse=True)
-    temas_ordenados = temas_ordenados[:10]
+    temas_ordenados = temas_ordenados[:limit]
     return temas_ordenados
+
 
