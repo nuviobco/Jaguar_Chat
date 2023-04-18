@@ -82,11 +82,15 @@ def guardar_historial(user_id, prompt, response):
         "user_id": user_id,
         "prompt": prompt,
         "response": response,
-        "timestamp": fecha,  
+        "timestamp": fecha, 
+        "tokens_usados": 0 
     }
     col_historial.insert_one(conversacion)
 
 scheduler = BackgroundScheduler()
+
+def contar_tokens(texto):
+    return len(texto.split())
 
 def limpiar_historial():
     print("Limpiando historial...")
@@ -340,14 +344,25 @@ def es_seguimiento(texto):
 @app.route('/generate_response', methods=['POST'])
 @login_required
 def generate_response():
-    print(f"Usuario autenticado: {current_user.is_authenticated}")  
+    print(f"Usuario autenticado: {current_user.is_authenticated}")
 
     if not current_user.is_authenticated:
         return jsonify({"error": "Usuario no autenticado"}), 401
+
     input_text = request.json.get('input_text', '')
 
     prompt = input_text
     prompt = request.json["prompt"]
+
+
+    limite_tokens = 2000
+
+    usuario = col_usuarios.find_one({"_id": current_user.id})
+
+    if usuario['tokens_usados'] >= limite_tokens:
+
+        return redirect(url_for('pago'))
+
     response = openai.Completion.create(
         engine="text-davinci-003",
         prompt=f"hola, buenos días, buenas tardes, buenas noches, saludos, qué, cómo, donde, cuándo, calcula, cuanto, por favor, cuantos grados, cuantos tipos, por qué, quien, de qué forma, de qué manera, dame, ejercicios, concepto, definición, cuál, cuales, figurar, desarrolar, cuando nació, ser muy amigable en el contexto de la educación básica en: 1. matemáticas (resolver, suma, resta, multiplicación, división, álgebra, geometría, fracciones, decimales, porcentajes, resolución de problemas, estadística, cómo se calcula, como se escribe, cúal es la fórmula, que ejercicos, resolver, etc.), 2. lengua y literatura (gramática, ortografía, tiempos verbales, vocabulario, lectura, escritura creativa, análisis de textos literarios, poesía, etc.), 3. ciencias naturales (biología, física, química, medio ambiente, cambio climático, energía, tecnología, salud, etc.), 4. estudios sociales (historia, geografía, ciudades, capitales, paises, continentes, simón bolívar, colonia, independencia, eloy alfaro, provincias, rios, montañas, volcanes, islas, américa latina, civismo, cultura, derechos humanos, democracia, economía, etc.), 5. habilidades comunicativas en inglés (vocabulario, gramática, conversación, lectura, escritura, pronunciación, etc.). saludar, agradecer, felicitar, agradecer. responde: {prompt}",
@@ -363,6 +378,11 @@ def generate_response():
         "response": response,
         "timestamp": datetime.now(pytz.utc)
     })
+
+    tokens_usados = contar_tokens(prompt) + contar_tokens(response)
+
+    col_usuarios.update_one({"_id": current_user.id}, {"$inc": {"tokens_usados": tokens_usados}})
+
 
     intentos = 0
     while not es_tema_educacion_basica(response) and intentos < 2:
@@ -385,6 +405,7 @@ def generate_response():
         return jsonify({"response": response})
     else:
         return jsonify({"response": "Lo siento, no entendí tu pregunta. ¿Podrías reformularla con respecto a la educación básica?"})
+
 
 @app.route('/')
 def index():
@@ -448,6 +469,18 @@ def speak(text):
     with tempfile.NamedTemporaryFile(delete=True) as fp:
         tts.save(fp.name)
         return send_file(fp.name, mimetype="audio/mpeg")
+    
+@app.route('/')
+def index():
+
+    limite_tokens=2000
+    
+    usuario = col_usuarios.find_one({"_id": current_user.id})
+    tokens_usados = usuario['tokens_usados']
+    tokens_disponibles = limite_tokens - tokens_usados
+
+    return render_template('index.html', tokens_disponibles=tokens_disponibles)
+
 
 @app.route('/analisis/<user_id>')
 @login_required
