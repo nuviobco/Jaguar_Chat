@@ -354,6 +354,10 @@ def generate_response():
     prompt = input_text
     prompt = request.json["prompt"]
 
+    usuario = col_usuarios.find_one({"_id": current_user.id})
+    if 'tokens_usados' not in usuario:
+        col_usuarios.update_one({"_id": current_user.id}, {"$set": {"tokens_usados": 0}})
+        usuario = col_usuarios.find_one({"_id": current_user.id})
 
     limite_tokens = 2000
 
@@ -394,6 +398,13 @@ def generate_response():
             temperature=0.6,
         ).choices[0].text.strip()
         intentos += 1
+    limite_tokens = 2000
+    if usuario['tokens_usados'] >= limite_tokens:
+        return redirect(url_for('pago'))
+
+    response = generate_response(prompt)
+    tokens_usados = contar_tokens(prompt) + contar_tokens(response)
+    col_usuarios.update_one({"_id": current_user.id}, {"$inc": {"tokens_usados": tokens_usados}})
 
     if es_saludo(response):
         return jsonify({"response": "¡Hola! Soy jaguar chat, un bot educativo. ¿En qué puedo ayudarte?"})
