@@ -1,6 +1,6 @@
 import uuid
 import openai
-from flask import Flask, request, jsonify, render_template, send_file, redirect, url_for, flash, session
+from flask import Flask, request, jsonify, render_template, send_file, redirect, url_for, flash, session, make_response
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, SelectField
 from wtforms.validators import DataRequired, Length, Email, EqualTo
@@ -13,24 +13,18 @@ import spacy
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 import pymongo
 import requests
-import os
 import bcrypt
-from flask import Flask, request, session, make_response
 import json
-from datetime import datetime
+from datetime import datetime, timedelta
 from analisis import obtener_datos, analizar_temas_mas_consultados, contar_palabras, analizar_nivel_comprension, analizar_sentimientos, obtener_horario_mayor_actividad
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.interval import IntervalTrigger
-from datetime import datetime, timedelta
 import pytz
-from flask import request, redirect, url_for, render_template
-import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-from flask import Flask, render_template, request, redirect, url_for, flash, session
-import requests 
 from pymongo import MongoClient
 from dotenv import load_dotenv
+
 load_dotenv()
 
 app = Flask(__name__, static_folder="static")
