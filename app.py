@@ -470,8 +470,8 @@ def speak(text):
         tts.save(fp.name)
         return send_file(fp.name, mimetype="audio/mpeg")
     
-@app.route('/')
-def index():
+@app.route('/ver_tokens')
+def ver_tokens():
 
     limite_tokens=2000
     
