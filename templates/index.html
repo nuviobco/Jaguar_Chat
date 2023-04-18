@@ -203,7 +203,7 @@
             Tokens disponibles: <span id="tokens-disponibles">{{ tokens_disponibles }}</span>
         </div>    
     </main>
-    
+
     <script>
         async function generateResponse() {
             const promptInput = document.getElementById("prompt");
@@ -236,6 +236,11 @@
                 playSound();
                 changeColor();
             }
+        }
+        
+        function playSound() {
+            const audio = new Audio("https://www.epidemicsound.com/track/URUN5nUPWZhttps://www.youtube.com/watch?v=LGnuBoo4RQs/");
+            audio.play();
         }
 
         function changeColor() {
