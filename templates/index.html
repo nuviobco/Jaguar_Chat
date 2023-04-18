@@ -259,21 +259,18 @@
 
         }
 
-
-
         function speak(text) {
             const synth = window.speechSynthesis;
             const utterance = new SpeechSynthesisUtterance(text);
             utterance.lang = 'es-ES';
-        }   
+        
             if (synth.speaking) {
                 synth.cancel();
             }
-
-            synth.speak(utterance);
-
         
-                // Agrega esta función para actualizar los tokens disponibles
+            synth.speak(utterance);
+        }
+        
         function actualizarTokensDisponibles(tokens_usados) {
             const tokensDisponiblesElement = document.getElementById("tokens-disponibles");
             const tokensDisponibles = parseInt(tokensDisponiblesElement.textContent, 10);
