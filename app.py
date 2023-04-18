@@ -416,6 +416,13 @@ def generate_response():
     else:
         return jsonify({"response": "Lo siento, no entendí tu pregunta. ¿Podrías reformularla con respecto a la educación básica?"})
 
+@app.route("/speak/<text>")
+def speak(text):
+    tts = gTTS(text=text, lang="es")
+    with tempfile.NamedTemporaryFile(delete=True) as fp:
+        tts.save(fp.name)
+        return send_file(fp.name, mimetype="audio/mpeg")
+
 
 @app.route('/')
 def index():
@@ -472,13 +479,7 @@ def historial():
 
     return render_template('historial.html', historial=historial, user_id=user_id, nombre=nombre_completo, colegio=colegio, grado=grado, profesor=profesor)
 
- 
-@app.route("/speak/<text>")
-def speak(text):
-    tts = gTTS(text=text, lang="es")
-    with tempfile.NamedTemporaryFile(delete=True) as fp:
-        tts.save(fp.name)
-        return send_file(fp.name, mimetype="audio/mpeg")
+
     
 @app.route('/ver_tokens')
 def ver_tokens():
