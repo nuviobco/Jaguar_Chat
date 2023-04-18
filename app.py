@@ -360,18 +360,19 @@ def generate_response():
     col_historial.insert_one({
         "user_id": current_user.id,
         "prompt": prompt,
-        "response": response
+        "response": response,
+        "timestamp": datetime.now(pytz.utc)
     })
+
     intentos = 0
     while not es_tema_educacion_basica(response) and intentos < 2:
         response = openai.Completion.create(
             engine="text-davinci-003",
             prompt=f"hola, buenos días, buenas tardes, buenas noches, saludos, qué, cómo, donde, cuándo, calcula, cuanto, por favor, cuantos grados, cuantos tipos, por qué, quien, de qué forma, de qué manera, dame, ejercicios, concepto, definición, cuál, cuales, figurar, desarrolar, cuando nació, ser muy amigable en el contexto de la educación básica en: 1. matemáticas (resolver, suma, resta, multiplicación, división, álgebra, geometría, fracciones, decimales, porcentajes, resolución de problemas, estadística, cómo se calcula, como se escribe, cúal es la fórmula, que ejercicos, resolver, etc.), 2. lengua y literatura (gramática, ortografía, tiempos verbales, vocabulario, lectura, escritura creativa, análisis de textos literarios, poesía, etc.), 3. ciencias naturales (biología, física, química, medio ambiente, cambio climático, energía, tecnología, salud, etc.), 4. estudios sociales (historia, geografía, ciudades, capitales, paises, continentes, simón bolívar, colonia, independencia, eloy alfaro, provincias, rios, montañas, volcanes, islas, américa latina, civismo, cultura, derechos humanos, democracia, economía, etc.), 5. habilidades comunicativas en inglés (vocabulario, gramática, conversación, lectura, escritura, pronunciación, etc.). saludar, agradecer, felicitar, agradecer. responde: {prompt}",
-             n=1,
+            n=1,
             stop=None,
             temperature=0.8,
         ).choices[0].text.strip()
-        guardar_historial(current_user.id, prompt, response)
         intentos += 1
 
     if es_saludo(response):
