@@ -237,6 +237,7 @@ def signup():
                     "grade": form.grade.data,
                     "school": form.school.data,
                     "teacher": form.teacher.data,
+                    "tokens_disponibles": 2000,
                 }
                 col_usuarios.insert_one(user_data)
                 flash("Usuario registrado exitosamente. Por favor, inicie sesión.", "success")
@@ -358,13 +359,9 @@ def generate_response():
     if 'tokens_usados' not in usuario:
         col_usuarios.update_one({"_id": current_user.id}, {"$set": {"tokens_usados": 0}})
         usuario = col_usuarios.find_one({"_id": current_user.id})
-
     limite_tokens = 2000
 
-    usuario = col_usuarios.find_one({"_id": current_user.id})
-
-    if usuario['tokens_usados'] >= limite_tokens:
-
+    if usuario['tokens_disponibles'] <= 0:
         return redirect(url_for('pago'))
 
     response = openai.Completion.create(
