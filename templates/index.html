@@ -193,9 +193,6 @@
             <div id="history-container">
                 <a href="{{ url_for('historial') }}">Ver historial</a>
               </div>
-              
-
-
         </div>
         </div>
         <div class="response-container">
@@ -227,8 +224,6 @@
             speak(jsonResponse.response);
             playSound();
             changeColor();
-            
-
         }
         
         function onInputKeyDown(event) {
@@ -253,12 +248,6 @@
             }, 300);
         }
 
-        function openHistory() {
-        const historyButton = document.getElementById("historyButton");
-        historyButton.style = "position: fixed; left: 50%; bottom: 20px; transform: translateX(-50%); font-size: 32px; padding: 10px 20px; border: none; border-radius: 5px; background-color: #f3c428; color: #fff; cursor: pointer;";
-
-        }
-
         function speak(text) {
             const synth = window.speechSynthesis;
             const utterance = new SpeechSynthesisUtterance(text);
@@ -275,32 +264,10 @@
             const tokensDisponiblesElement = document.getElementById("tokens-disponibles");
             const tokensDisponibles = parseInt(tokensDisponiblesElement.textContent, 10);
             tokensDisponiblesElement.textContent = tokensDisponibles - tokens_usados;
-            }
-        
-               
-                async function generateResponse() {
-                    const promptInput = document.getElementById("prompt");
-                    const responseOutput = document.getElementById("response");
-        
-                    const response = await fetch("/generate_response", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify({ prompt: promptInput.value })
-                    });
-        
-                    const jsonResponse = await response.json();
-                    responseOutput.innerHTML = jsonResponse.response;
-        
-                    
-                    actualizarTokensDisponibles(jsonResponse.tokens_usados);
-        
-                    promptInput.value = "";        
-
-
         }
     </script>
-    <body> onload="openHistory()">
+</body>
+</html>
+    <body onload="openHistory()">
     <body>
 </html>
