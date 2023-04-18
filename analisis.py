@@ -29,7 +29,7 @@ def obtener_datos(user_id):
     print("Datos obtenidos:", prompts)  
     return prompts
 
-def contar_palabras(prompts, campo='prompt', limit=10):
+def contar_palabras(prompts, campo='prompt', num_palabras=10):
     nlp = spacy.load("es_core_news_sm")
     conteo_palabras = defaultdict(int)
 
@@ -38,11 +38,12 @@ def contar_palabras(prompts, campo='prompt', limit=10):
         if texto is not None:
             doc = nlp(texto)
             for token in doc:
-                if token.is_alpha:
+                if token.is_alpha and not token.is_stop and token.pos_ in ['NOUN', 'VERB', 'ADJ', 'ADV']:
                     conteo_palabras[token.text.lower()] += 1
-    conteo_palabras = dict(sorted(conteo_palabras.items(), key=lambda x: x[1], reverse=True)[:limit])
+    conteo_palabras = dict(sorted(conteo_palabras.items(), key=lambda x: x[1], reverse=True)[:num_palabras])
 
     return dict(conteo_palabras)
+
 
 def obtener_horario_mayor_actividad(prompts):
     conteo_horas = [0] * 24
@@ -85,12 +86,23 @@ def analizar_nivel_comprension(prompts, limit=10):
 def analizar_sentimientos(prompts, limit=10):
     resultados = []
 
+    malas_palabras = ['chucha', 'malo', 'marico', 'chingar', 'wey', 'pendejo', 'cabrón', 'puta', ]
+    palabras_agradecimiento = ['gracias', 'agradecido', 'agradecimiento', 'super', 'maravilloso', 'exitante', 'cariñoso', 'respetuoso']
+
     for prompt in prompts:
         texto = prompt.get('prompt')
         if texto is not None:
             doc = nlp(texto)
 
             puntaje_sentimiento = TextBlob(texto).sentiment.polarity
+
+            for palabra in malas_palabras:
+                if palabra.lower() in texto.lower():
+                    puntaje_sentimiento -= 0.5
+
+            for palabra in palabras_agradecimiento:
+                if palabra.lower() in texto.lower():
+                    puntaje_sentimiento += 0.5
 
             if puntaje_sentimiento > 0:
                 etiqueta_sentimiento = "Positivo"
@@ -101,20 +113,24 @@ def analizar_sentimientos(prompts, limit=10):
 
             resultados.append({'texto': texto, 'puntaje_sentimiento': puntaje_sentimiento, 'etiqueta_sentimiento': etiqueta_sentimiento})
     resultados = sorted(resultados, key=lambda x: abs(x['puntaje_sentimiento']), reverse=True)[:limit]
+
     return resultados
 
 
-def analizar_temas_mas_consultados(prompts, limit=10):
+def analizar_temas_mas_consultados(prompts, num_temas=10):
+    nlp = spacy.load("es_core_news_sm")
     conteo_temas = defaultdict(int)
 
     for prompt in prompts:
-        if prompt is not None:
-            tema = prompt.get('prompt')
-            if tema:
-                conteo_temas[tema] += 1
+        texto = prompt.get('prompt')
+        if texto is not None:
+            doc = nlp(texto)
+            palabras_relevantes = [token.text.lower() for token in doc if token.is_alpha and not token.is_stop and token.pos_ in ['NOUN', 'VERB', 'ADJ', 'ADV']]
+            tema_filtrado = ' '.join(palabras_relevantes)
+            conteo_temas[tema_filtrado] += 1
 
     temas_ordenados = sorted(conteo_temas.items(), key=lambda x: x[1], reverse=True)
-    temas_ordenados = temas_ordenados[:limit]
+    temas_ordenados = temas_ordenados[:num_temas]
     return temas_ordenados
 
 
