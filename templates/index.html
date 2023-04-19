@@ -244,7 +244,7 @@
         
         
         function playSound() {
-            const audio = new Audio("static\mixkit-arcade-game-jump-coin-216.wav");
+            const audio = new Audio("static/ups.wav");
             audio.play();
         }
 
@@ -268,10 +268,10 @@
             synth.speak(utterance);
         }
         
-        function actualizarTokensUtilizados(tokens_usados) {
-            const tokensUtilizadosElement = document.getElementById("tokens-utilizados");
-            const tokensUtilizados = parseInt(tokensUtilizadosElement.textContent, 10);
-            tokensUtilizadosElement.textContent = tokensUtilizados + tokens_usados;
+        function actualizarTokensDisponibles(tokens_usados) {
+            const tokensDisponiblesElement = document.getElementById("tokens-usados");
+            const tokensDisponibles = parseInt(tokensDisponiblesElement.textContent, 10);
+            tokensDisponiblesElement.textContent = tokensDisponibles - tokens_usados;
         }
         
     </script>
