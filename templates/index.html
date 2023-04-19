@@ -199,7 +199,7 @@
             <p id="response"></p>
         </div>
         <div id="tokens-container" style="position: fixed; top: 10px; right: 10px; font-size: 14px; color: #fff; padding: 5px; border-radius: 5px; background-color: rgba(216, 3, 198, 0.562);">
-            Tokens utilizados: <span id="tokens-usados">{{ tokens_usados }}</span>
+            Tokens utilizados: <span id="tokens-utilizados">{{ tokens_usados }}</span>
         </div>
     </main>
 
@@ -224,7 +224,8 @@
             const jsonResponse = await response.json();
             responseOutput.innerHTML = jsonResponse.response;
 
-            actualizarTokensDisponibles(jsonResponse.tokens_usados);
+            actualizarTokensUtilizados(jsonResponse.tokens_usados);
+
 
             promptInput.value = "";
             speak(jsonResponse.response);
@@ -267,12 +268,12 @@
             synth.speak(utterance);
         }
         
-        function actualizarTokensDisponibles(tokens_usados) {
-            const tokensDisponiblesElement = document.getElementById("tokens-disponibles");
-            const tokensDisponibles = parseInt(tokensDisponiblesElement.textContent, 10);
-            tokensDisponiblesElement.textContent = tokensDisponibles - tokens_usados;
-        
+        function actualizarTokensUtilizados(tokens_usados) {
+            const tokensUtilizadosElement = document.getElementById("tokens-utilizados");
+            const tokensUtilizados = parseInt(tokensUtilizadosElement.textContent, 10);
+            tokensUtilizadosElement.textContent = tokensUtilizados + tokens_usados;
         }
+        
     </script>
     <body>
 </html>

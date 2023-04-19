@@ -350,10 +350,8 @@ def generate_response():
     if not current_user.is_authenticated:
         return jsonify({"error": "Usuario no autenticado"}), 401
 
-    input_text = request.json.get('input_text', '')
-
-    prompt = input_text
     prompt = request.json["prompt"]
+
 
     usuario = col_usuarios.find_one({"_id": current_user.id})
     if 'tokens_usados' not in usuario:
@@ -477,7 +475,6 @@ def historial():
     
 @app.route('/ver_tokens')
 def ver_tokens():
-    limite_tokens = 2000
 
     usuario = col_usuarios.find_one({"_id": current_user.id})
     tokens_usados = usuario['tokens_usados']
