@@ -382,13 +382,6 @@ def generate_response():
         "timestamp": datetime.now(pytz.utc)
     })
 
-    tokens_usados = contar_tokens(prompt) + contar_tokens(response)
-    col_usuarios.update_one({"_id": current_user.id}, {"$inc": {"tokens_usados": tokens_usados}})
-
-    if usuario.get('tokens_usados', 0) >= limite_tokens:
-        return jsonify({"error": "Límite de tokens alcanzado"}), 402
-
-
     intentos = 0
     while not es_tema_educacion_basica(response) and intentos < 2:
         response = openai.Completion.create(
