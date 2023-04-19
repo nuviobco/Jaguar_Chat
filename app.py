@@ -359,9 +359,11 @@ def generate_response():
     if 'tokens_usados' not in usuario:
         col_usuarios.update_one({"_id": current_user.id}, {"$set": {"tokens_usados": 0}})
         usuario = col_usuarios.find_one({"_id": current_user.id})
+
     limite_tokens = 2000
-    if usuario.get('tokens_disponibles', 0) <= 0:
-        return redirect(url_for('pagina_pago'))
+
+    if usuario.get('tokens_usados', 0) >= limite_tokens:
+        return jsonify({"error": "Límite de tokens alcanzado"}), 402
 
 
     response = openai.Completion.create(
@@ -381,8 +383,10 @@ def generate_response():
     })
 
     tokens_usados = contar_tokens(prompt) + contar_tokens(response)
-
     col_usuarios.update_one({"_id": current_user.id}, {"$inc": {"tokens_usados": tokens_usados}})
+
+    if usuario.get('tokens_usados', 0) >= limite_tokens:
+        return jsonify({"error": "Límite de tokens alcanzado"}), 402
 
 
     intentos = 0
@@ -394,13 +398,14 @@ def generate_response():
             stop=None,
             temperature=0.6,
         ).choices[0].text.strip()
-        intentos += 1
-    limite_tokens = 2000
-    if usuario.get('tokens_disponibles', 0) <= 0:
-        return redirect(url_for('pagina_pago'))
+    intentos += 1
 
     tokens_usados = contar_tokens(prompt) + contar_tokens(response)
     col_usuarios.update_one({"_id": current_user.id}, {"$inc": {"tokens_usados": tokens_usados}})
+
+    if usuario.get('tokens_usados', 0) >= limite_tokens:
+        return jsonify({"error": "Límite de tokens alcanzado"}), 402
+    
 
     if es_saludo(response):
         return jsonify({"response": "¡Hola! Soy jaguar chat, un bot educativo. ¿En qué puedo ayudarte?"})
@@ -412,6 +417,7 @@ def generate_response():
         return jsonify({"response": response})
     else:
         return jsonify({"response": "Lo siento, no entendí tu pregunta. ¿Podrías reformularla con respecto a la educación básica?"})
+    
 
 @app.route("/speak/<text>")
 def speak(text):
@@ -492,7 +498,7 @@ def ver_tokens():
 @app.route('/pago')
 @login_required
 def pagina_pago():
-    return redirect(url_for('pagina_pago'))
+    return render_template('pagina_pago.html')
 
 @app.route('/analisis/<user_id>')
 @login_required
