@@ -480,15 +480,13 @@ def historial():
     
 @app.route('/ver_tokens')
 def ver_tokens():
+    limite_tokens = 2000
 
-    limite_tokens=2000
-    
     usuario = col_usuarios.find_one({"_id": current_user.id})
     tokens_usados = usuario['tokens_usados']
     tokens_disponibles = limite_tokens - tokens_usados
 
     return render_template('index.html', tokens_disponibles=tokens_disponibles)
-
 
 @app.route('/analisis/<user_id>')
 @login_required
