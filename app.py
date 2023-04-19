@@ -481,12 +481,10 @@ def ver_tokens():
 
     usuario = col_usuarios.find_one({"_id": current_user.id})
     tokens_usados = usuario['tokens_usados']
-    tokens_disponibles = limite_tokens - tokens_usados
 
     print("Tokens usados:", tokens_usados)
-    print("Tokens disponibles:", tokens_disponibles)
 
-    return render_template('index.html', tokens_disponibles=tokens_disponibles)
+    return render_template('index.html', tokens_usados=tokens_usados)
 
 @app.route('/pago')
 @login_required
