@@ -475,8 +475,6 @@ def historial():
     print("Objeto historial:", historial)
 
     return render_template('historial.html', historial=historial, user_id=user_id, nombre=nombre_completo, colegio=colegio, grado=grado, profesor=profesor)
-
-
     
 @app.route('/ver_tokens')
 def ver_tokens():
@@ -494,7 +492,7 @@ def ver_tokens():
 @app.route('/pago')
 @login_required
 def pagina_pago():
-    return render_template('pagina_pago.html')
+    return render_template('pago.html')
 
 @app.route('/analisis/<user_id>')
 @login_required
