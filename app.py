@@ -474,14 +474,14 @@ def historial():
     return render_template('historial.html', historial=historial, user_id=user_id, nombre=nombre_completo, colegio=colegio, grado=grado, profesor=profesor)
     
 @app.route('/ver_tokens')
+@login_required
 def ver_tokens():
-
     usuario = col_usuarios.find_one({"_id": current_user.id})
-    tokens_usados = usuario['tokens_usados']
+    tokens_usados = usuario.get('tokens_usados', 0)
 
     print("Tokens usados:", tokens_usados)
 
-    return render_template('index.html', tokens_usados=tokens_usados)
+    return jsonify({"tokens_usados": tokens_usados})
 
 @app.route('/pago')
 @login_required
