@@ -207,7 +207,7 @@
         async function generateResponse() {
             const promptInput = document.getElementById("prompt");
             const responseOutput = document.getElementById("response");
-    
+
             const response = await fetch("/generate_response", {
                 method: "POST",
                 headers: {
@@ -215,22 +215,30 @@
                 },
                 body: JSON.stringify({ prompt: promptInput.value })
             });
-    
+
             if (response.status === 402) {
                 window.location.href = "/pago";
                 return;
             }
-    
+
             const jsonResponse = await response.json();
             responseOutput.innerHTML = jsonResponse.response;
-    
+
             actualizarTokensDisponibles(jsonResponse.tokens_usados);
-    
+
             promptInput.value = "";
-            
             speak(jsonResponse.response);
             playSound();
             changeColor();
+        }
+
+        function onInputKeyDown(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                generateResponse();
+                playSound();
+                changeColor();
+            }
         }
         
         
