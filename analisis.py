@@ -122,12 +122,12 @@ def analizar_temas_mas_consultados(prompts, num_temas=10):
     conteo_temas = defaultdict(int)
 
     for prompt in prompts:
-     texto = prompt.get('prompt')
-    if texto is not None:
-        doc = nlp(texto)
-        palabras_relevantes = [token.text.lower() for token in doc if token.is_alpha and not token.is_stop and token.pos_ in ['NOUN', 'VERB', 'ADJ', 'ADV']]
-        for palabra in palabras_relevantes:
-            conteo_temas[palabra] += 1
+        texto = prompt.get('prompt')
+        if texto is not None:
+            doc = nlp(texto)
+            palabras_relevantes = [token.text.lower() for token in doc if token.is_alpha and not token.is_stop and token.pos_ in ['NOUN', 'VERB', 'ADJ', 'ADV']]
+            for palabra in palabras_relevantes:
+                conteo_temas[palabra] += 1
 
     temas_ordenados = sorted(conteo_temas.items(), key=lambda x: x[1], reverse=True)
     temas_ordenados = temas_ordenados[:num_temas]
