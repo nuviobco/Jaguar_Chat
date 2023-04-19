@@ -361,8 +361,8 @@ def generate_response():
     limite_tokens = 2000
 
     if usuario.get('tokens_usados', 0) >= limite_tokens:
-        return jsonify({"error": "Límite de tokens alcanzado"}), 402
-
+        return jsonify({"response": response, "tokens_usados": usuario['tokens_usados'] + tokens_usados})
+    
 
     response = openai.Completion.create(
         engine="text-davinci-003",
@@ -396,19 +396,17 @@ def generate_response():
 
     if usuario.get('tokens_usados', 0) >= limite_tokens:
         return jsonify({"error": "Límite de tokens alcanzado"}), 402
-    
 
     if es_saludo(response):
-        return jsonify({"response": "¡Hola! Soy jaguar chat, un bot educativo. ¿En qué puedo ayudarte?"})
+        return jsonify({"response": "¡Hola! Soy jaguar chat, un bot educativo. ¿En qué puedo ayudarte?", "tokens_usados": usuario['tokens_usados'] + tokens_usados})
     elif "gracias" in response.lower():
-        return jsonify({"response": "¡De nada! Estoy aquí para ayudarte en lo que necesites."})
+        return jsonify({"response": "¡De nada! Estoy aquí para ayudarte en lo que necesites.", "tokens_usados": usuario['tokens_usados'] + tokens_usados})
     elif es_seguimiento(response):
-        return jsonify({"response": "Claro, ¿qué otra duda tienes?"})
+        return jsonify({"response": "Claro, ¿qué otra duda tienes?", "tokens_usados": usuario['tokens_usados'] + tokens_usados})
     elif es_tema_educacion_basica(response):
-        return jsonify({"response": response})
+        return jsonify({"response": response, "tokens_usados": usuario['tokens_usados'] + tokens_usados})
     else:
-        return jsonify({"response": "Lo siento, no entendí tu pregunta. ¿Podrías reformularla con respecto a la educación básica?"})
-    
+        return jsonify({"response": "Lo siento, no entendí tu pregunta. ¿Podrías reformularla con respecto a la educación básica?", "tokens_usados": usuario['tokens_usados'] + tokens_usados})
 
 @app.route("/speak/<text>")
 def speak(text):

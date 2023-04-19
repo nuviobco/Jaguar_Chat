@@ -269,9 +269,8 @@
         
         
         function actualizarTokensDisponibles(tokens_usados) {
-            const tokensDisponiblesElement = document.getElementById("tokens-usados");
-            const tokensDisponibles = parseInt(tokensDisponiblesElement.textContent, 10);
-            tokensDisponiblesElement.textContent = tokensDisponibles - tokens_usados;
+            const tokensUsadosElement = document.getElementById("tokens-usados");
+            tokensUsadosElement.textContent = tokens_usados;
         }
         
     </script>
