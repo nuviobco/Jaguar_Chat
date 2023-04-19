@@ -362,7 +362,8 @@ def generate_response():
     limite_tokens = 2000
 
     if usuario['tokens_disponibles'] <= 0:
-        return redirect(url_for('pago'))
+        return redirect(url_for('pagina_pago'))
+
 
     response = openai.Completion.create(
         engine="text-davinci-003",
@@ -397,7 +398,7 @@ def generate_response():
         intentos += 1
     limite_tokens = 2000
     if usuario['tokens_usados'] >= limite_tokens:
-        return redirect(url_for('pago'))
+        return redirect(url_for('pagina_pago'))
 
     tokens_usados = contar_tokens(prompt) + contar_tokens(response)
     col_usuarios.update_one({"_id": current_user.id}, {"$inc": {"tokens_usados": tokens_usados}})
