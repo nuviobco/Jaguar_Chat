@@ -360,8 +360,7 @@ def generate_response():
         col_usuarios.update_one({"_id": current_user.id}, {"$set": {"tokens_usados": 0}})
         usuario = col_usuarios.find_one({"_id": current_user.id})
     limite_tokens = 2000
-
-    if usuario['tokens_disponibles'] <= 0:
+    if usuario.get('tokens_disponibles', 0) <= 0:
         return redirect(url_for('pagina_pago'))
 
 
@@ -397,7 +396,7 @@ def generate_response():
         ).choices[0].text.strip()
         intentos += 1
     limite_tokens = 2000
-    if usuario['tokens_usados'] >= limite_tokens:
+    if usuario.get('tokens_disponibles', 0) <= 0:
         return redirect(url_for('pagina_pago'))
 
     tokens_usados = contar_tokens(prompt) + contar_tokens(response)
