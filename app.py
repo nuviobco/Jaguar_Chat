@@ -491,6 +491,11 @@ def ver_tokens():
 
     return render_template('index.html', tokens_disponibles=tokens_disponibles)
 
+@app.route('/pago')
+@login_required
+def pagina_pago():
+    return render_template('pagina_pago.html')
+
 @app.route('/analisis/<user_id>')
 @login_required
 def analisis(user_id):
