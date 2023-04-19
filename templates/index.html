@@ -148,28 +148,27 @@
             width: 100%;
             height: 100vh;
             z-index: -1;
-        }
-
-        video {
-            position: absolute;
-            min-width: 50%;
-            min-height: 50%;
+          }
+          
+        .video {
+            width: 100%;
+            height: 100%;
             object-fit: cover;
-        }
-
-        .video-overlay {
+          }
+          
+          .video-overlay {
             position: absolute;
             top: 0;
             left: 0;
             width: 50%;
             height: 0%;
             background-color: rgba(4, 13, 138, 0.5); 
-        }
-
-        .content {
+          }
+          
+          .content {
             position: relative;
             z-index: 1;
-        }
+          }
     </style>
 </head>
 
@@ -199,7 +198,7 @@
             <h2>Respuesta:</h2>
             <p id="response"></p>
         </div>
-        <div id="tokens-container" style="position: fixed; top: 10px; right: 10px; font-size: 14px; color: #fff; padding: 5px; border-radius: 5px; background-color: rgba(0, 0, 0, 0.5);">
+        <div id="tokens-container" style="position: fixed; top: 10px; right: 10px; font-size: 14px; color: #fff; padding: 5px; border-radius: 5px; background-color: rgba(216, 3, 198, 0.562);">
             Tokens disponibles: <span id="tokens-disponibles">{{ tokens_disponibles }}</span>
         </div> 
     </main>
