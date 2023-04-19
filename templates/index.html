@@ -207,7 +207,7 @@
         async function generateResponse() {
             const promptInput = document.getElementById("prompt");
             const responseOutput = document.getElementById("response");
-
+        
             const response = await fetch("/generate_response", {
                 method: "POST",
                 headers: {
@@ -215,18 +215,18 @@
                 },
                 body: JSON.stringify({ prompt: promptInput.value })
             });
-
+        
             if (response.status === 402) {
                 window.location.href = "/pagina_pago";
                 return;
             }
-
+        
             const jsonResponse = await response.json();
             responseOutput.innerHTML = jsonResponse.response;
-
-            actualizarTokensDisponibles();
-
-
+        
+            
+            actualizarTokensDisponibles(jsonResponse.tokens_usados);
+        
             promptInput.value = "";
             speak(jsonResponse.response);
             playSound();
@@ -265,20 +265,16 @@
                 synth.cancel();
             }
         
-            synth.speak(utterance);
+            window.onfocus = function () {
+                synth.speak(utterance);
+            };
         }
         
         
-        function obtenerTokensUsados() {
-            fetch('/ver_tokens')
-                .then(response => response.json())
-                .then(data => {
-                    const tokensUsadosElement = document.getElementById('tokens-usados');
-                    tokensUsadosElement.textContent = data.tokens_usados;
-                })
-                .catch(error => {
-                    console.error('Error al obtener los tokens usados:', error);
-                });
+        function actualizarTokensDisponibles(tokens_usados) {
+            const tokensDisponiblesElement = document.getElementById("tokens-usados");
+            const tokensDisponibles = parseInt(tokensDisponiblesElement.textContent, 10);
+            tokensDisponiblesElement.textContent = tokensDisponibles - tokens_usados;
         }
         
     </script>
