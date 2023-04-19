@@ -242,22 +242,21 @@
             }
         }
         
-        
         function playSound() {
             const audio = new Audio("/static/ups.wav");
             audio.play();
         }
 
-        function changeColor() {
-            const sendButton = document.getElementById("sendButton");
-            sendButton.style.backgroundColor = "#00FF00";
-            setTimeout(() => {
-                sendButton.style.backgroundColor = "#f3c428";
-            }, 300);
-        }
-
         function speak(text) {
             const synth = window.speechSynthesis;
+        
+            if (synth.getVoices().length === 0) {
+                synth.addEventListener("voiceschanged", function () {
+                    speak(text);
+                });
+                return;
+            }
+        
             const utterance = new SpeechSynthesisUtterance(text);
             utterance.lang = 'es-ES';
         
@@ -265,9 +264,7 @@
                 synth.cancel();
             }
         
-            window.onfocus = function () {
-                synth.speak(utterance);
-            };
+            synth.speak(utterance);
         }
         
         
