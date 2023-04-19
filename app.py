@@ -492,7 +492,7 @@ def ver_tokens():
 @app.route('/pago')
 @login_required
 def pagina_pago():
-    return render_template('pago.html')
+    return redirect(url_for('pagina_pago'))
 
 @app.route('/analisis/<user_id>')
 @login_required
