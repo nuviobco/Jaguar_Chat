@@ -267,6 +267,14 @@
             synth.speak(utterance);
         }
         
+        function changeColor() {
+            const sendButton = document.getElementById("sendButton");
+            sendButton.style.backgroundColor = "#00FF00";
+            setTimeout(() => {
+                sendButton.style.backgroundColor = "#f3c428";
+            }, 300);
+        }
+
         
         function actualizarTokensDisponibles(tokens_usados) {
             const tokensUsadosElement = document.getElementById("tokens-usados");
