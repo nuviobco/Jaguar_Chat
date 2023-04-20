@@ -352,7 +352,6 @@ def generate_response():
 
     prompt = request.json["prompt"]
 
-
     usuario = col_usuarios.find_one({"_id": current_user.id})
     if 'tokens_usados' not in usuario:
         col_usuarios.update_one({"_id": current_user.id}, {"$set": {"tokens_usados": 0}})
@@ -361,7 +360,7 @@ def generate_response():
     limite_tokens = 2000
 
     if usuario.get('tokens_usados', 0) >= limite_tokens:
-        return jsonify({"response": response, "tokens_usados": usuario['tokens_usados'] + tokens_usados})
+        return jsonify({"error": "Límite de tokens alcanzado", "tokens_usados": usuario['tokens_usados']}), 402
     
 
     response = openai.Completion.create(
@@ -395,8 +394,8 @@ def generate_response():
     col_usuarios.update_one({"_id": current_user.id}, {"$inc": {"tokens_usados": tokens_usados}})
 
     if usuario.get('tokens_usados', 0) >= limite_tokens:
-        return jsonify({"error": "Límite de tokens alcanzado"}), 402
-
+        return jsonify({"error": "Límite de tokens alcanzado", "tokens_usados": usuario['tokens_usados']}), 402
+    
     if es_saludo(response):
         return jsonify({"response": "¡Hola! Soy jaguar chat, un bot educativo. ¿En qué puedo ayudarte?", "tokens_usados": usuario['tokens_usados'] + tokens_usados})
     elif "gracias" in response.lower():
