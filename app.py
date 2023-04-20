@@ -480,8 +480,7 @@ def ver_tokens():
 
     return jsonify({"tokens_usados": tokens_usados})
 
-@app.route('/pago')
-@login_required
+@app.route('/pagina_pago', methods=['GET'])
 def pagina_pago():
     return render_template('pagina_pago.html')
 
