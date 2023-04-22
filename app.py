@@ -395,11 +395,11 @@ def generate_response():
         if not respuesta_no_valida(response):
             break
 
-        tokens_usados = contar_tokens(prompt) + contar_tokens(response)
-        col_usuarios.update_one({"_id": current_user.id}, {"$inc": {"tokens_usados": tokens_usados}})
+    tokens_usados = contar_tokens(prompt) + contar_tokens(response)
+    col_usuarios.update_one({"_id": current_user.id}, {"$inc": {"tokens_usados": tokens_usados}})
 
-        if usuario.get('tokens_usados', 0) >= limite_tokens:
-            return jsonify({"error": "Límite de tokens alcanzado", "tokens_usados": usuario['tokens_usados']}), 402
+    if usuario.get('tokens_usados', 0) >= limite_tokens:
+        return jsonify({"error": "Límite de tokens alcanzado", "tokens_usados": usuario['tokens_usados']}), 402
 
     if respuesta_no_valida(response):
         response = "Lo siento, no entendí tu pregunta. ¿Podrías reformularla con respecto a la educación básica?"
