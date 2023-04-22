@@ -14,16 +14,13 @@ nlp = spacy.load('es_core_news_sm')
 
 
 def obtener_datos(user_id):
-
     mongo_uri = os.environ.get("MONGO_URI")
     mongo_client = pymongo.MongoClient(mongo_uri)
     db = mongo_client["jaguar_chat"]
 
     col_historial = db["historial"]
 
-
-    cursor = col_historial.find({'user_id': user_id})
-
+    cursor = col_historial.find({'user_id': user_id}).sort([("timestamp", pymongo.DESCENDING), ("tamp", pymongo.DESCENDING)]).limit(10)
 
     prompts = [doc for doc in cursor]
     print("Datos obtenidos:", prompts)  
