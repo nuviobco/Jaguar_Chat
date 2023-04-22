@@ -401,11 +401,10 @@ def generate_response():
         if usuario.get('tokens_usados', 0) >= limite_tokens:
             return jsonify({"error": "Límite de tokens alcanzado", "tokens_usados": usuario['tokens_usados']}), 402
 
-        if respuesta_no_valida(response):
-            response = "Lo siento, no entendí tu pregunta. ¿Podrías reformularla con respecto a la educación básica?"
+    if respuesta_no_valida(response):
+        response = "Lo siento, no entendí tu pregunta. ¿Podrías reformularla con respecto a la educación básica?"
 
-            return jsonify({"response": response, "tokens_usados": usuario['tokens_usados'] + tokens_usados})
-
+    return jsonify({"response": response, "tokens_usados": usuario['tokens_usados'] + tokens_usados})
 
 @app.route("/speak/<text>")
 def speak(text):
