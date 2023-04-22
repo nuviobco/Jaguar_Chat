@@ -39,7 +39,7 @@ def contar_palabras(prompts, campo='prompt', num_palabras=10):
                     conteo_palabras[token.text.lower()] += 1
     conteo_palabras = dict(sorted(conteo_palabras.items(), key=lambda x: x[1], reverse=True)[:num_palabras])
 
-    return {'conteo_palabras': dict(conteo_palabras)}
+    return dict(conteo_palabras)
 
 
 def obtener_horario_mayor_actividad(prompts):
@@ -63,7 +63,7 @@ def obtener_horario_mayor_actividad(prompts):
     horas_mayor_actividad = [(i, conteo) for i, conteo in enumerate(conteo_horas)]
     horas_mayor_actividad = sorted(horas_mayor_actividad, key=lambda x: x[1], reverse=True)[:10]
 
-    return {'horas_mayor_actividad': horas_mayor_actividad}
+    return horas_mayor_actividad
 
 
 def analizar_nivel_comprension(prompts, limit=10):
@@ -77,7 +77,7 @@ def analizar_nivel_comprension(prompts, limit=10):
             resultados.append({'texto': texto, 'nivel_comprension': nivel_comprension})
     resultados = sorted(resultados, key=lambda x: x['nivel_comprension'], reverse=True)[:limit]
 
-    return {'resultados_comprension': resultados}
+    return resultados
 
 
 def analizar_sentimientos(prompts, limit=10):
@@ -111,7 +111,7 @@ def analizar_sentimientos(prompts, limit=10):
             resultados.append({'texto': texto, 'puntaje_sentimiento': puntaje_sentimiento, 'etiqueta_sentimiento': etiqueta_sentimiento})
     resultados = sorted(resultados, key=lambda x: abs(x['puntaje_sentimiento']), reverse=True)[:limit]
 
-    return {'resultados_sentimientos': resultados}
+    return resultados
 
 
 def analizar_temas_mas_consultados(prompts, num_temas=10):
@@ -128,6 +128,6 @@ def analizar_temas_mas_consultados(prompts, num_temas=10):
 
     temas_ordenados = sorted(conteo_temas.items(), key=lambda x: x[1], reverse=True)
     temas_ordenados = temas_ordenados[:num_temas]
-    return {'temas_mas_consultados': temas_ordenados}
+    return temas_ordenados
 
 
