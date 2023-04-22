@@ -2,6 +2,7 @@ import uuid
 import openai
 from flask import Flask, request, jsonify, render_template, send_file, redirect, url_for, flash, session, make_response
 from flask_wtf import FlaskForm
+from flask import render_template_string
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, SelectField
 from wtforms.validators import DataRequired, Length, Email, EqualTo
 from gtts import gTTS
@@ -20,8 +21,10 @@ from analisis import obtener_datos, analizar_temas_mas_consultados, contar_palab
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.interval import IntervalTrigger
 import pytz
-from email.mime.text import MIMEText
+import base64
 from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.image import MIMEImage
 from pymongo import MongoClient
 from dotenv import load_dotenv
 
@@ -102,9 +105,23 @@ trigger = IntervalTrigger(weeks=1)
 scheduler.add_job(limpiar_historial, trigger)
 scheduler.start()
 
-def enviar_email_mailgun(asunto, contenido, destinatario):
-    mailgun_api_key = os.environ.get('MAILGUN_API_KEY')  
-    mailgun_domain = os.environ.get('MAILGUN_DOMAIN')  
+def enviar_email_mailgun(asunto, contenido, destinatario, images=None):
+    mailgun_api_key = os.environ.get('MAILGUN_API_KEY')
+    mailgun_domain = os.environ.get('MAILGUN_DOMAIN')
+
+    msg = MIMEMultipart()
+
+    msg.attach(MIMEText(contenido, 'html'))
+
+    if images:
+        for image_name, image_path in images.items():
+            with open(image_path, 'rb') as f:
+                image_data = f.read()
+
+            image = MIMEImage(image_data)
+            image.add_header('Content-ID', f'<{image_name}>')
+            image.add_header('Content-Disposition', 'inline', filename=image_name)
+            msg.attach(image)
 
     url = f"https://api.mailgun.net/v3/{mailgun_domain}/messages"
     auth = ("api", mailgun_api_key)
@@ -112,7 +129,7 @@ def enviar_email_mailgun(asunto, contenido, destinatario):
         'from': 'tu_email@example.com',
         'to': destinatario,
         'subject': asunto,
-        'text': contenido
+        'html': msg.as_string()
     }
 
     response = requests.post(url, auth=auth, data=data)
@@ -573,10 +590,19 @@ def enviar_analisis():
 
         asunto = "Resultados del análisis"
 
-        contenido = str(resultados_analisis)
+        with open('email.html', 'r') as f:
+            plantilla_email = f.read()
+        
+        contenido = render_template_string(plantilla_email, **resultados_analisis)
+        
+        images = {
+            'temas_mas_consultados': os.path.join('static', 'img', 'temas_mas_consultados.png'),
+            'horarios_mayor_actividad': os.path.join('static', 'img', 'horarios_mayor_actividad.png'),
+            'nivel_comprension': os.path.join('static', 'img', 'nivel_comprension.png')
+        }
 
         try:
-            response = enviar_email_mailgun(asunto, contenido, profesor_email)
+            response = enviar_email_mailgun(asunto, contenido, profesor_email, images)
             if response.status_code == 200:
                 return render_template('resultado_envio.html', enviado=True)
             else:
@@ -587,7 +613,6 @@ def enviar_analisis():
             return render_template('resultado_envio.html', enviado=False)
 
     return render_template('enviar_analisis.html')
-
 
 @app.route('/logout')
 def logout():
