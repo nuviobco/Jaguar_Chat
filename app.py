@@ -590,10 +590,7 @@ def enviar_analisis():
 
         asunto = "Resultados del análisis"
 
-        with open('email.html', 'r') as f:
-            plantilla_email = f.read()
-        
-        contenido = render_template_string(plantilla_email, **resultados_analisis)
+        contenido = render_template('email.html', **resultados_analisis)
         
         images = {
             'temas_mas_consultados': os.path.join('static', 'img', 'temas_mas_consultados.png'),
