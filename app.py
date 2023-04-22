@@ -320,7 +320,7 @@ def home():
 
 def es_saludo(texto):
 
-    saludos = ["hola", "saludos", "buenos días", "buenas tardes", "buenas noches", "bienvenidos"]
+    saludos = ["hola", "saludos", "buenos días", "buenas tardes", "buenas noches", "bienvenidos" , "como esta" ,]
     texto = texto.lower()
     
     return any(re.search(r'\b' + saludo + r'\b', texto) for saludo in saludos)
@@ -341,6 +341,9 @@ def es_seguimiento(texto):
         if seguimiento in texto:
             return True
     return False
+
+def respuesta_no_valida(respuesta):
+    return not es_tema_educacion_basica(respuesta) and not es_saludo(respuesta) and not "gracias" in respuesta.lower() and not es_seguimiento(respuesta)
 
 @app.route('/generate_response', methods=['POST'])
 @login_required
@@ -378,34 +381,31 @@ def generate_response():
         "timestamp": datetime.now(pytz.utc)
     })
 
-    intentos = 0
-    max_intentos = 1
-    while not es_tema_educacion_basica(response) and intentos < max_intentos:
-        response = openai.Completion.create(
-            engine="text-davinci-003",
-            prompt=f"hola, buenos días, buenas tardes, buenas noches, saludos, qué, cómo, donde, cuándo, calcula, cuanto, por favor, cuantos grados, cuantos tipos, por qué, quien, de qué forma, de qué manera, dame, ejercicios, concepto, definición, cuál, cuales, figurar, desarrolar, cuando nació, ser muy amigable en el contexto de la educación básica en: 1. matemáticas (resolver, suma, resta, multiplicación, división, álgebra, geometría, fracciones, decimales, porcentajes, resolución de problemas, estadística, cómo se calcula, como se escribe, cúal es la fórmula, que ejercicos, resolver, etc.), 2. lengua y literatura (gramática, ortografía, tiempos verbales, vocabulario, lectura, escritura creativa, análisis de textos literarios, poesía, etc.), 3. ciencias naturales (biología, física, química, medio ambiente, cambio climático, energía, tecnología, salud, etc.), 4. estudios sociales (historia, geografía, ciudades, capitales, paises, continentes, simón bolívar, colonia, independencia, eloy alfaro, provincias, rios, montañas, volcanes, islas, américa latina, civismo, cultura, derechos humanos, democracia, economía, etc.), 5. habilidades comunicativas en inglés (vocabulario, gramática, conversación, lectura, escritura, pronunciación, etc.). saludar, agradecer, felicitar, agradecer. responde: {prompt}",
-            n=1,
-            stop=None,
-            temperature=0.6,
-        ).choices[0].text.strip()
-    intentos += 1
+    max_intentos = 2
+    for intento in range(max_intentos):
+        if intento > 0:
+            response = openai.Completion.create(
+                engine="text-davinci-003",
+                prompt=f"hola, buenos días, buenas tardes, buenas noches, saludos, qué, cómo, donde, cuándo, calcula, cuanto, por favor, cuantos grados, cuantos tipos, por qué, quien, de qué forma, de qué manera, dame, ejercicios, concepto, definición, cuál, cuales, figurar, desarrolar, cuando nació, ser muy amigable en el contexto de la educación básica en: 1. matemáticas (resolver, suma, resta, multiplicación, división, álgebra, geometría, fracciones, decimales, porcentajes, resolución de problemas, estadística, cómo se calcula, como se escribe, cúal es la fórmula, que ejercicos, resolver, etc.), 2. lengua y literatura (gramática, ortografía, tiempos verbales, vocabulario, lectura, escritura creativa, análisis de textos literarios, poesía, etc.), 3. ciencias naturales (biología, física, química, medio ambiente, cambio climático, energía, tecnología, salud, etc.), 4. estudios sociales (historia, geografía, ciudades, capitales, paises, continentes, simón bolívar, colonia, independencia, eloy alfaro, provincias, rios, montañas, volcanes, islas, américa latina, civismo, cultura, derechos humanos, democracia, economía, etc.), 5. habilidades comunicativas en inglés (vocabulario, gramática, conversación, lectura, escritura, pronunciación, etc.). saludar, agradecer, felicitar, agradecer. responde: {prompt}",
+                n=1,
+                stop=None,
+                temperature=0.6,
+            ).choices[0].text.strip()
 
-    tokens_usados = contar_tokens(prompt) + contar_tokens(response)
-    col_usuarios.update_one({"_id": current_user.id}, {"$inc": {"tokens_usados": tokens_usados}})
+        if not respuesta_no_valida(response):
+            break
 
-    if usuario.get('tokens_usados', 0) >= limite_tokens:
-        return jsonify({"error": "Límite de tokens alcanzado", "tokens_usados": usuario['tokens_usados']}), 402
-    
-    if es_saludo(response):
-        return jsonify({"response": "¡Hola! Soy jaguar chat, un bot educativo. ¿En qué puedo ayudarte?", "tokens_usados": usuario['tokens_usados'] + tokens_usados})
-    elif "gracias" in response.lower():
-        return jsonify({"response": "¡De nada! Estoy aquí para ayudarte en lo que necesites.", "tokens_usados": usuario['tokens_usados'] + tokens_usados})
-    elif es_seguimiento(response):
-        return jsonify({"response": "Claro, ¿qué otra duda tienes?", "tokens_usados": usuario['tokens_usados'] + tokens_usados})
-    elif es_tema_educacion_basica(response):
-        return jsonify({"response": response, "tokens_usados": usuario['tokens_usados'] + tokens_usados})
-    else:
-        return jsonify({"response": "Lo siento, no entendí tu pregunta. ¿Podrías reformularla con respecto a la educación básica?", "tokens_usados": usuario['tokens_usados'] + tokens_usados})
+        tokens_usados = contar_tokens(prompt) + contar_tokens(response)
+        col_usuarios.update_one({"_id": current_user.id}, {"$inc": {"tokens_usados": tokens_usados}})
+
+        if usuario.get('tokens_usados', 0) >= limite_tokens:
+            return jsonify({"error": "Límite de tokens alcanzado", "tokens_usados": usuario['tokens_usados']}), 402
+
+        if respuesta_no_valida(response):
+            response = "Lo siento, no entendí tu pregunta. ¿Podrías reformularla con respecto a la educación básica?"
+
+            return jsonify({"response": response, "tokens_usados": usuario['tokens_usados'] + tokens_usados})
+
 
 @app.route("/speak/<text>")
 def speak(text):
