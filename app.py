@@ -384,7 +384,7 @@ def generate_response():
         "timestamp": datetime.now(pytz.utc)
     })
 
-    max_intentos = 2
+    max_intentos = 1
     for intento in range(max_intentos):
         if intento > 0:
             response = openai.Completion.create(
