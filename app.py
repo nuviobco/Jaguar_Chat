@@ -579,22 +579,18 @@ def enviar_analisis():
     if request.method == 'POST':
         profesor_email = request.form['correo_profesor']
     
-        resultados_analisis = analisis(user_id)
-
         email_usuario, _ = obtener_credenciales_email(user_id)
 
         asunto = "Resultados del análisis"
 
-        contenido = render_template('email.html', **resultados_analisis)
-        
-        images = {
-            'temas_mas_consultados': os.path.join('static', 'img', 'temas_mas_consultados.png'),
-            'horarios_mayor_actividad': os.path.join('static', 'img', 'horarios_mayor_actividad.png'),
-            'nivel_comprension': os.path.join('static', 'img', 'nivel_comprension.png')
-        }
+        # Crear la URL absoluta para la página de análisis del usuario
+        analisis_url = request.url_root + url_for('mostrar_analisis', user_id=user_id)[1:]
+
+        # Usar la URL en el contenido del correo electrónico
+        contenido = render_template('email.html', analisis_url=analisis_url)
 
         try:
-            response = enviar_email_mailgun(asunto, contenido, profesor_email, images)
+            response = enviar_email_mailgun(asunto, contenido, profesor_email)
             if response.status_code == 200:
                 return render_template('resultado_envio.html', enviado=True)
             else:
