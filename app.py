@@ -20,8 +20,7 @@ from datetime import datetime, timedelta
 from analisis import obtener_datos, analizar_temas_mas_consultados, contar_palabras, analizar_nivel_comprension, analizar_sentimientos, obtener_horario_mayor_actividad
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.interval import IntervalTrigger
-import pytz
-import base64
+import pytz 
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
@@ -106,33 +105,29 @@ scheduler.add_job(limpiar_historial, trigger)
 scheduler.start()
 
 def enviar_email_mailgun(asunto, contenido, destinatario, images=None):
-    mailgun_api_key = os.environ.get('MAILGUN_API_KEY')
-    mailgun_domain = os.environ.get('MAILGUN_DOMAIN')
+    MAILGUN_API_KEY = os.environ.get("MAILGUN_API_KEY")
+    MAILGUN_DOMAIN = os.environ.get("MAILGUN_DOMAIN")
+    MAILGUN_SENDER = os.environ.get("MAILGUN_SENDER")
+    
+    url = f"https://api.mailgun.net/v3/{MAILGUN_DOMAIN}/messages"
+    auth = ("api", MAILGUN_API_KEY)
 
-    msg = MIMEMultipart()
-
-    msg.attach(MIMEText(contenido, 'html'))
-
-    if images:
-        for image_name, image_path in images.items():
-            with open(image_path, 'rb') as f:
-                image_data = f.read()
-
-            image = MIMEImage(image_data)
-            image.add_header('Content-ID', f'<{image_name}>')
-            image.add_header('Content-Disposition', 'inline', filename=image_name)
-            msg.attach(image)
-
-    url = f"https://api.mailgun.net/v3/{mailgun_domain}/messages"
-    auth = ("api", mailgun_api_key)
     data = {
-        'from': 'tu_email@example.com',
-        'to': destinatario,
-        'subject': asunto,
-        'html': msg.as_string()
+        "from": f"Jaguar Chat <{MAILGUN_SENDER}>",
+        "to": destinatario,
+        "subject": asunto,
+        "html": contenido
     }
 
-    response = requests.post(url, auth=auth, data=data)
+    if images:
+        files = []
+        for key, path in images.items():
+            with open(path, "rb") as f:
+                files.append(("inline", (key + ".png", f.read(), "image/png")))
+
+        response = requests.post(url, auth=auth, data=data, files=files)
+    else:
+        response = requests.post(url, auth=auth, data=data)
 
     return response
 
