@@ -584,7 +584,8 @@ def enviar_analisis():
         asunto = "Resultados del análisis"
 
         # Crear la URL absoluta para la página de análisis del usuario
-        analisis_url = request.url_root + url_for('mostrar_analisis', user_id=user_id)[1:]
+        analisis_url = request.url_root + url_for('analisis', user_id=user_id)[1:]
+
 
         # Usar la URL en el contenido del correo electrónico
         contenido = render_template('email.html', analisis_url=analisis_url)
