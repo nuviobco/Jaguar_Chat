@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .logo {
+            display: block;
+            margin: 0 auto;
+            max-width: 150px;
+        }
+        h1 {
+            font-size: 24px;
+            text-align: center;
+        }
+        p {
+            font-size: 16px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="cid:logo" alt="Logo" class="logo">
+        <h1>Resultados del análisis</h1>
+        <p>Estimado maestro, le enviamos los resultados del análisis de las conversaciones del usuario {{ nombre_completo }}. Por favor, haga clic en el siguiente enlace para ver los resultados de la interacción de su alumno con JaguarChat:</p>
+        <p><a href="{{ url_analisis }}">Ver resultados del análisis</a></p>
+    </div>
+</body>
+</html>
