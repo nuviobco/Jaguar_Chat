@@ -578,25 +578,28 @@ def enviar_analisis():
         return redirect(url_for('login'))
     if request.method == 'POST':
         profesor_email = request.form['correo_profesor']
-
-        enlace_analisis = url_for('analisis', user_id=user_id, _external=True)
+    
+        resultados_analisis = analisis(user_id)
 
         email_usuario, _ = obtener_credenciales_email(user_id)
 
         asunto = "Resultados del análisis"
 
-        contenido = f"""
-        <p>Hola,</p>
-        <p>Estimado maestro, le enviamos los resultados del análisis de las conversaciones del usuario {user_id}. Por favor, haz clic en el siguiente enlace para ver los resultados de la interacción de su alumno con Jaguarchat:</p>
-        <p><a href="{enlace_analisis}">{enlace_analisis}</a></p>
-        """
+        contenido = render_template('email.html', **resultados_analisis)
+        
+        images = {
+            'temas_mas_consultados': os.path.join('static', 'img', 'temas_mas_consultados.png'),
+            'horarios_mayor_actividad': os.path.join('static', 'img', 'horarios_mayor_actividad.png'),
+            'nivel_comprension': os.path.join('static', 'img', 'nivel_comprension.png')
+        }
 
         try:
-            response = enviar_email_mailgun(asunto, contenido, profesor_email)
+            response = enviar_email_mailgun(asunto, contenido, profesor_email, images)
             if response.status_code == 200:
                 return render_template('resultado_envio.html', enviado=True)
             else:
-                print("Error al enviar el correo electrónico:", response.status_code)
+                print("Error al enviar el correo electrónico. Código de estado:", response.status_code)
+                print("Respuesta:", response.text)
                 return render_template('resultado_envio.html', enviado=False)
         except Exception as e:
             print("Error al enviar el correo electrónico:", e)
