@@ -337,7 +337,7 @@ def home():
 
 def es_saludo(texto):
 
-    saludos = ["hola", "saludos", "buenos días", "buenas tardes", "buenas noches", "bienvenidos" , "como esta" ,]
+    saludos = ["hola", "saludos", "buenos días", "buenas tardes", "buenas noches", "bienvenidos" , "como esta", "gracias", "super" , "genial", ]
     texto = texto.lower()
     
     return any(re.search(r'\b' + saludo + r'\b', texto) for saludo in saludos)
@@ -360,7 +360,7 @@ def es_seguimiento(texto):
     return False
 
 def respuesta_no_valida(respuesta):
-    palabras_clave = ['matemáticas', 'lengua y literatura', 'ciencias naturales', 'estudios sociales', 'habilidades comunicativas en inglés']
+    palabras_clave = ['matemáticas', 'lengua y literatura', 'ciencias naturales', 'estudios sociales', 'habilidades comunicativas en inglés', 'que', 'cómo', 'donde', 'cuando', 'porqué', ]
     palabras_clave_en_respuesta = any(palabra in respuesta.lower() for palabra in palabras_clave)
     
     return not palabras_clave_en_respuesta and not es_tema_educacion_basica(respuesta) and not es_saludo(respuesta) and not "gracias" in respuesta.lower() and not es_seguimiento(respuesta)
@@ -380,7 +380,7 @@ def generate_response():
         col_usuarios.update_one({"_id": current_user.id}, {"$set": {"tokens_usados": 0}})
         usuario = col_usuarios.find_one({"_id": current_user.id})
 
-    limite_tokens = 2000
+    limite_tokens = 500
 
     if usuario.get('tokens_usados', 0) >= limite_tokens:
         return jsonify({"error": "Límite de tokens alcanzado", "tokens_usados": usuario['tokens_usados']}), 402
@@ -576,30 +576,28 @@ def obtener_datos_usuario(user_id):
     else:
         return {}
 
-@app.route('/enviar_analisis', methods=['GET', 'POST'])
 def enviar_analisis():
     user_id = session.get('user_id')
     if not user_id:
         return redirect(url_for('login'))
     if request.method == 'POST':
         profesor_email = request.form['correo_profesor']
-    
-        resultados_analisis = analisis(user_id)
+
+        enlace_analisis = url_for('analisis', _external=True)
 
         email_usuario, _ = obtener_credenciales_email(user_id)
 
         asunto = "Resultados del análisis"
 
-        contenido = render_template('email.html', **resultados_analisis)
         
-        images = {
-            'temas_mas_consultados': os.path.join('static', 'img', 'temas_mas_consultados.png'),
-            'horarios_mayor_actividad': os.path.join('static', 'img', 'horarios_mayor_actividad.png'),
-            'nivel_comprension': os.path.join('static', 'img', 'nivel_comprension.png')
-        }
+        contenido = f"""
+        <p>Hola,</p>
+        <p>Estimado maestro, le enviamos los resultados del análisis de las conversaciones del usuario {user_id}. Por favor, haz clic en el siguiente enlace para ver los resultados:</p>
+        <p><a href="{enlace_analisis}">{enlace_analisis}</a></p>
+        """
 
         try:
-            response = enviar_email_mailgun(asunto, contenido, profesor_email, images)
+            response = enviar_email_mailgun(asunto, contenido, profesor_email)
             if response.status_code == 200:
                 return render_template('resultado_envio.html', enviado=True)
             else:
