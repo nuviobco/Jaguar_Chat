@@ -368,10 +368,10 @@ def es_seguimiento(texto):
     return False
 
 def respuesta_no_valida(respuesta):
-    palabras_clave = ['matemáticas', 'lengua y literatura', 'ciencias naturales', 'estudios sociales', 'habilidades comunicativas en inglés', 'que', 'cómo', 'donde', 'cuando', 'porqué', 'quien', 'de donde viene', 'quisiera saber', 'me puedes decir', 'suma', 'resta', 'multiplicación', 'division', 'operaciones matemáticas', 'resuelve', 'compara', 'ejercicios', 'ejemplos',]
+    palabras_clave = ['matemáticas', 'lengua y literatura', 'ciencias naturales', 'estudios sociales', 'habilidades comunicativas en inglés', 'que', 'cómo', 'donde', 'cuando', 'porqué', 'quien', 'de donde viene', 'quisiera saber', 'me puedes decir', 'operaciones matemáticas', 'resuelve', 'compara', 'ejercicios', 'ejemplos',]
     palabras_clave_en_respuesta = any(palabra in respuesta.lower() for palabra in palabras_clave)
     
-    return not palabras_clave_en_respuesta and not es_tema_educacion_basica(respuesta) and not es_saludo(respuesta) and not "gracias" in respuesta.lower() and not es_seguimiento(respuesta)
+    return not palabras_clave_en_respuesta and not es_tema_educacion_basica(respuesta) and not es_saludo(respuesta) and not "gracias" in respuesta.lower() and not es_seguimiento(respuesta) and not resolver_operacion(respuesta)
 
 @app.route('/generate_response', methods=['POST'])
 @login_required
