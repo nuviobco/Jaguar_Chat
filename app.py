@@ -2,7 +2,7 @@ import uuid
 import openai
 from flask import Flask, request, jsonify, render_template, send_file, redirect, url_for, flash, session, make_response
 from flask_wtf import FlaskForm
-from flask import render_template_string
+import sympy
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, SelectField
 from wtforms.validators import DataRequired, Length, Email, EqualTo
 from gtts import gTTS
@@ -347,6 +347,19 @@ def es_tema_educacion_basica(texto):
             return True
     return False
 
+def resolver_operacion(texto):
+    operacion_regex = r"(-?\d+(\.\d+)?[\s]?[\+\-\*/][\s]?-?\d+(\.\d+)?)"
+    operaciones = re.findall(operacion_regex, texto)
+
+    if operaciones:
+        try:
+            resultado = sympy.sympify(operaciones[0])
+            return f"{operaciones[0]} = {resultado}"
+        except:
+            return None
+    else:
+        return None
+
 def es_seguimiento(texto):
     seguimientos = ["¿Algo más?", "¿Te ayudo en algo más?", "¿Necesitas algo más?", "¿En qué más te puedo ayudar?"]
     for seguimiento in seguimientos:
@@ -355,7 +368,7 @@ def es_seguimiento(texto):
     return False
 
 def respuesta_no_valida(respuesta):
-    palabras_clave = ['matemáticas', 'lengua y literatura', 'ciencias naturales', 'estudios sociales', 'habilidades comunicativas en inglés', 'que', 'cómo', 'donde', 'cuando', 'porqué', 'quien', 'de donde viene', 'quisiera saber', 'me puedes decir', '_+_=', '_-_=', '_*_=', '_/_=', 'resuelve', 'compara', 'ejercicios', 'ejemplos',]
+    palabras_clave = ['matemáticas', 'lengua y literatura', 'ciencias naturales', 'estudios sociales', 'habilidades comunicativas en inglés', 'que', 'cómo', 'donde', 'cuando', 'porqué', 'quien', 'de donde viene', 'quisiera saber', 'me puedes decir', 'suma', 'resta', 'multiplicación', 'division', 'operaciones matemáticas', 'resuelve', 'compara', 'ejercicios', 'ejemplos',]
     palabras_clave_en_respuesta = any(palabra in respuesta.lower() for palabra in palabras_clave)
     
     return not palabras_clave_en_respuesta and not es_tema_educacion_basica(respuesta) and not es_saludo(respuesta) and not "gracias" in respuesta.lower() and not es_seguimiento(respuesta)
@@ -412,6 +425,10 @@ def generate_response():
 
     tokens_usados = contar_tokens(prompt) + contar_tokens(response)
     col_usuarios.update_one({"_id": current_user.id}, {"$inc": {"tokens_usados": tokens_usados}})
+
+    resultado_operacion = resolver_operacion(prompt)
+    if resultado_operacion:
+        return jsonify({"response": resultado_operacion, "tokens_usados": 0})
 
     if usuario.get('tokens_usados', 0) >= limite_tokens:
         return jsonify({"error": "Límite de tokens alcanzado", "tokens_usados": usuario['tokens_usados']}), 402
