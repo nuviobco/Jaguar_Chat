@@ -394,8 +394,6 @@ def generate_response():
 
     prompt = request.json["prompt"]
 
-    resolver_operacion = extraer_operaciones_matematicas(prompt)
-
     usuario = col_usuarios.find_one({"_id": current_user.id})
     if 'tokens_usados' not in usuario:
         col_usuarios.update_one({"_id": current_user.id}, {"$set": {"tokens_usados": 0}})
@@ -439,8 +437,8 @@ def generate_response():
     tokens_usados = contar_tokens(prompt) + contar_tokens(response)
     col_usuarios.update_one({"_id": current_user.id}, {"$inc": {"tokens_usados": tokens_usados}})
 
-    resultado_operacion = resultado_operacion(prompt)
-    for op, resultado in resultado_operacion.items():
+    operaciones_resueltas = extraer_operaciones_matematicas(prompt)
+    for op, resultado in operaciones_resueltas.items():
         prompt = prompt.replace(op, str(resultado))
     
     if usuario.get('tokens_usados', 0) >= limite_tokens:
@@ -449,8 +447,8 @@ def generate_response():
     if es_saludo(response):
         response = "Hola, soy jaguarchat, un bot educativo, ¿En qué puedo ayudarte?"
 
-    if resultado_operacion:
-        return jsonify({"response": resultado_operacion, "tokens_usados": 0})
+    if operaciones_resueltas:
+        return jsonify({"response": operaciones_resueltas, "tokens_usados": 0})
 
     if respuesta_no_valida(response):
         response = "Lo siento, no entendí tu pregunta. ¿Podrías reformularla con respecto a la educación básica?"
