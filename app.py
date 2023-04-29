@@ -368,7 +368,7 @@ def es_seguimiento(texto):
     return False
 
 def respuesta_no_valida(respuesta):
-    palabras_clave = ['matemáticas', 'lengua y literatura', 'ciencias naturales', 'estudios sociales', 'habilidades comunicativas en inglés', 'que', 'cómo', 'donde', 'cuando', 'porqué', 'quien', 'de donde viene', 'quisiera saber', 'me puedes decir', 'operaciones matemáticas', 'resuelve', 'compara', 'ejercicios', 'ejemplos', 'dime un ejercicio', 'dime un ejemplo' ]
+    palabras_clave = ['matemáticas', 'lengua y literatura', 'ciencias naturales', 'estudios sociales', 'habilidades comunicativas en inglés', 'que', 'cómo', 'donde', 'cuando', 'porqué', 'quien', 'de donde viene', 'quisiera saber', 'me puedes decir', 'operaciones matemáticas', 'suma', 'reta', 'division', 'resuelve', 'multiplicación', 'resuelve', 'compara', 'ejercicios', 'ejemplos', 'dime un ejercicio', 'dime un ejemplo' ]
     palabras_clave_en_respuesta = any(palabra in respuesta.lower() for palabra in palabras_clave)
     
     return not palabras_clave_en_respuesta and not es_tema_educacion_basica(respuesta) and not es_saludo(respuesta) and not "gracias" in respuesta.lower() and not es_seguimiento(respuesta) and not resolver_operacion(respuesta)
@@ -427,14 +427,15 @@ def generate_response():
     col_usuarios.update_one({"_id": current_user.id}, {"$inc": {"tokens_usados": tokens_usados}})
 
     resultado_operacion = resolver_operacion(prompt)
-    if resultado_operacion:
-        return jsonify({"response": resultado_operacion, "tokens_usados": 0})
-
+    
     if usuario.get('tokens_usados', 0) >= limite_tokens:
         return jsonify({"error": "Límite de tokens alcanzado", "tokens_usados": usuario['tokens_usados']}), 402
     
     if es_saludo(response):
         response = "Hola, soy jaguarchat, un bot educativo, ¿En qué puedo ayudarte?"
+
+    if resultado_operacion:
+        return jsonify({"response": resultado_operacion, "tokens_usados": 0})
 
     if respuesta_no_valida(response):
         response = "Lo siento, no entendí tu pregunta. ¿Podrías reformularla con respecto a la educación básica?"
