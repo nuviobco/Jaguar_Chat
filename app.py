@@ -331,11 +331,11 @@ def home():
         return redirect(url_for("login"))
 
 def es_saludo(texto):
-    saludos = ["hola", "saludos", "buenos días", "buenas tardes", "buenas noches", "bienvenidos"]
-    for saludo in saludos:
-        if saludo in texto.lower():
-            return True
-    return False
+
+    saludos = ["hola", "saludos", "buenos días", "buenas tardes", "buenas noches", "bienvenidos" , "como esta", "gracias", "super" , "genial", ]
+    texto = texto.lower()
+    
+    return any(re.search(r'\b' + saludo + r'\b', texto) for saludo in saludos)
 
 def es_tema_educacion_basica(texto):
     palabras_clave_educacion_basica = ["explicar", "que", "como", "donde", "cuando", "quien", "decir en qué consiste", "tiempos verbales", "concepto", "ayudar", "dar ejemplo", "definir", "desarrollar", "qué es", "socializar", "teoremas", "matemáticas", "suma", "resta", "ecuaciones", "grados y tipos", "multiplicación", "división", "matemática general", "aritmética", "álgebra", "geometría", "trigonometría", "estadística", "probabilidad","lengua", "ciencias naturales", "sociales", "presidentes", "historia de Ecuador", "simón bolívar", "ciudades", "capitales", "paises", "historia latinoamericana", "historia universal", "geografía de Ecuador", "cívica", "teorema", "valores", "literatura", "escritura", "gramática", "ortografía", "vocabulario", "fauna", "flora", "álgebra", "aritmética", "cálculo", "fracciones", "geometría", "medidas", "multiplicación", "operaciones combinadas", "problemas de palabras", "proporciones", "regla de tres", "suma", "sustracción", "teorema de pitágoras", "teoría de conjuntos", "teoría de números", "transformaciones geométricas", "ángulos", "decimales", "división", "ecuaciones", "funciones", "geometría analítica", "números enteros", "porcentajes", "potencias", "razones", "sistemas de ecuaciones", "sistemas de numeración", "trigonometría", "unidades de medida", "vectores", "área", "perímetro", "estadística", "probabilidad", "gráficas", "simetría", "transformaciones en el plano", "algoritmos", "patrones numéricos", "geometría espacial", "fracciones equivalentes", "números mixtos", "redondeo de números", "suma de fracciones", "sustracción de fracciones", "_+_", "_*_", "_-_", "_/_", "multiplicación de fracciones", "división de fracciones", "fracciones impropias", "líneas paralelas", "líneas perpendiculares", "mediana", "moda", "media aritmética", "diagramas de Venn", "números romanos", "cilindro", "cono", "esfera", "poliedros", "polígonos", "propiedades de las operaciones", "fracciones y números mixtos", "porcentajes simples", "porcentajes múltiples", "relaciones de proporcionalidad", "notación científica", "desigualdades", "funciones lineales", "funciones cuadráticas", "ecuaciones de segundo grado", "matrices", "sistemas de matrices", "gráficos circulares", "gráficos de barras", "gráficos de línea", "gráficos de puntos", "estadísticas de dispersión", "regresión lineal", "geometría fractal","comprensión lectora", "ortografía", "redacción", "gramática", "vocabulario", "lectura", "escritura", "literatura infantil", "expresión oral", "interpretación de textos", "tipos de texto", "figuras literarias", "géneros literarios", "análisis literario", "literatura universal", "literatura hispanoamericana", "poesía", "cuento", "novela", "drama", "tragedia", "comedia", "ensayo", "fábula", "leyenda", "mito", "personajes literarios", "técnicas narrativas", "ambiente literario", "contexto literario", "lectura comprensiva", "comprensión auditiva", "estrategias de lectura", "interpretación de poemas", "análisis de textos", "lectura crítica", "literatura clásica", "literatura contemporánea", "literatura fantástica", "literatura de terror", "literatura juvenil", "literatura infantil y juvenil", "literatura gótica", "literatura romántica", "literatura realista", "literatura modernista", "literatura vanguardista", "lenguaje figurado", "uso de la coma", "uso del punto", "uso del punto y coma", "uso de los dos puntos", "uso de las comillas", "uso del paréntesis", "uso del guión", "uso del diéresis", "uso del apóstrofe", "uso del acento", "uso de la tilde", "tipos de palabras", "sinónimos", "antónimos", "homónimos", "polisemia", "paronimia", "afijos", "sufijos", "prefijos", "palabras compuestas", "adjetivos", "adverbios", "verbos", "sustantivos", "pronombres", "artículos", "conjunciones", "preposiciones", "materia", "ciclo vital" "energía", "átomo", "molécula", "elemento", "compuesto", "reacción química", "periodicidad", "fuerzas", "movimiento", "velocidad", "aceleración", "fricción", "leyes de Newton", "gravitación", "termodinámica", "ciclos biogeoquímicos", "ecosistemas", "cadenas alimentarias", "biodiversidad", "evolución", "clasificación de los seres vivos", "adaptación", "mutación", "genes", "herencia", "ADN", "mitosis", "meiosis", "organización celular", "órganos", "sistemas", "respiración", "nutrición", "circulación", "excreción", "homeostasis", "órganos sensoriales", "reflejos", "nervios", "sinapsis", "sistema nervioso", "hormonas", "glándulas", "sistema endocrino", "órganos reproductores", "fecundación", "embarazo", "parto", "desarrollo humano", "enfermedades infecciosas", "vacunas", "antibióticos", "enfermedades crónicas", "cáncer", "contaminación", "animales", "efecto invernadero", "cambio climático", "energías renovables", "recursos naturales", "ecología", "delfin", "ballena", "pez", "biotecnología", "nanotecnología", "óptica", "ondas electromagnéticas", "sonido", "electricidad", "magnetismo", "leyes de la electricidad", "circuitos eléctricos", "electrónica", "tecnología", "innovación", "anatomía", "geografía", "historia", "política", "economía", "cultura", "derechos humanos", "democracia", "globalización", "migración", "identidad", "nacionalismo", "multiculturalismo", "racismo", "discriminación", "equidad", "género", "familia", "sociedad", "estado", "ciudadanía", "poder", "participación ciudadana", "organización social", "comunidad", "desigualdad social", "desarrollo sostenible", "recursos naturales", "contaminación", "cambio climático", "biodiversidad", "ecosistemas", "ciencias políticas", "antropología", "sociología", "psicología social", "educación cívica", "patrimonio cultural", "arte", "literatura", "música", "cine", "deporte", "turismo", "religión", "secularismo", "laicidad", "globalismo", "identidades culturales", "interdependencia global", "diversidad cultural", "globalidad", "movimientos sociales", "derecho internacional", "comercio internacional", "crisis migratorias", "conflicto armado", "sistemas políticos", "sistema electoral", "sistema de gobierno", "ciudadanía global", "desarrollo humano", "justicia social", "bienestar social", "relaciones internacionales", "geopolítica", "demografía", "desarrollo económico", "cambio social", "desarrollo social", "derecho internacional humanitario", "terrorismo", "violencia de género", "salud pública", "desastres naturales", "acción humanitaria", "solidaridad", "desarrollo rural", "loja", "alonso de mercadillo", "pio jaramillo alvarado", "ecuador", "ciudades de Ecuador", "gobernanza", "política pública", "política exterior", "política social", "política cultural", "política económica", "relaciones de poder", "participación política", "justicia", "etnografía", "criminología", "diversidad funcional", "diversidad sexual", "derechos de autor", "vocabulary building", "grammar rules", "reading comprehension", "listening skills", "pronunciation practice", "conversation practice", "writing practice", "idioms and expressions", "verb tenses", "phrasal verbs", "conditional sentences", "modal verbs", "prepositions usage", "adjectives and adverbs", "nouns and pronouns", "articles usage", "irregular verbs", "comparative and superlative forms", "question formation", "passive voice", "present continuous tense", "past simple tense", "future tense", "conditionals type 1 and 2", "reported speech", "historia y geografía de Ecuador"]
@@ -347,12 +347,31 @@ def es_tema_educacion_basica(texto):
             return True
     return False
 
+def resolver_operacion(texto):
+    operacion_regex = r"(-?\d+(\.\d+)?[\s]?[\+\-\*/][\s]?-?\d+(\.\d+)?)"
+    operaciones = re.findall(operacion_regex, texto)
+
+    if operaciones:
+        try:
+            resultado = sympy.sympify(operaciones[0])
+            return f"{operaciones[0]} = {resultado}"
+        except:
+            return None
+    else:
+        return None
+
 def es_seguimiento(texto):
-    seguimientos = ["¿Algo más?", "¿Te ayudo en algo más?", "¿Necesitas algo más?", "¿En qué más te puedo ayudar?"]
+    seguimientos = ["¿Algo más?", "¿Te ayudo en algo más?", "¿Necesitas algo más?", "¿En qué más te puedo ayudar?", "pero me dijiste", "puedes repetir", "nuevamente", "repite pero",]
     for seguimiento in seguimientos:
         if seguimiento in texto:
             return True
     return False
+
+def respuesta_no_valida(respuesta):
+    palabras_clave = ['matemáticas', 'lengua y literatura', 'ciencias naturales', 'estudios sociales', 'habilidades comunicativas en inglés', 'que', 'cómo', 'donde', 'cuando', 'porqué', 'quien', 'de donde viene', 'quisiera saber', 'me puedes decir', 'operaciones matemáticas', 'suma', 'reta', 'division', 'resuelve', 'multiplicación', 'resuelve', 'compara', 'ejercicios', 'ejemplos', 'dime un ejercicio', 'dime un ejemplo' ]
+    palabras_clave_en_respuesta = any(palabra in respuesta.lower() for palabra in palabras_clave)
+    
+    return not palabras_clave_en_respuesta and not es_tema_educacion_basica(respuesta) and not es_saludo(respuesta) and not "gracias" in respuesta.lower() and not es_seguimiento(respuesta) and not resolver_operacion(respuesta)
 
 @app.route('/generate_response', methods=['POST'])
 @login_required
@@ -361,42 +380,67 @@ def generate_response():
 
     if not current_user.is_authenticated:
         return jsonify({"error": "Usuario no autenticado"}), 401
-    input_text = request.json.get('input_text', '')
 
     prompt = request.json["prompt"]
+
+    usuario = col_usuarios.find_one({"_id": current_user.id})
+    if 'tokens_usados' not in usuario:
+        col_usuarios.update_one({"_id": current_user.id}, {"$set": {"tokens_usados": 0}})
+        usuario = col_usuarios.find_one({"_id": current_user.id})
+
+    limite_tokens = 500
+
+    if usuario.get('tokens_usados', 0) >= limite_tokens:
+        return jsonify({"error": "Límite de tokens alcanzado", "tokens_usados": usuario['tokens_usados']}), 402
+
     response = openai.Completion.create(
         engine="text-davinci-003",
-        prompt=f"En el contexto de la educación básica en matemáticas (suma, resta, multiplicación, división, álgebra, geometría, fracciones, decimales, porcentajes, resolución de problemas, estadística, etc.), lengua y literatura (gramática, ortografía, vocabulario, lectura, escritura creativa, análisis de textos literarios, poesía, etc.), ciencias naturales (biología, física, química, medio ambiente, cambio climático, energía, tecnología, salud, etc.), estudios sociales (historia, geografía, civismo, cultura, derechos humanos, democracia, economía, etc.), y habilidades comunicativas en inglés (vocabulario, gramática, conversación, lectura, escritura, pronunciación, etc.) saludar, gracias, felicitar, agradecer, responde: {prompt}",
-        max_tokens=300,
+        prompt=f"hola, buenos días, buenas tardes, buenas noches, saludos, qué, cómo, donde, cuándo, calcula, cuanto es, cuanto mide, de donde viene, por favor, cuantos grados, cuantos tipos, por qué, quien, de qué forma, de qué manera, dame, ejercicios, concepto, definición, cuál, cuales, figurar, desarrolar, cuando nació, ser muy amigable en el contexto de la educación básica en: matemáticas (resolver, suma, resta, multiplicación, división, álgebra, geometría, fracciones, decimales, porcentajes, resolución de problemas, estadística, cómo se calcula, como se escribe, cúal es la fórmula, que ejercicos, resolver, etc.), lengua y literatura (gramática, ortografía, tiempos verbales, vocabulario, lectura, escritura creativa, análisis de textos literarios, poesía, etc.), ciencias naturales (biología, física, química, medio ambiente, cambio climático, energía, tecnología, salud, etc.), estudios sociales (historia, geografía, ciudades, capitales, paises, continentes, simón bolívar, colonia, independencia, eloy alfaro, provincias, provincias de ecuador, rios, montañas, volcanes, islas, américa latina, civismo, cultura, derechos humanos, democracia, economía, etc.), habilidades comunicativas en inglés (vocabulario, gramática, conversación, lectura, escritura, pronunciación, etc.). saludar, agradecer, felicitar, agradecer. responde: {prompt}",
+        max_tokens=250,
         n=1,
         stop=None,
-        temperature=0.5,
+        temperature=0.6,
     ).choices[0].text.strip()
 
-    guardar_historial(current_user.id, prompt, response)
-    intentos = 0
-    while not es_tema_educacion_basica(response) and intentos < 1:
-        response = openai.Completion.create(
-            engine="text-davinci-003",
-            prompt=f"En el contexto de la educación básica en matemáticas (suma, resta, multiplicación, división, álgebra, geometría, fracciones, decimales, porcentajes, resolución de problemas, estadística, etc.), lengua y literatura (gramática, ortografía, vocabulario, lectura, escritura creativa, análisis de textos literarios, poesía, etc.), ciencias naturales (biología, física, química, medio ambiente, cambio climático, energía, tecnología, salud, etc.), estudios sociales (historia, geografía, civismo, cultura, derechos humanos, democracia, economía, etc.), y habilidades comunicativas en inglés (vocabulario, gramática, conversación, lectura, escritura, pronunciación, etc.) {prompt}",
-            max_tokens=300,
-            n=1,
-            stop=None,
-            temperature=0.5,
-        ).choices[0].text.strip()
-        guardar_historial(current_user.id, prompt, response)
-        intentos += 1
+    col_historial.insert_one({
+        "user_id": current_user.id,
+        "prompt": prompt,
+        "response": response,
+        "timestamp": datetime.now(pytz.utc)
+    })
 
+    max_intentos = 1
+    for intento in range(max_intentos):
+        if intento > 0:
+            response = openai.Completion.create(
+                engine="text-davinci-003",
+                prompt=f"hola, buenos días, buenas tardes, buenas noches, saludos, qué, cómo, donde, cuándo, calcula, cuanto es, cuanto mide, de donde viene, por favor, cuantos grados, cuantos tipos, por qué, quien, de qué forma, de qué manera, dame, ejercicios, concepto, definición, cuál, cuales, figurar, desarrolar, cuando nació, ser muy amigable en el contexto de la educación básica en: matemáticas (resolver, suma, resta, multiplicación, división, álgebra, geometría, fracciones, decimales, porcentajes, resolución de problemas, estadística, cómo se calcula, como se escribe, cúal es la fórmula, que ejercicos, resolver, etc.), lengua y literatura (gramática, ortografía, tiempos verbales, vocabulario, lectura, escritura creativa, análisis de textos literarios, poesía, etc.), ciencias naturales (biología, física, química, medio ambiente, cambio climático, energía, tecnología, salud, etc.), estudios sociales (historia, geografía, ciudades, capitales, paises, continentes, simón bolívar, colonia, independencia, eloy alfaro, provincias, provincias de ecuador, rios, montañas, volcanes, islas, américa latina, civismo, cultura, derechos humanos, democracia, economía, etc.), habilidades comunicativas en inglés (vocabulario, gramática, conversación, lectura, escritura, pronunciación, etc.). saludar, agradecer, felicitar, agradecer. responde: {prompt}",
+                n=1,
+                stop=None,
+                temperature=0.5,
+            ).choices[0].text.strip()
+
+        if not respuesta_no_valida(response):
+            break
+
+    tokens_usados = contar_tokens(prompt) + contar_tokens(response)
+    col_usuarios.update_one({"_id": current_user.id}, {"$inc": {"tokens_usados": tokens_usados}})
+
+    resultado_operacion = resolver_operacion(prompt)
+    
+    if usuario.get('tokens_usados', 0) >= limite_tokens:
+        return jsonify({"error": "Límite de tokens alcanzado", "tokens_usados": usuario['tokens_usados']}), 402
+    
     if es_saludo(response):
-        return jsonify({"response": "¡Hola! Soy jaguar chat, un bot educativo. ¿En qué puedo ayudarte?"})
-    elif "gracias" in response.lower():
-        return jsonify({"response": "¡De nada! Estoy aquí para ayudarte en lo que necesites."})
-    elif es_seguimiento(response):
-        return jsonify({"response": "Claro, ¿qué otra duda tienes?"})
-    elif es_tema_educacion_basica(response):
-        return jsonify({"response": response})
-    else:
-        return jsonify({"response": "Lo siento, no entendí tu pregunta. ¿Podrías reformularla con respecto a la educación básica?"})
+        response = "Hola, soy jaguarchat, un bot educativo, ¿En qué puedo ayudarte?"
+
+    if resultado_operacion:
+        return jsonify({"response": resultado_operacion, "tokens_usados": 0})
+
+    if respuesta_no_valida(response):
+        response = "Lo siento, no entendí tu pregunta. ¿Podrías reformularla con respecto a la educación básica?"
+
+    return jsonify({"response": response, "tokens_usados": usuario['tokens_usados'] + tokens_usados})
 
 
 @app.route("/speak/<text>")
