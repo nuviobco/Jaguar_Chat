@@ -347,6 +347,17 @@ def es_tema_educacion_basica(texto):
             return True
     return False
 
+def extraer_operaciones_matematicas(texto):
+    operaciones = re.findall(r"(\d+\s*[\+\-\*/]\s*\d+)", texto)
+    resultados = {}
+    for op in operaciones:
+        try:
+            resultado = eval(op)
+            resultados[op] = resultado
+        except:
+            pass
+    return resultados
+
 def resolver_operacion(texto):
     operacion_regex = r"(-?\d+(\.\d+)?[\s]?[\+\-\*/][\s]?-?\d+(\.\d+)?)"
     operaciones = re.findall(operacion_regex, texto)
@@ -382,6 +393,8 @@ def generate_response():
         return jsonify({"error": "Usuario no autenticado"}), 401
 
     prompt = request.json["prompt"]
+
+    resolver_operacion = extraer_operaciones_matematicas(prompt)
 
     usuario = col_usuarios.find_one({"_id": current_user.id})
     if 'tokens_usados' not in usuario:
@@ -427,6 +440,8 @@ def generate_response():
     col_usuarios.update_one({"_id": current_user.id}, {"$inc": {"tokens_usados": tokens_usados}})
 
     resultado_operacion = resolver_operacion(prompt)
+    for op, resultado in resultado_operacion.items():
+        prompt = prompt.replace(op, str(resultado))
     
     if usuario.get('tokens_usados', 0) >= limite_tokens:
         return jsonify({"error": "Límite de tokens alcanzado", "tokens_usados": usuario['tokens_usados']}), 402
