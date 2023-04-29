@@ -356,7 +356,7 @@ def extraer_operaciones_matematicas(texto):
             resultados[op] = resultado
         except:
             pass
-    return {"operaciones": resultados}
+    return resultados
 
 def resolver_operacion(texto):
     operacion_regex = r"(-?\d+(\.\d+)?[\s]?[\+\-\*/][\s]?-?\d+(\.\d+)?)"
@@ -447,8 +447,8 @@ def generate_response():
     if es_saludo(response):
         response = "Hola, soy jaguarchat, un bot educativo, ¿En qué puedo ayudarte?"
 
-    if operaciones_resueltas["operaciones"]:
-        return jsonify({"response": operaciones_resueltas["operaciones"], "tokens_usados": 0})
+    if operaciones_resueltas:
+        return jsonify({"response": operaciones_resueltas, "tokens_usados": 0})
 
     if respuesta_no_valida(response):
         response = "Lo siento, no entendí tu pregunta. ¿Podrías reformularla con respecto a la educación básica?"
