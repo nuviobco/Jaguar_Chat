@@ -439,7 +439,7 @@ def generate_response():
     tokens_usados = contar_tokens(prompt) + contar_tokens(response)
     col_usuarios.update_one({"_id": current_user.id}, {"$inc": {"tokens_usados": tokens_usados}})
 
-    resultado_operacion = resolver_operacion(prompt)
+    resultado_operacion = resultado_operacion(prompt)
     for op, resultado in resultado_operacion.items():
         prompt = prompt.replace(op, str(resultado))
     
