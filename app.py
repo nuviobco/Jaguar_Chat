@@ -448,7 +448,8 @@ def generate_response():
         response = "Hola, soy jaguarchat, un bot educativo, ¿En qué puedo ayudarte?"
 
     if operaciones_resueltas:
-        return jsonify({"response": operaciones_resueltas, "tokens_usados": 0})
+        respuesta_operaciones = ', '.join([f"{op} = {resultado}" for op, resultado in operaciones_resueltas.items()])
+        return jsonify({"response": respuesta_operaciones, "tokens_usados": 0})
 
     if respuesta_no_valida(response):
         response = "Lo siento, no entendí tu pregunta. ¿Podrías reformularla con respecto a la educación básica?"
