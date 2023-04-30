@@ -338,6 +338,7 @@ def es_saludo(texto):
     return any(re.search(r'\b' + saludo + r'\b', texto) for saludo in saludos)
 
 def jaccard_similarity(set1, set2):
+    set1, set2 = set(set1), set(set2)  
     interseccion = set1.intersection(set2)
     union = set1.union(set2)
     return len(interseccion) / len(union)
