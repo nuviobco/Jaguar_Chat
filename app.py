@@ -461,7 +461,7 @@ def generate_response():
 
 @app.route("/speak/<text>")
 def speak(text):
-    tts = gTTS(text=text, lang="es")
+    tts = gTTS(text=text, lang="es-419")
     with tempfile.NamedTemporaryFile(delete=True) as fp:
         tts.save(fp.name)
         return send_file(fp.name, mimetype="audio/mpeg")
