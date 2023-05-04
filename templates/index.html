@@ -171,18 +171,17 @@
           }
         
           #instrucciones-container {
-            position: fixed;
-            top: 10px;
-            left: 10px;
+            margin-top: 10px;
             padding: 10px;
-            background-color: rgba(9, 7, 128, 0.616);
-            border-radius: 10px;
+            background-color: rgba(0, 16, 105, 0.61);
+            border-radius: 5px;
+            text-align: center;
         }
 
         #instrucciones-container p {
-            font-size: 14px;
+            font-size: 10px;
             margin: 0;
-            color: #fdfafa;
+            color: #e5bb00;
         }
     </style>
 </head>
@@ -200,6 +199,12 @@
             <h1></h1>
         </header>
     <main>
+        <div id="instrucciones-container">
+            <p>Por favor, escribe en forma de pregunta y haz clic en "Enviar" una vez. 
+                Ten paciencia y espera la respuesta del chatbot. 
+                 Para multiplicar usa * </p>
+        </div>
+        <div class="input-container">
         <div class="input-container">
             <label for="prompt">Haz tu pregunta:</label>
             <input type="text" id="prompt" onkeydown="onInputKeyDown(event)">
@@ -215,9 +220,6 @@
         </div>
         <div id="tokens-container" style="position: fixed; top: 10px; right: 10px; font-size: 14px; color: #fff; padding: 5px; border-radius: 5px; background-color: rgba(216, 3, 198, 0.562);">
             <p>Tokens utilizados: <span id="tokens-usados">0</span></p>
-        </div>
-        <div id="instrucciones-container">
-            <p>Por favor, escribe en forma de pregunta y pulsa enter en "Enviar" una vez. Ten paciencia y espera la respuesta del chatbot.</p>
         </div>
     </main>
 
