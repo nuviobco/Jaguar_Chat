@@ -405,14 +405,17 @@ def generate_response():
     if usuario.get('tokens_usados', 0) >= limite_tokens:
         return jsonify({"error": "Límite de tokens alcanzado", "tokens_usados": usuario['tokens_usados']}), 402
 
-    response = openai.Completion.create(
-        engine="text-davinci-003",
-        prompt=f"hola, buenos días, buenas tardes, buenas noches, saludos, qué, cómo, donde, cuándo, calcula, cuanto es, cuanto mide, de donde viene, por favor, cuantos grados, cuantos tipos, por qué, quien, de qué forma, de qué manera, dame, ejercicios, concepto, definición, cuál, cuales, figurar, desarrolar, cuando nació, ser muy amigable en el contexto de la educación básica en: matemáticas (resolver, suma, resta, multiplicación, división, álgebra, geometría, fracciones, decimales, porcentajes, resolución de problemas, estadística, cómo se calcula, como se escribe, cúal es la fórmula, que ejercicos, resolver, etc.), lengua y literatura (gramática, ortografía, tiempos verbales, vocabulario, lectura, escritura creativa, análisis de textos literarios, poesía, etc.), ciencias naturales (biología, física, química, medio ambiente, cambio climático, energía, tecnología, salud, etc.), estudios sociales (historia, geografía, ciudades, capitales, paises, continentes, simón bolívar, colonia, independencia, eloy alfaro, provincias, provincias de ecuador, rios, montañas, volcanes, islas, américa latina, civismo, cultura, derechos humanos, democracia, economía, etc.), habilidades comunicativas en inglés (vocabulario, gramática, conversación, lectura, escritura, pronunciación, etc.). saludar, agradecer, felicitar, agradecer. responde: {prompt}",
-        max_tokens=200,
-        n=1,
-        stop=None,
-        temperature=0.4,
-    ).choices[0].text.strip()
+    def generar_respuesta(prompt):
+        return openai.Completion.create(
+            engine="text-davinci-003",
+            prompt=f"hola, buenos días, buenas tardes, buenas noches, saludos, qué, cómo, donde, cuándo, calcula, cuanto es, cuanto mide, de donde viene, por favor, cuantos grados, cuantos tipos, por qué, quien, de qué forma, de qué manera, dame, ejercicios, concepto, definición, cuál, cuales, figurar, desarrolar, cuando nació, ser muy amigable en el contexto de la educación básica en: matemáticas (resolver, suma, resta, multiplicación, división, álgebra, geometría, fracciones, decimales, porcentajes, resolución de problemas, estadística, cómo se calcula, como se escribe, cúal es la fórmula, que ejercicos, resolver, etc.), lengua y literatura (gramática, ortografía, tiempos verbales, vocabulario, lectura, escritura creativa, análisis de textos literarios, poesía, etc.), ciencias naturales (biología, física, química, medio ambiente, cambio climático, energía, tecnología, salud, etc.), estudios sociales (historia, geografía, ciudades, capitales, paises, continentes, simón bolívar, colonia, independencia, eloy alfaro, provincias, provincias de ecuador, rios, montañas, volcanes, islas, américa latina, civismo, cultura, derechos humanos, democracia, economía, etc.), habilidades comunicativas en inglés (vocabulario, gramática, conversación, lectura, escritura, pronunciación, etc.). saludar, agradecer, felicitar, agradecer. responde: {prompt}",
+            max_tokens=200,
+            n=1,
+            stop=None,
+            temperature=0.4,
+        ).choices[0].text.strip()
+
+    response = generar_respuesta(prompt)
 
     col_historial.insert_one({
         "user_id": current_user.id,
@@ -422,18 +425,13 @@ def generate_response():
     })
 
     max_intentos = 1
-    for intento in range(max_intentos):
-        if intento > 0:
-            response = openai.Completion.create(
-                engine="text-davinci-003",
-                prompt=f"hola, buenos días, buenas tardes, buenas noches, saludos, qué, cómo, donde, cuándo, calcula, cuanto es, cuanto mide, de donde viene, por favor, cuantos grados, cuantos tipos, por qué, quien, de qué forma, de qué manera, dame, ejercicios, concepto, definición, cuál, cuales, figurar, desarrolar, cuando nació, ser muy amigable en el contexto de la educación básica en: matemáticas (resolver, suma, resta, multiplicación, división, álgebra, geometría, fracciones, decimales, porcentajes, resolución de problemas, estadística, cómo se calcula, como se escribe, cúal es la fórmula, que ejercicos, resolver, etc.), lengua y literatura (gramática, ortografía, tiempos verbales, vocabulario, lectura, escritura creativa, análisis de textos literarios, poesía, etc.), ciencias naturales (biología, física, química, medio ambiente, cambio climático, energía, tecnología, salud, etc.), estudios sociales (historia, geografía, ciudades, capitales, paises, continentes, simón bolívar, colonia, independencia, eloy alfaro, provincias, provincias de ecuador, rios, montañas, volcanes, islas, américa latina, civismo, cultura, derechos humanos, democracia, economía, etc.), habilidades comunicativas en inglés (vocabulario, gramática, conversación, lectura, escritura, pronunciación, etc.). saludar, agradecer, felicitar, agradecer. responde: {prompt}",
-                n=1,
-                stop=None,
-                temperature=0.4,
-            ).choices[0].text.strip()
-
-        if not respuesta_no_valida(response):
+    intento = 0
+    while intento < max_intentos:
+        if respuesta_no_valida(response):
+            response = "Lo siento, no entendí tu pregunta, ¿puedes reformularla?"
+        else:
             break
+        intento += 1
 
     tokens_usados = contar_tokens(prompt) + contar_tokens(response)
     col_usuarios.update_one({"_id": current_user.id}, {"$inc": {"tokens_usados": tokens_usados}})
@@ -441,10 +439,10 @@ def generate_response():
     operaciones_resueltas = extraer_operaciones_matematicas(prompt)
     for op, resultado in operaciones_resueltas.items():
         prompt = prompt.replace(op, str(resultado))
-    
+
     if usuario.get('tokens_usados', 0) >= limite_tokens:
         return jsonify({"error": "Límite de tokens alcanzado", "tokens_usados": usuario['tokens_usados']}), 402
-    
+
     if es_saludo(response):
         response = "Hola, soy jaguarchat, un bot educativo, ¿en qué puedo ayudarte?"
 
@@ -457,6 +455,7 @@ def generate_response():
         return jsonify({"response": response, "tokens_usados": 0})
 
     return jsonify({"response": response, "tokens_usados": usuario['tokens_usados'] + tokens_usados})
+
 
 
 @app.route("/speak/<text>")
