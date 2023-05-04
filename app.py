@@ -609,7 +609,8 @@ def obtener_datos_usuario(user_id):
             'nombre': usuario['first_name'] + ' ' + usuario['last_name'],
             'colegio': usuario['colegio'],
             'grado': usuario['grado'],
-            'profesor': usuario['profesor']
+            'profesor': usuario['profesor'],
+            'email': usuario['email_usuario']
         }
     else:
         return {}
@@ -621,17 +622,15 @@ def enviar_analisis():
         return redirect(url_for('login'))
     if request.method == 'POST':
         profesor_email = request.form['correo_profesor']
-    
-        email_usuario, _ = obtener_credenciales_email(user_id)
+
+        datos_usuario = obtener_datos_usuario(user_id)
+        enviar_email_mailgun = datos_usuario['email']
 
         asunto = "Resultados del análisis"
 
-        # Crear la URL absoluta para la página de análisis del usuario
         analisis_url = request.url_root + url_for('analisis', user_id=user_id)[1:]
 
-
-        # Usar la URL en el contenido del correo electrónico
-        contenido = render_template('email.html', analisis_url=analisis_url)
+        contenido = render_template('email.html', analisis_url=analisis_url, datos_usuario=datos_usuario)
 
         try:
             response = enviar_email_mailgun(asunto, contenido, profesor_email)
@@ -643,7 +642,7 @@ def enviar_analisis():
                 return render_template('resultado_envio.html', enviado=False)
         except Exception as e:
             print("Error al enviar el correo electrónico:", e)
-            return render_template('resultado_envio.html', enviado=False)
+            return render_template('resultado_envio.html', enviado=False, mensaje_error=str(e))
 
     return render_template('enviar_analisis.html')
 
