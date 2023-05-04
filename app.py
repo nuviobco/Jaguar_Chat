@@ -593,7 +593,6 @@ def obtener_credenciales_email(user_id):
         return usuario['email'], usuario['password']
     else:
         return None, None
-    ...
 
 def obtener_datos_usuario(user_id):
     mongo_uri = os.environ.get("MONGO_URI")
