@@ -169,6 +169,21 @@
             position: relative;
             z-index: 1;
           }
+        
+          #instrucciones-container {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            padding: 10px;
+            background-color: rgba(248, 202, 188, 0.863);
+            border-radius: 5px;
+        }
+
+        #instrucciones-container p {
+            font-size: 14px;
+            margin: 0;
+            color: #000;
+        }
     </style>
 </head>
 
@@ -200,6 +215,9 @@
         </div>
         <div id="tokens-container" style="position: fixed; top: 10px; right: 10px; font-size: 14px; color: #fff; padding: 5px; border-radius: 5px; background-color: rgba(216, 3, 198, 0.562);">
             <p>Tokens utilizados: <span id="tokens-usados">0</span></p>
+        </div>
+        <div id="instrucciones-container">
+            <p>Por favor, escribe en forma de pregunta y haz clic en "Enviar" una vez. Ten paciencia y espera la respuesta del chatbot.</p>
         </div>
     </main>
 
