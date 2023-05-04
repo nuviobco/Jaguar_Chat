@@ -609,10 +609,11 @@ def obtener_datos_usuario(user_id):
             'colegio': usuario['colegio'],
             'grado': usuario['grado'],
             'profesor': usuario['profesor'],
-            'email': usuario['email_usuario']
+            'email': usuario['email']
         }
     else:
         return {}
+
 
 @app.route('/enviar_analisis', methods=['GET', 'POST'])
 def enviar_analisis():
