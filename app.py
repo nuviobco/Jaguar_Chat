@@ -623,7 +623,7 @@ def enviar_analisis():
         profesor_email = request.form['correo_profesor']
 
         datos_usuario = obtener_datos_usuario(user_id)
-        enviar_email_mailgun = datos_usuario['email']
+        email_usuario = datos_usuario['email'] 
 
         asunto = "Resultados del análisis"
 
