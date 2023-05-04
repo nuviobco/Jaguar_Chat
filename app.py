@@ -425,13 +425,10 @@ def generate_response():
     })
 
     max_intentos = 1
-    intento = 0
-    while intento < max_intentos:
-        if respuesta_no_valida(response):
-            response = "Lo siento, no entendí tu pregunta, ¿puedes reformularla?"
-        else:
+    for intento in range(max_intentos + 1):
+        if intento == max_intentos or not respuesta_no_valida(response):
             break
-        intento += 1
+        response = "Lo siento, no entendí tu pregunta, puedes reformularla?"
 
     tokens_usados = contar_tokens(prompt) + contar_tokens(response)
     col_usuarios.update_one({"_id": current_user.id}, {"$inc": {"tokens_usados": tokens_usados}})
