@@ -644,8 +644,9 @@ def enviar_analisis():
                 print("Respuesta:", response.text)
                 return render_template('resultado_envio.html', enviado=False)
         except Exception as e:
-            print("Error al enviar el correo electrónico:", e)
-            return render_template('resultado_envio.html', enviado=False, mensaje_error=str(e))
+                print("Error al enviar el correo electrónico:", e)
+                print("Detalles de la excepción:", repr(e))
+                return render_template('resultado_envio.html', enviado=False, mensaje_error=str(e))
 
     return render_template('enviar_analisis.html')
 
