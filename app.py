@@ -635,6 +635,11 @@ def enviar_analisis():
 
         contenido = render_template('email.html', analisis_url=analisis_url, datos_usuario=datos_usuario)
 
+        print("Asunto:", asunto)
+        print("Contenido:", contenido)
+        print("Profesor email:", profesor_email)
+
+
         try:
             response = enviar_email_mailgun(asunto, contenido, profesor_email)
             if response.status_code == 200:
