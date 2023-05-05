@@ -624,16 +624,22 @@ def enviar_analisis():
         return redirect(url_for('login'))
     if request.method == 'POST':
         profesor_email = request.form['correo_profesor']
-
+        print("Correo del profesor:", profesor_email)
         datos_usuario = obtener_datos_usuario(user_id)
+        print("Datos del usuario:", datos_usuario)
+
         email_usuario = datos_usuario.get('email')
     
 
         asunto = "Resultados del análisis"
 
         analisis_url = request.url_root + url_for('analisis', user_id=user_id)[1:]
+        print("URL del análisis:", analisis_url)
+
 
         contenido = render_template('email.html', analisis_url=analisis_url, datos_usuario=datos_usuario)
+        print("Contenido del correo electrónico:", contenido)
+
 
         print("Asunto:", asunto)
         print("Contenido:", contenido)
