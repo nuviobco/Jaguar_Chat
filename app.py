@@ -604,13 +604,15 @@ def obtener_datos_usuario(user_id):
     usuario = col_usuarios.find_one({'user_id': user_id})
 
     if usuario:
-        return {
+        datos = {
             'nombre': usuario['first_name'] + ' ' + usuario['last_name'],
             'colegio': usuario['colegio'],
             'grado': usuario['grado'],
             'profesor': usuario['profesor'],
-            'email': usuario['email']
         }
+        if 'email' in usuario:
+            datos['email'] = usuario['email']
+        return datos
     else:
         return {}
 
@@ -624,7 +626,8 @@ def enviar_analisis():
         profesor_email = request.form['correo_profesor']
 
         datos_usuario = obtener_datos_usuario(user_id)
-        email_usuario = datos_usuario['email'] 
+        email_usuario = datos_usuario.get('email')
+    
 
         asunto = "Resultados del análisis"
 
