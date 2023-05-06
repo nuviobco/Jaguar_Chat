@@ -613,7 +613,7 @@ def obtener_datos_usuario(user_id):
     col_usuarios = db["usuarios"]
 
 
-    usuario = col_usuarios.find_one({'_id': ObjectId(user_id)}) 
+    usuario = col_usuarios.find_one({'_id': user_id})
 
     if usuario:
         datos = {
