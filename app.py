@@ -593,9 +593,9 @@ def analisis(user_id, datos_usuario=None):
                            sentimientos=sentimientos,
                            user_id=user_id,
                            nombre_completo=nombre_completo, 
-                           colegio=datos_usuario['colegio'],
-                           grado=datos_usuario['grado'],
-                           profesor=datos_usuario['profesor'])
+                           colegio=colegio,
+                           grado=grado,
+                           profesor=profesor)
 
 
 def obtener_credenciales_email(user_id):
