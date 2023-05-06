@@ -182,9 +182,9 @@ def recuperar_contraseña():
     return render_template('recuperar_contraseña.html', success=False)
 
 
-@app.route('/reset_password/<token>', methods=['GET', 'POST', 'PATCH', 'OPTIONS'])
+@app.route('/reset_password/<token>', methods=['GET', 'POST',])
 def reset_password(token):
-    if request.method == 'OPTIONS':
+    if request.method == 'POST':
         response = make_response()
         response.headers['Allow'] = 'GET, PUT, PATCH, OPTIONS'
         return response
@@ -219,7 +219,7 @@ def enviar_email_recuperacion(email, token):
         f'https://api.mailgun.net/v3/{mailgun_domain}/messages',
         auth=('api', mailgun_api_key),
         data={
-            'from': 'noreply@your_app_domain.com',
+            'from': 'noreply@jaguarchat.org',
             'to': email,
             'subject': subject,
             'html': html_content
