@@ -618,9 +618,9 @@ def obtener_datos_usuario(user_id):
     if usuario:
         datos = {
             'nombre': usuario['first_name'] + ' ' + usuario['last_name'],
-            'colegio': usuario['colegio'],
-            'grado': usuario['grado'],
-            'profesor': usuario['profesor'],
+            'colegio': usuario.get('colegio', ''),
+            'grado': usuario.get('grado', ''),
+            'profesor': usuario.get('profesor', ''),
         }
         if 'email' in usuario:
             datos['email'] = usuario['email']
