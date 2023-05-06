@@ -573,12 +573,12 @@ def analisis(token):
     sentimientos = analizar_sentimientos(prompts)
     print("Sentimientos:", sentimientos)
 
-    datos_usuario = obtener_datos_usuario(user_id)
+    user_id = obtener_datos_usuario(user_id)
 
     nombre_completo = f"{current_user.first_name} {current_user.last_name}"
-    colegio = datos_usuario['colegio']
-    grado = datos_usuario['grado']
-    profesor = datos_usuario['profesor']
+    colegio = current_user.school
+    grado = current_user.grade
+    profesor = current_user.teacher
 
     return render_template('analisis.html',
                            temas_consultados=temas_consultados,
