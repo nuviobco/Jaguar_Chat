@@ -547,10 +547,11 @@ def ver_tokens():
 def pagina_pago():
     return render_template('pagina_pago.html')
 
-@app.route('/analisis/<token>', methods=['GET'])
-def analisis(token):
+
+@app.route('/analisis/<user_id>/<token>', methods=['GET'])
+@login_required
+def analisis(user_id, token):
     try:
-        # Deserializar el token seguro para obtener el user_id
         user_id = serializer.loads(token)
     except Exception as e:
         print("Error al deserializar el token:", e)
