@@ -552,6 +552,7 @@ def pagina_pago():
 @app.route('/analisis/<user_id>', methods=['GET'])
 @login_required
 def analisis(user_id):
+    datos_usuario = g.datos_usuario if hasattr(g, 'datos_usuario') else obtener_datos_usuario(user_id)
 
     prompts = obtener_datos(user_id)
 
