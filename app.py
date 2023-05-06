@@ -550,7 +550,9 @@ def pagina_pago():
 
 
 @app.route('/analisis/<user_id>', methods=['GET'])
-def analisis(user_id):
+def analisis(user_id, datos_usuario=None):
+    if datos_usuario is None:
+        datos_usuario = obtener_datos_usuario(user_id)
     datos_usuario = g.datos_usuario if hasattr(g, 'datos_usuario') else obtener_datos_usuario(user_id)
 
     prompts = obtener_datos(user_id)
@@ -592,9 +594,9 @@ def analisis(user_id):
                            sentimientos=sentimientos,
                            user_id=user_id,
                            nombre_completo=nombre_completo, 
-                           colegio=colegio,
-                           grado=grado,
-                           profesor=profesor)
+                           colegio=datos_usuario['colegio'],
+                           grado=datos_usuario['grado'],
+                           profesor=datos_usuario['profesor'])
 
 
 def obtener_credenciales_email(user_id):
