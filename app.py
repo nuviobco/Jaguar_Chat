@@ -553,6 +553,7 @@ def pagina_pago():
 def analisis(user_id, datos_usuario=None):
     if datos_usuario is None:
         datos_usuario = obtener_datos_usuario(user_id)
+    g.datos_usuario = datos_usuario
 
     prompts = obtener_datos(user_id)
 
@@ -571,7 +572,7 @@ def analisis(user_id, datos_usuario=None):
     sentimientos = analizar_sentimientos(prompts)
     print("Sentimientos:", sentimientos)
 
-    if not hasattr(g, 'datos_usuario'):
+    if current_user.is_authenticated:
         nombre_completo = f"{current_user.first_name} {current_user.last_name}"
         colegio = current_user.school
         grado = current_user.grade
@@ -593,7 +594,6 @@ def analisis(user_id, datos_usuario=None):
                            colegio=colegio,
                            grado=grado,
                            profesor=profesor)
-
 
 def obtener_credenciales_email(user_id):
     mongo_uri = os.environ.get("MONGO_URI")
