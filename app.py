@@ -26,6 +26,7 @@ from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
 from pymongo import MongoClient
 from itsdangerous import URLSafeSerializer
+from bson.objectid import ObjectId
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -611,7 +612,8 @@ def obtener_datos_usuario(user_id):
 
     col_usuarios = db["usuarios"]
 
-    usuario = col_usuarios.find_one({'user_id': user_id})
+
+    usuario = col_usuarios.find_one({'_id': ObjectId(user_id)}) 
 
     if usuario:
         datos = {
@@ -638,7 +640,7 @@ def analisis_token(token):
 
 @app.route('/enviar_analisis', methods=['GET', 'POST'])
 def enviar_analisis():
-    user_id = session.get('user_id')
+    user_id = current_user.get_id() 
     if not user_id:
         return redirect(url_for('login'))
     if request.method == 'POST':
