@@ -548,14 +548,9 @@ def pagina_pago():
     return render_template('pagina_pago.html')
 
 
-@app.route('/analisis/<user_id>/<token>', methods=['GET'])
+@app.route('/analisis/<user_id>', methods=['GET'])
 @login_required
-def analisis(user_id, token):
-    try:
-        user_id = serializer.loads(token)
-    except Exception as e:
-        print("Error al deserializar el token:", e)
-        return "Token inválido", 400
+def analisis(user_id):
 
     prompts = obtener_datos(user_id)
 
