@@ -574,13 +574,12 @@ def analisis(user_id, datos_usuario=None):
 
     user_id = obtener_datos_usuario(user_id)
 
-    if not hasattr(g, 'datos_usuario'):
+    if datos_usuario is None:
         nombre_completo = f"{current_user.first_name} {current_user.last_name}"
         colegio = current_user.school
         grado = current_user.grade
         profesor = current_user.teacher
     else:
-        datos_usuario = g.datos_usuario
         nombre_completo = datos_usuario.get('nombre', '')
         colegio = datos_usuario.get('colegio', '')
         grado = datos_usuario.get('grado', '')
