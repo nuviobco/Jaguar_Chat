@@ -644,8 +644,8 @@ def analisis_token(token):
         print("Error al deserializar el token:", e)
         return "Token inválido", 400
 
-    g.datos_usuario = obtener_datos_usuario(user_id)
-    return analisis(user_id)
+    datos_usuario = obtener_datos_usuario(user_id)
+    return analisis(user_id, datos_usuario)
 
 @app.route('/analisis_sin_login/<user_id>', methods=['GET'])
 def analisis_sin_login(user_id):
