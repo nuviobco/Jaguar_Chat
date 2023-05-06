@@ -627,7 +627,6 @@ def obtener_datos_usuario(user_id):
         return {}
     
 @app.route('/analisis_token/<token>', methods=['GET'])
-@login_required
 def analisis_token(token):
     try:
         user_id = serializer.loads(token)
@@ -654,9 +653,9 @@ def enviar_analisis():
 
         signed_user_id = serializer.dumps(user_id)
 
-        analisis_url = request.url_root + f"analisis/{signed_user_id}"
-        print("URL del análisis:", analisis_url)
+        analisis_url = request.url_root + f"analisis_token/{signed_user_id}"
 
+        print("URL del análisis:", analisis_url)
         contenido = render_template('email.html', analisis_url=analisis_url, datos_usuario=datos_usuario)
         print("Contenido del correo electrónico:", contenido)
 
