@@ -575,7 +575,7 @@ def analisis(token):
 
     datos_usuario = obtener_datos_usuario(user_id)
 
-    nombre_completo = datos_usuario['nombre']
+    nombre_completo = f"{current_user.first_name} {current_user.last_name}"
     colegio = datos_usuario['colegio']
     grado = datos_usuario['grado']
     profesor = datos_usuario['profesor']
