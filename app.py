@@ -625,7 +625,17 @@ def obtener_datos_usuario(user_id):
         return datos
     else:
         return {}
+    
+@app.route('/analisis_token/<token>', methods=['GET'])
+@login_required
+def analisis_token(token):
+    try:
+        user_id = serializer.loads(token)
+    except Exception as e:
+        print("Error al deserializar el token:", e)
+        return "Token inválido", 400
 
+    return analisis(user_id)
 
 @app.route('/enviar_analisis', methods=['GET', 'POST'])
 def enviar_analisis():
