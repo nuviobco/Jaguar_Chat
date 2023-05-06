@@ -553,7 +553,6 @@ def pagina_pago():
 def analisis(user_id, datos_usuario=None):
     if datos_usuario is None:
         datos_usuario = obtener_datos_usuario(user_id)
-    datos_usuario = g.datos_usuario if hasattr(g, 'datos_usuario') else obtener_datos_usuario(user_id)
 
     prompts = obtener_datos(user_id)
 
@@ -572,9 +571,7 @@ def analisis(user_id, datos_usuario=None):
     sentimientos = analizar_sentimientos(prompts)
     print("Sentimientos:", sentimientos)
 
-    user_id = obtener_datos_usuario(user_id)
-
-    if datos_usuario is None:
+    if not hasattr(g, 'datos_usuario'):
         nombre_completo = f"{current_user.first_name} {current_user.last_name}"
         colegio = current_user.school
         grado = current_user.grade
