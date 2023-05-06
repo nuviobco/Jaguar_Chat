@@ -1,6 +1,6 @@
 import uuid
 import openai
-from flask import Flask, request, jsonify, render_template, send_file, redirect, url_for, flash, session, make_response
+from flask import Flask, request, jsonify, render_template, send_file, redirect, url_for, flash, session, make_response, g
 from flask_wtf import FlaskForm
 import sympy
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, SelectField
@@ -572,10 +572,17 @@ def analisis(user_id):
 
     user_id = obtener_datos_usuario(user_id)
 
-    nombre_completo = f"{current_user.first_name} {current_user.last_name}"
-    colegio = current_user.school
-    grado = current_user.grade
-    profesor = current_user.teacher
+    if not hasattr(g, 'datos_usuario'):
+        nombre_completo = f"{current_user.first_name} {current_user.last_name}"
+        colegio = current_user.school
+        grado = current_user.grade
+        profesor = current_user.teacher
+    else:
+        datos_usuario = g.datos_usuario
+        nombre_completo = datos_usuario.get('nombre', '')
+        colegio = datos_usuario.get('colegio', '')
+        grado = datos_usuario.get('grado', '')
+        profesor = datos_usuario.get('profesor', '')
 
     return render_template('analisis.html',
                            temas_consultados=temas_consultados,
@@ -637,6 +644,7 @@ def analisis_token(token):
         print("Error al deserializar el token:", e)
         return "Token inválido", 400
 
+    g.datos_usuario = obtener_datos_usuario(user_id)
     return analisis(user_id)
 
 @app.route('/enviar_analisis', methods=['GET', 'POST'])
