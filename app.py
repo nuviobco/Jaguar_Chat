@@ -49,7 +49,7 @@ col_historial = db["historial"]
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "login"
-serializer = URLSafeSerializer('jaguarchatorg')
+serializer = URLSafeSerializer(app.secret_key)
 user_id = 123  
 signed_user_id = serializer.dumps(user_id)
 analisis_url = f"https://jaguarchat.org/analisis/{signed_user_id}"
@@ -622,6 +622,7 @@ def obtener_datos_usuario(user_id):
             'grado': usuario.get('grado', ''),
             'profesor': usuario.get('profesor', ''),
         }
+
         if 'email' in usuario:
             datos['email'] = usuario['email']
         return datos
@@ -648,8 +649,6 @@ def enviar_analisis():
         print("Correo del profesor:", profesor_email)
         datos_usuario = obtener_datos_usuario(user_id)
         print("Datos del usuario:", datos_usuario)
-
-        email_usuario = datos_usuario.get('email')
 
         asunto = "Resultados del análisis"
 
