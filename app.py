@@ -25,6 +25,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
 from pymongo import MongoClient
+from itsdangerous import URLSafeSerializer
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -47,6 +48,10 @@ col_historial = db["historial"]
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "login"
+serializer = URLSafeSerializer('jaguarchatorg')
+user_id = 123  
+signed_user_id = serializer.dumps(user_id)
+analisis_url = f"https://jaguarchat.org/analisis/{signed_user_id}"
 
 class Usuario(UserMixin):
     def __init__(self, user_data):
@@ -541,9 +546,15 @@ def ver_tokens():
 def pagina_pago():
     return render_template('pagina_pago.html')
 
-@app.route('/analisis/<user_id>')
-@login_required
-def analisis(user_id):
+@app.route('/analisis/<token>', methods=['GET'])
+def analisis(token):
+    try:
+        # Deserializar el token seguro para obtener el user_id
+        user_id = serializer.loads(token)
+    except Exception as e:
+        print("Error al deserializar el token:", e)
+        return "Token inválido", 400
+
     prompts = obtener_datos(user_id)
 
     temas_consultados = analizar_temas_mas_consultados(prompts)
@@ -561,10 +572,12 @@ def analisis(user_id):
     sentimientos = analizar_sentimientos(prompts)
     print("Sentimientos:", sentimientos)
 
-    nombre_completo = f"{current_user.first_name} {current_user.last_name}"
-    colegio = current_user.school
-    grado = current_user.grade
-    profesor = current_user.teacher
+    datos_usuario = obtener_datos_usuario(user_id)
+
+    nombre_completo = datos_usuario['nombre']
+    colegio = datos_usuario['colegio']
+    grado = datos_usuario['grado']
+    profesor = datos_usuario['profesor']
 
     return render_template('analisis.html',
                            temas_consultados=temas_consultados,
@@ -629,22 +642,20 @@ def enviar_analisis():
         print("Datos del usuario:", datos_usuario)
 
         email_usuario = datos_usuario.get('email')
-    
 
         asunto = "Resultados del análisis"
 
-        analisis_url = request.url_root + url_for('analisis', user_id=user_id)[1:]
-        print("URL del análisis:", analisis_url)
+        signed_user_id = serializer.dumps(user_id)
 
+        analisis_url = request.url_root + f"analisis/{signed_user_id}"
+        print("URL del análisis:", analisis_url)
 
         contenido = render_template('email.html', analisis_url=analisis_url, datos_usuario=datos_usuario)
         print("Contenido del correo electrónico:", contenido)
 
-
         print("Asunto:", asunto)
         print("Contenido:", contenido)
         print("Profesor email:", profesor_email)
-
 
         try:
             response = enviar_email_mailgun(asunto, contenido, profesor_email)
@@ -655,9 +666,9 @@ def enviar_analisis():
                 print("Respuesta:", response.text)
                 return render_template('resultado_envio.html', enviado=False)
         except Exception as e:
-                print("Error al enviar el correo electrónico:", e)
-                print("Detalles de la excepción:", repr(e))
-                return render_template('resultado_envio.html', enviado=False, mensaje_error=str(e))
+            print("Error al enviar el correo electrónico:", e)
+            print("Detalles de la excepción:", repr(e))
+            return render_template('resultado_envio.html', enviado=False, mensaje_error=str(e))
 
     return render_template('enviar_analisis.html')
 
