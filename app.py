@@ -530,7 +530,8 @@ def historial():
 
     print("Objeto historial:", historial)
 
-    return render_template('historial.html', historial=historial, user_id=user_id, nombre=nombre_completo, colegio=colegio, grado=grado, profesor=profesor)
+    return render_template('historial.html', historial=historial, user_id=user_id, nombre=nombre_completo, colegio=colegio, grado=grado, profesor=profesor, signed_user_id=signed_user_id)
+
     
 @app.route('/ver_tokens')
 @login_required

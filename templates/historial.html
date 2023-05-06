@@ -108,7 +108,7 @@
         </table>
         <p class="new-style"></p>
         <p><a href="/">Volver al inicio</a></p>
-        <a href="{{ url_for('analisis', user_id=user_id) }}" class="boton-verde">Realizar análisis</a>
+        <a href="{{ url_for('analisis', token=signed_user_id) }}" class="boton-verde">Realizar análisis</a>
     </div>
 </body>
 </html>
