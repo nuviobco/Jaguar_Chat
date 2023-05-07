@@ -643,7 +643,12 @@ def analisis_token(token):
         return "Token inválido", 400
 
     datos_usuario = obtener_datos_usuario(user_id)
-    return analisis(user_id, datos_usuario)
+    colegio = datos_usuario.get('colegio', '')
+    grado = datos_usuario.get('grado', '')
+    profesor = datos_usuario.get('profesor', '')
+
+    return analisis(user_id, datos_usuario, colegio, grado, profesor)
+
 
 @app.route('/analisis_sin_login/<user_id>', methods=['GET'])
 def analisis_sin_login(user_id):
