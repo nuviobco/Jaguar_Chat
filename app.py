@@ -550,7 +550,7 @@ def pagina_pago():
 
 
 @app.route('/analisis/<user_id>', methods=['GET'])
-def analisis(user_id, datos_usuario=None):
+def analisis(user_id, datos_usuario=None, colegio='', grado='', profesor=''):
     if datos_usuario is None:
         datos_usuario = obtener_datos_usuario(user_id)
     g.datos_usuario = datos_usuario
@@ -647,7 +647,7 @@ def analisis_token(token):
     grado = datos_usuario.get('grado', '')
     profesor = datos_usuario.get('profesor', '')
 
-    return analisis(user_id, datos_usuario, colegio, grado, profesor)
+    return analisis(user_id, datos_usuario=datos_usuario, colegio=colegio, grado=grado, profesor=profesor)
 
 
 @app.route('/analisis_sin_login/<user_id>', methods=['GET'])
