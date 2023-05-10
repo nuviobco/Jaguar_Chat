@@ -183,7 +183,7 @@ def recuperar_contraseña():
     return render_template('recuperar_contraseña.html', success=False)
 
 
-@app.route('/reset_password/<token>', methods=['GET', 'POST', 'PATCH'])
+@app.route('/reset_password/<token>', methods=['GET', 'POST'])
 def reset_password(token):
     _id = obtener_id_usuario_por_token(token)
     if not _id:
@@ -198,15 +198,7 @@ def reset_password(token):
             return render_template('reset_password.html', error=True, message=str(e))
         return render_template('reset_password.html', success=True)
 
-    elif request.method == 'PATCH':
-        new_password = request.form['new_password']
-        confirm_password = request.form['confirm_password']
-        try:
-            actualizar_contraseña(_id, new_password, confirm_password)
-        except ValueError as e:
-            return render_template('reset_password.html', error=True, message=str(e))
-        return render_template('reset_password.html', success=True)
-
+    return render_template('reset_password.html', error=False)
     return render_template('reset_password.html', error=False)
 
 
