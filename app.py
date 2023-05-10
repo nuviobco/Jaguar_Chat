@@ -185,22 +185,27 @@ def recuperar_contraseña():
 
 @app.route('/reset_password/<token>', methods=['GET', 'POST'])
 def reset_password(token):
+    print(f"reset_password llamado con token: {token}")
     _id = obtener_id_usuario_por_token(token)
     if not _id:
+        print("No se encontró el usuario correspondiente al token.")
         return render_template('reset_password.html', error=True)
 
     if request.method == 'POST':
+        print("Solicitud POST recibida.")
         new_password = request.form['new_password']
         confirm_password = request.form['confirm_password']
         try:
+            print("Intentando actualizar contraseña...")
             actualizar_contraseña(_id, new_password, confirm_password)
+            print("Contraseña actualizada con éxito.")
         except ValueError as e:
+            print(f"Error al actualizar la contraseña: {str(e)}")
             return render_template('reset_password.html', error=True, message=str(e))
         return render_template('reset_password.html', success=True)
 
+    print("Solicitud GET recibida.")
     return render_template('reset_password.html', error=False)
-    return render_template('reset_password.html', error=False)
-
 
 def generar_token():
     return str(uuid.uuid4())
