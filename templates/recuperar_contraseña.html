@@ -34,16 +34,22 @@
     <title>Recuperar contraseña</title>
 </head>
 <body>
-    <h1>Recuperar contraseña</h1>
-    {% if success %}
-        <p>Se ha enviado un correo electrónico con instrucciones para restablecer tu contraseña. Por favor, revisa tu bandeja de entrada.</p>
+    <h1>Restablecer contraseña</h1>
+    {% if error %}
+        <p>{{ message }}</p>
+    {% elif success %}
+        <p>Tu contraseña ha sido cambiada exitosamente.</p>
     {% else %}
-        <form action="/recuperar_contraseña" method="post">
+        <form action="/reset_password/{{token}}" method="post">
             <div>
-                <label for="email">Correo electrónico:</label>
-                <input type="email" id="email" name="email" required>
+                <label for="new_password">Nueva contraseña:</label>
+                <input type="password" id="new_password" name="new_password" required>
             </div>
-            <button type="submit">Solicitar recuperación</button>
+            <div>
+                <label for="confirm_password">Confirmar nueva contraseña:</label>
+                <input type="password" id="confirm_password" name="confirm_password" required>
+            </div>
+            <button type="submit">Cambiar contraseña</button>
         </form>
     {% endif %}
 </body>

@@ -183,18 +183,22 @@ def recuperar_contraseña():
     return render_template('recuperar_contraseña.html', success=False)
 
 
-@app.route('/reset_password/<token>', methods=['GET', 'POST',])
+@app.route('/reset_password/<token>', methods=['GET', 'POST', 'PATCH'])
 def reset_password(token):
-    if request.method == 'POST':
-        response = make_response()
-        response.headers['Allow'] = 'GET, PUT, PATCH, OPTIONS'
-        return response
-
     _id = obtener_id_usuario_por_token(token)
     if not _id:
         return render_template('reset_password.html', error=True)
 
-    if request.method in ['POST', 'PATCH']:
+    if request.method == 'POST':
+        new_password = request.form['new_password']
+        confirm_password = request.form['confirm_password']
+        try:
+            actualizar_contraseña(_id, new_password, confirm_password)
+        except ValueError as e:
+            return render_template('reset_password.html', error=True, message=str(e))
+        return render_template('reset_password.html', success=True)
+
+    elif request.method == 'PATCH':
         new_password = request.form['new_password']
         confirm_password = request.form['confirm_password']
         try:
@@ -204,6 +208,7 @@ def reset_password(token):
         return render_template('reset_password.html', success=True)
 
     return render_template('reset_password.html', error=False)
+
 
 def generar_token():
     return str(uuid.uuid4())
