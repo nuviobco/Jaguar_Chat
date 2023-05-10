@@ -652,7 +652,12 @@ def analisis_token(token):
 
 @app.route('/analisis_sin_login/<user_id>', methods=['GET'])
 def analisis_sin_login(user_id):
-    return analisis(user_id)
+    datos_usuario = obtener_datos_usuario(user_id)
+    colegio = datos_usuario.get('colegio', '')
+    grado = datos_usuario.get('grado', '')
+    profesor = datos_usuario.get('profesor', '')
+    return analisis(user_id, datos_usuario=datos_usuario, colegio=colegio, grado=grado, profesor=profesor)
+
 
 @app.route('/enviar_analisis', methods=['GET', 'POST'])
 def enviar_analisis():
