@@ -216,8 +216,8 @@
                         <a href="{{ url_for('historial') }}">Ver historial</a>
                     </div>
                 </div>
-                <div id="myProgress" style="width: 100%; height: 20px; background: #27d105;">
-                    <div id="myBar" style="width: 0%; height: 20px; background: #f3c428;"></div>
+                <div id="myProgress" style="width: 100%; height: 10px; background: #27d105;">
+                    <div id="myBar" style="width: 0%; height: 10px; background: rgba(216, 3, 198, 0.562);"></div>
                 </div>
                 <div class="response-container">
                     <h2>Respuesta:</h2>
@@ -260,7 +260,7 @@
                         } else {
                             width++; progress.style.width = width + '%';
                         }
-                    }, 60);  // Ajusta este valor para cambiar la velocidad de la barra de progreso
+                    }, 80);  // Ajusta este valor para cambiar la velocidad de la barra de progreso
                 }
         
                 if (response.status === 402) {
