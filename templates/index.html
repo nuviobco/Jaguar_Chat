@@ -198,54 +198,64 @@
             <img src="https://i.ibb.co/sPPL3F2/jaguar3.png" alt="jaguar3" width="150px" border="0"></a>
             <h1></h1>
         </header>
-    <main>
-        <div id="instrucciones-container">
-            <p>Por favor, escribe en forma de pregunta y pulsa enter en "Enviar" una vez. 
-                Ten paciencia y espera la respuesta del chatbot. 
-                Para multiplicar usa * </p>
-        </div>
-        <div class="input-container">
-        <div class="input-container">
-            <label for="prompt">Haz tu pregunta:</label>
-            <input type="text" id="prompt" onkeydown="onInputKeyDown(event)">
-            <button id="sendButton" onclick="generateResponse()">Enviar</button>
-            <div id="history-container">
-                <a href="{{ url_for('historial') }}">Ver historial</a>
-              </div>
-        </div>
-        </div>
-        <div class="response-container">
-            <h2>Respuesta:</h2>
-            <p id="response"></p>
-        </div>
-        <div id="tokens-container" style="position: fixed; top: 10px; right: 10px; font-size: 14px; color: #fff; padding: 5px; border-radius: 5px; background-color: rgba(216, 3, 198, 0.562);">
-            <p>Tokens utilizados: <span id="tokens-usados">0</span></p>
-        </div>
-    </main>
-
-    <script>
-        async function generateResponse() {
-            const promptInput = document.getElementById("prompt");
-            const responseOutput = document.getElementById("response");
+        <main>
+            <div id="instrucciones-container">
+                <p>Por favor, escribe en forma de pregunta y pulsa enter en "Enviar" una vez. 
+                    Ten paciencia y espera la respuesta del chatbot. 
+                    Para multiplicar usa * </p>
+            </div>
+            <div class="input-container">
+                <label for="prompt">Haz tu pregunta:</label>
+                <input type="text" id="prompt" onkeydown="onInputKeyDown(event)">
+                <button id="sendButton" onclick="generateResponse()">Enviar</button>
+                <div id="myProgress" style="width: 0%; height: 20px; background: grey; margin-top: 10px;"></div>
+                <div id="history-container">
+                    <a href="{{ url_for('historial') }}">Ver historial</a>
+                </div>
+            </div>
+            <div class="response-container">
+                <h2>Respuesta:</h2>
+                <p id="response"></p>
+            </div>
+            <div id="tokens-container" style="position: fixed; top: 10px; right: 10px; font-size: 14px; color: #fff; padding: 5px; border-radius: 5px; background-color: rgba(216, 3, 198, 0.562);">
+                <p>Tokens utilizados: <span id="tokens-usados">0</span></p>
+            </div>
+        </main>
         
-            const response = await fetch("/generate_response", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ prompt: promptInput.value })
-            });
+        <script>
+            async function generateResponse() {
+                const promptInput = document.getElementById("prompt");
+                const responseOutput = document.getElementById("response");
+                const sendButton = document.getElementById("sendButton");
+                const progress = document.getElementById("myProgress");
         
-            if (response.status === 402) {
-                window.location.href = "/pagina_pago";
-                return;
-            }
+                // Deshabilitar el botón y mostrar la barra de progreso
+                sendButton.disabled = true;
+                progress.style.width = '100%';
         
-            const jsonResponse = await response.json();
-            responseOutput.innerHTML = jsonResponse.response;
+                const response = await fetch("/generate_response", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ prompt: promptInput.value })
+                });
         
+                // Reestablecer la barra de progreso y habilitar el botón
+                sendButton.disabled = false;
+                progress.style.width = '0%';
+        
+                if (response.status === 402) {
+                    window.location.href = "/pagina_pago";
+                    return;
+                }
+        
+                const jsonResponse = await response.json();
+                responseOutput.innerHTML = jsonResponse.response;
             
-            actualizarTokensDisponibles(jsonResponse.tokens_usados);
+                
+                actualizarTokensDisponibles(jsonResponse.tokens_usados);
+            
         
 
             promptInput.value = "";

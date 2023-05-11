@@ -39,8 +39,8 @@ scheduler.start()
 
 api_key = os.getenv("OPENAI_API_KEY")
 
-mongo_uri = os.environ.get("MONGO_URI")
-mongo_client = pymongo.MongoClient(os.getenv('MONGO_URI'))
+mongo_uri = os.getenv('MONGO_URI')
+mongo_client = pymongo.MongoClient(mongo_uri)
 
 db = mongo_client["jaguar_chat"]
 col_usuarios = db["usuarios"]
@@ -79,9 +79,9 @@ class RegistrationForm(FlaskForm):
     submit = SubmitField('Registrarse')
 
 def get_db_connection():
-    mongo_uri = os.environ.get('MONGO_URI')
-    client = MongoClient(mongo_uri)
-    db = client["jaguar_chat"]
+    mongo_uri = os.getenv("MONGO_URI")
+    mongo_client = pymongo.MongoClient(mongo_uri)
+    db = mongo_client["jaguar_chat"]
     return db
 
 def guardar_historial(user_id, prompt, response):
@@ -136,12 +136,6 @@ def enviar_email_mailgun(asunto, contenido, destinatario, images=None):
         response = requests.post(url, auth=auth, data=data)
 
     return response
-
-def get_db_connection():
-    mongo_uri = os.environ.get("MONGO_URI")
-    mongo_client = pymongo.MongoClient(mongo_uri)
-    db = mongo_client["jaguar_chat"]
-    return db
 
 def obtener_usuario_por_email(email):
     db = get_db_connection()
@@ -468,7 +462,6 @@ def generate_response():
         return jsonify({"response": response, "tokens_usados": 0})
 
     return jsonify({"response": response, "tokens_usados": usuario['tokens_usados'] + tokens_usados})
-
 
 
 @app.route("/speak/<text>")
