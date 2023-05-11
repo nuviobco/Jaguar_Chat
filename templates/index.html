@@ -183,6 +183,9 @@
             margin: 0;
             color: #e5bb00;
         }
+        #myProgress {
+            margin-top: 10px;
+        }
     </style>
 </head>
 
@@ -204,21 +207,22 @@
                     Ten paciencia y espera la respuesta del chatbot. 
                     Para multiplicar usa * </p>
             </div>
-            <div class="input-container">
-                <label for="prompt">Haz tu pregunta:</label>
-                <input type="text" id="prompt" onkeydown="onInputKeyDown(event)">
-                <button id="sendButton" onclick="generateResponse()">Enviar</button>
-                <div id="myProgress" style="width: 100%; height: 20px; background: #27d105; margin-top: 10px;">
+            <main>
+                <div class="input-container">
+                    <label for="prompt">Haz tu pregunta:</label>
+                    <input type="text" id="prompt" onkeydown="onInputKeyDown(event)">
+                    <button id="sendButton" onclick="generateResponse()">Enviar</button>
+                    <div id="history-container">
+                        <a href="{{ url_for('historial') }}">Ver historial</a>
+                    </div>
+                </div>
+                <div id="myProgress" style="width: 100%; height: 20px; background: #27d105;">
                     <div id="myBar" style="width: 0%; height: 20px; background: #f3c428;"></div>
                 </div>
-                <div id="history-container">
-                    <a href="{{ url_for('historial') }}">Ver historial</a>
+                <div class="response-container">
+                    <h2>Respuesta:</h2>
+                    <p id="response"></p>
                 </div>
-            </div>
-            <div class="response-container">
-                <h2>Respuesta:</h2>
-                <p id="response"></p>
-            </div>
             <div id="tokens-container" style="position: fixed; top: 10px; right: 10px; font-size: 14px; color: #fff; padding: 5px; border-radius: 5px; background-color: rgba(216, 3, 198, 0.562);">
                 <p>Tokens utilizados: <span id="tokens-usados">0</span></p>
             </div>
@@ -233,7 +237,7 @@
         
                 // Deshabilitar el botón y mostrar la barra de progreso
                 sendButton.disabled = true;
-                progress.style.width = '100%';
+                simulateProgress();
         
                 const response = await fetch("/generate_response", {
                     method: "POST",
@@ -244,8 +248,20 @@
                 });
         
                 // Reestablecer la barra de progreso y habilitar el botón
-                sendButton.disabled = false;
                 progress.style.width = '0%';
+                sendButton.disabled = false;
+
+                function simulateProgress() {
+                    const progress = document.getElementById("myBar");
+                    let width = 0;
+                    const intervalId = setInterval(() => {
+                        if (width >= 100) {
+                            clearInterval(intervalId);
+                        } else {
+                            width++; progress.style.width = width + '%';
+                        }
+                    }, 60);  // Ajusta este valor para cambiar la velocidad de la barra de progreso
+                }
         
                 if (response.status === 402) {
                     window.location.href = "/pagina_pago";
