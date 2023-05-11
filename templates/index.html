@@ -334,6 +334,16 @@
             tokensUsadosElement.textContent = tokens_usados;
         }
         
-    </script>
+        window.addEventListener('resize', adjustVideoContainerHeight);
+
+    function adjustVideoContainerHeight() {
+        const videoContainer = document.querySelector('.video-container');
+        videoContainer.style.height = window.innerHeight + 'px';
+    }
+
+    // Llamar a la función una vez al inicio para ajustar la altura inicialmente
+    adjustVideoContainerHeight();
+    
+</script>
     <body>
 </html>
