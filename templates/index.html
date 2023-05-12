@@ -190,6 +190,36 @@
         #myProgress {
             margin-top: 10px;
         }
+        .video-container {
+            display: none;
+        }
+    
+        /* CSS para mostrar la imagen en pantallas pequeñas */
+        .mobile-image {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        
+        .mobile-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    
+        /* Cambiar lo que se muestra en función del tamaño de la pantalla */
+        @media screen and (min-width: 720px) {
+            .video-container {
+                display: block;
+            }
+            .mobile-image {
+                display: none;
+            }
+        }
     </style>
 </head>
 
@@ -199,7 +229,9 @@
             <source src="static/video.mp4" type="video/mp4">
         </video>
         <div class="video-overlay"></div>
-    </div>
+        <div class="mobile-image">
+            <img src="https://i.ibb.co/vmQBcNH/fondo-app.jpg" alt="Imagen de fondo para móviles">
+</div>
     <div class="content">
         <header>
             <img src="https://i.ibb.co/sPPL3F2/jaguar3.png" alt="jaguar3" width="145px" border="0"></a>
@@ -210,8 +242,6 @@
                 <p>Por favor, escribe en forma de pregunta y pulsa enter en "Enviar" una vez. 
                     Ten paciencia y espera la respuesta del chatbot. 
                     Para multiplicar usa * </p>
-            </div>
-            <main>
                 <div class="input-container">
                     <label for="prompt">Haz tu pregunta:</label>
                     <input type="text" id="prompt" onkeydown="onInputKeyDown(event)">
@@ -231,7 +261,6 @@
                 <p>Tokens utilizados: <span id="tokens-usados">0</span></p>
             </div>
         </main>
-        
         <script>
             async function generateResponse() {
                 const promptInput = document.getElementById("prompt");
@@ -343,7 +372,6 @@
 
     // Llamar a la función una vez al inicio para ajustar la altura inicialmente
     adjustVideoContainerHeight();
-
 </script>
     <body>
 </html>
