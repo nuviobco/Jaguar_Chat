@@ -202,7 +202,7 @@
         <div class="video-overlay"></div>
     <div class="content">
         <header>
-            <img src="https://i.ibb.co/sPPL3F2/jaguar3.png" alt="jaguar3" width="145px" border="0"></a>
+            <img src="https://i.ibb.co/sPPL3F2/jaguar3.png" alt="jaguar3" width="145px" border="0">
             <h1></h1>
         </header>
         <main>
@@ -283,13 +283,11 @@
             changeColor();
         }
 
-        function onInputKeyDown(event) {
-            if (event.key === "Enter") {
-                event.preventDefault();
-                generateResponse();
-                playSound();
-                changeColor();
-            }
+        function onInputKeyDown() {
+            event.preventDefault();
+            generateResponse();
+            playSound();
+            changeColor();
         }
         
         function playSound() {
