@@ -142,24 +142,25 @@
 
         .video-container {
             position: fixed;
-            overflow: hidden;
             top: 0;
             left: 0;
-            width: 300%;
+            width: 100%;
             height: 100vh;
+            overflow: hidden;
             z-index: -1;
         }
-                  
+                
         .video {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 300%;
-            height: 300%;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            transform: translate(-50%, -50%);
             object-fit: cover;
-            object-position: center;
         }
-          
           .video-overlay {
             position: absolute;
             top: 0;
@@ -190,36 +191,6 @@
         #myProgress {
             margin-top: 10px;
         }
-        .video-container {
-            display: none;
-        }
-    
-        /* CSS para mostrar la imagen en pantallas pequeñas */
-        .mobile-image {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-        }
-        
-        .mobile-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-    
-        /* Cambiar lo que se muestra en función del tamaño de la pantalla */
-        @media screen and (min-width: 720px) {
-            .video-container {
-                display: block;
-            }
-            .mobile-image {
-                display: none;
-            }
-        }
     </style>
 </head>
 
@@ -229,9 +200,6 @@
             <source src="static/video.mp4" type="video/mp4">
         </video>
         <div class="video-overlay"></div>
-        <div class="mobile-image">
-            <img src="https://i.ibb.co/vmQBcNH/fondo-app.jpg" alt="Imagen de fondo para móviles">
-</div>
     <div class="content">
         <header>
             <img src="https://i.ibb.co/sPPL3F2/jaguar3.png" alt="jaguar3" width="145px" border="0"></a>
