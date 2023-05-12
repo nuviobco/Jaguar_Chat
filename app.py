@@ -383,7 +383,7 @@ def resolver_operacion(texto):
         return None
 
 def es_seguimiento(texto):
-    seguimientos = ["¿Algo más?", "¿Te ayudo en algo más?", "¿Necesitas algo más?", "¿En qué más te puedo ayudar?", "pero me dijiste", "puedes repetir", "nuevamente", "repite pero",]
+    seguimientos = ["¿Algo más?", "ayudame en algo más", "como", "se relaciona", "pero me dijiste", "puedes repetir", "calcula", "entonces", "nuevamente", "repite pero", "y", "porque", ]
     for seguimiento in seguimientos:
         if seguimiento in texto:
             return True
