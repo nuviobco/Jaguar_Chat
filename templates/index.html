@@ -283,11 +283,13 @@
             changeColor();
         }
 
-        function onInputKeyDown() {
-            event.preventDefault();
-            generateResponse();
-            playSound();
-            changeColor();
+        function onInputKeyDown(event) {
+            if(event.key === 'Enter') {
+                event.preventDefault();
+                generateResponse();
+                playSound();
+                changeColor();
+            }
         }
         
         function playSound() {
