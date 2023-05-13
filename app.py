@@ -144,6 +144,12 @@ def obtener_usuario_por_email(email):
         return usuario
     return None
 
+TOKEN_SALT = os.getenv("TOKEN_SALT")
+
+def generar_token(email):
+    serializer = URLSafeSerializer(app.secret_key)
+    return serializer.dumps(email, salt=TOKEN_SALT)
+
 def guardar_token(_id, token):
     db = get_db_connection()
     db.usuarios.update_one({"_id": _id}, {"$set": {"token": token}})
@@ -154,6 +160,25 @@ def obtener_id_usuario_por_token(token):
     if usuario:
         return usuario["_id"]
     return None
+
+def verificar_token(token):
+    serializer = URLSafeSerializer(app.secret_key)
+    try:
+        email = serializer.loads(token, salt=TOKEN_SALT, max_age=1800)
+    except Exception as e:
+        print("Error al verificar el token:", str(e))
+        return False
+    return email
+
+def test_token():
+    email = "test@example.com"
+    token = generar_token(email)
+    print("Token generado: ", token)
+
+    email_recuperada = verificar_token(token)
+    print("Email recuperada: ", email_recuperada)
+
+    assert email == email_recuperada, "El email no coincide con el original"
 
 def actualizar_contraseña(_id, new_password, confirm_password):
     if new_password != confirm_password:
@@ -170,14 +195,11 @@ def recuperar_contraseña():
         email = request.form['email']
         user = obtener_usuario_por_email(email)
         if user:
-            token = generar_token()
+            token = generar_token(email)
             guardar_token(user['_id'], token)
             enviar_email_recuperacion(email, token)
         return render_template('recuperar_contraseña.html', success=True)
     return render_template('recuperar_contraseña.html', success=False)
-
-def generar_token():
-    return str(uuid.uuid4())
 
 def enviar_email_recuperacion(email, token):
     link = f'https://jaguarchat.up.railway.app/reset_password/{token}'
@@ -204,16 +226,22 @@ def enviar_email_recuperacion(email, token):
         print('Error al enviar el correo electrónico:', response.status_code)
         print('Detalles del error:', response.text)
 
-@app.route('/reset_password/<token>', methods=['GET', 'POST'])
+@app.route('/reset_password/<token>/', methods=['GET', 'POST'])
 def reset_password(token):
-    print(f"reset_password llamado con token: {token}")
-    _id = obtener_id_usuario_por_token(token)
-    if not _id:
-        print("No se encontró el usuario correspondiente al token.")
-        return render_template('reset_password.html', error=True)
+    print("Token: ", token)
+    email = verificar_token(token)
+    user = obtener_usuario_por_email(email) if email else None
+    _id = user['_id'] if user else None
 
     if request.method == 'POST':
         print("Solicitud POST recibida.")
+        new_password = request.form.get('new_password')
+        confirm_password = request.form.get('confirm_password')
+        print(f"Nueva contraseña recibida: {new_password}")
+        print(f"Confirmación de contraseña recibida: {confirm_password}")
+        if not _id:
+            print("No se encontró el usuario correspondiente al token.")
+            return render_template('reset_password.html', error=True)
         new_password = request.form['new_password']
         confirm_password = request.form['confirm_password']
         try:
@@ -226,7 +254,10 @@ def reset_password(token):
         return render_template('reset_password.html', success=True)
 
     print("Solicitud GET recibida.")
-    return render_template('reset_password.html', error=False)
+    if not _id:
+        print("No se encontró el usuario correspondiente al token.")
+        return render_template('reset_password.html', error=True)
+    return render_template('reset_password.html', error=False, token=token)
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
