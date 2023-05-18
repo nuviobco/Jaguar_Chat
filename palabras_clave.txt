@@ -4,6 +4,17 @@ como
 donde
 cuando
 quien
+haz
+escribe
+redacta
+ordena
+clasifica
+menciona
+ayuda
+construye
+desarrolla
+complementa
+compara
 decir en qué consiste
 tiempos verbales
 concepto
@@ -148,6 +159,8 @@ análisis literario
 literatura universal
 literatura hispanoamericana
 poesía
+poema
+rima
 cuento
 novela
 drama
