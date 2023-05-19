@@ -9,6 +9,7 @@ haz
 escribe
 redacta
 ordena
+cuanto es
 clasifica
 menciona
 ayuda
