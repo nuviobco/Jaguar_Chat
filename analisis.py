@@ -10,6 +10,7 @@ from pymongo import MongoClient
 from textblob import TextBlob
 from collections import defaultdict
 
+
 nlp = spacy.load('es_core_news_sm')
 
 
