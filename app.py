@@ -414,7 +414,7 @@ def resolver_operacion(texto):
         return None
 
 def es_seguimiento(texto):
-    seguimientos = ["¿Algo más?", "ayudame en algo más", "como", "se relaciona", "pero me dijiste", "puedes repetir", "calcula", "entonces", "nuevamente", "repite pero", "y", "porque", "según la respuesta anterior", "seguir conversación"]
+    seguimientos = ["¿Algo más?", "ayudame en algo más", "como", "se relaciona", "pero me dijiste", "puedes repetir", "calcula", "entonces", "nuevamente", "repite pero", "y", "porque", ]
     for seguimiento in seguimientos:
         if seguimiento in texto:
             return True
@@ -441,7 +441,7 @@ def generate_response():
         col_usuarios.update_one({"_id": current_user.id}, {"$set": {"tokens_usados": 0}})
         usuario = col_usuarios.find_one({"_id": current_user.id})
 
-    limite_tokens = 550
+    limite_tokens = 500
 
     if usuario.get('tokens_usados', 0) >= limite_tokens:
         return jsonify({"error": "Límite de tokens alcanzado", "tokens_usados": usuario['tokens_usados']}), 402
@@ -450,10 +450,10 @@ def generate_response():
         return openai.Completion.create(
             engine="text-davinci-003",
             prompt=f"hola, buenos días, buenas tardes, responder afirmaciones, buenas noches, saludos, qué, cómo, donde, cuándo, calcula, cuanto es, cuanto mide, de donde viene, por favor, cuantos grados, cuantos tipos, por qué, quien, de qué forma, de qué manera, dame, ejercicios, concepto, definición, cuál es, cuales son, como se clasifican, clasificación de, especies de, figurar, desarrolar, cuando nació, ser muy amigable en el contexto de la educación básica en: matemáticas (resolver, suma, resta, multiplicación, división, álgebra, geometría, fracciones, decimales, porcentajes, resolución de problemas, estadística, cómo se calcula, como se escribe, cúal es la fórmula, que ejercicos, resolver, etc.), lengua y literatura (gramática, ortografía, tiempos verbales, vocabulario, lectura, escritura creativa, análisis de textos literarios, poesía, etc.), ciencias naturales (biología, física, química, medio ambiente, cambio climático, energía, tecnología, salud, etc.), estudios sociales (historia, geografía, ciudades, capitales, paises, continentes, simón bolívar, colonia, independencia, eloy alfaro, provincias, provincias de ecuador, rios, montañas, volcanes, islas, américa latina, civismo, cultura, derechos humanos, democracia, economía, etc.), habilidades comunicativas en inglés (vocabulario, gramática, conversación, lectura, escritura, pronunciación, etc.). saludar, agradecer, felicitar, agradecer. responde: {prompt}",
-            max_tokens=210,
+            max_tokens=200,
             n=1,
             stop=None,
-            temperature=0.5,
+            temperature=0.4,
         ).choices[0].text.strip()
 
     response = generar_respuesta(prompt)
