@@ -11,8 +11,7 @@ RUN pip install --upgrade pip && pip install -r requirements.txt
 
 RUN python -m nltk.downloader punkt
 
-RUN https://github.com/explosion/spacy-models/releases/download/es_core_news_lg-3.5.0/es_core_news_lg-3.5.0.tar.gz
-
+RUN pip install https://github.com/explosion/spacy-models/releases/download/es_core_news_lg-3.5.0/es_core_news_lg-3.5.0.tar.gz
 
 # Copiar el resto del código del proyecto al contenedor
 COPY . .
