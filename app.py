@@ -316,7 +316,7 @@ def validar_credenciales(email, password):
     return False
 
 
-nlp = spacy.load('es_core_news_sm')
+nlp = spacy.load('es_core_news_lg')
 
 texto = "Este es un ejemplo de texto para tokenizar."
 doc = nlp(texto)
