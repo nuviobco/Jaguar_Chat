@@ -83,8 +83,8 @@ def analizar_nivel_comprension(prompts, limit=10):
 def analizar_sentimientos(prompts, limit=10):
     resultados = []
 
-    malas_palabras = ['chucha', 'malo', 'marico', 'chingar', 'wey', 'pendejo', 'cabrón', 'puta', 'afirmaciones', 'prompt mal escrito', 'tema sexual', 'alcohol', 'SOLO MAYUSCULAS', ]
-    palabras_agradecimiento = ['gracias', 'agradecido', 'agradecimiento', 'super', 'maravilloso', 'exitante', 'cariñoso', 'respetuoso', 'usa ?', 'otografía correcta', 'da contexto en los prompt', 'lenguaje formal']
+    malas_palabras = ['chucha', 'malo', 'marico', 'chingar', 'wey', 'pendejo', 'cabrón', 'puta']
+    palabras_agradecimiento = ['gracias', 'agradecido', 'agradecimiento', 'super', 'maravilloso', 'exitante', 'cariñoso', 'respetuoso']
 
     for prompt in prompts:
         texto = prompt.get('prompt')
