@@ -414,9 +414,11 @@ def resolver_operacion(texto):
         return None
 
 def es_seguimiento(texto):
-    seguimientos = ["¿Algo más?", "ayudame en algo más", "como", "se relaciona", "pero me dijiste", "puedes repetir", "calcula", "entonces", "nuevamente", "repite pero", "y", "porque", "respuesta anterior", "sigue conversacionalmente"]
+    seguimientos = ["¿algo más?", "ayudame en algo más", "como", "se relaciona", "pero me dijiste", "puedes repetir", "calcula", "entonces", "nuevamente", "repite pero", "y", "porque", "respuesta anterior", "sigue conversaciones", "respondiste"]
+    texto = texto.lower()
+    
     for seguimiento in seguimientos:
-        if seguimiento in texto:
+        if re.search(r'\b' + seguimiento + r'\b', texto):
             return True
     return False
 
