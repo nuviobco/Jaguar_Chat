@@ -483,16 +483,13 @@ def generate_response():
     if usuario.get('tokens_usados', 0) >= limite_tokens:
         return jsonify({"error": "Límite de tokens alcanzado", "tokens_usados": usuario['tokens_usados']}), 402
 
-    if es_saludo(response):
-        response = "Hola, soy jaguarchat, un bot educativo, ¿en qué puedo ayudarte?"
+    if es_saludo(prompt):
+        response = "Hola, soy jaguarchat, un bot educativo, ¿En qué puedo ayudarte?"
+        return jsonify({"response": response, "tokens_usados": 0})
 
     if operaciones_resueltas:
         respuesta_operaciones = ', '.join([f"{op} = {resultado}" for op, resultado in operaciones_resueltas.items()])
         return jsonify({"response": respuesta_operaciones, "tokens_usados": 0})
-
-    if es_saludo(prompt):
-        response = "Hola, soy jaguarchat, un bot educativo, ¿En qué puedo ayudarte?"
-        return jsonify({"response": response, "tokens_usados": 0})
 
     return jsonify({"response": response, "tokens_usados": usuario['tokens_usados'] + tokens_usados})
 
