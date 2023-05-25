@@ -541,13 +541,15 @@ def historial():
     ecuador_tz = pytz.timezone('America/Guayaquil') 
 
     historial = [
-        {
-            "fecha": item["timestamp"].astimezone(ecuador_tz).strftime('%Y-%m-%d %H:%M:%S') if "timestamp" in item else "N/A",
-            "pregunta": item["prompt"],
-            "respuesta": item["response"],
-        }
-        for item in historial_usuario if item["response"] != "Lo siento, no entendí tu pregunta. ¿Podrías reformularla con respecto a la educación básica?"
-    ]
+    {
+        "fecha": item["timestamp"].astimezone(ecuador_tz).strftime('%Y-%m-%d %H:%M:%S') if "timestamp" in item else "N/A",
+        "pregunta": item["prompt"],
+        "respuesta": item["response"],
+    }
+    for item in historial_usuario 
+    if item["response"] != "Lo siento, no entendí tu pregunta. ¿Podrías reformularla con respecto a la educación básica?" and
+       item["response"] != "Hola, soy jaguarchat, un bot educativo, ¿En qué puedo ayudarte?" 
+]
     nombre_completo = f"{current_user.first_name} {current_user.last_name}"
     colegio = current_user.school
     grado = current_user.grade
