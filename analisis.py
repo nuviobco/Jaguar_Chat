@@ -28,7 +28,6 @@ def obtener_datos(user_id):
     return prompts
 
 def contar_palabras(prompts, campo='prompt', num_palabras=10):
-    nlp = spacy.load('es_core_news_lg')
     conteo_palabras = defaultdict(int)
 
     for prompt in prompts:
@@ -116,7 +115,6 @@ def analizar_sentimientos(prompts, limit=10):
 
 
 def analizar_temas_mas_consultados(prompts, num_temas=10):
-    nlp = spacy.load('es_core_news_lg')
     conteo_temas = defaultdict(int)
 
     for prompt in prompts:
