@@ -369,10 +369,11 @@ def cargar_palabras_clave_desde_archivo(archivo):
 palabras_clave_educacion_basica = cargar_palabras_clave_desde_archivo("palabras_clave.txt")
 
 def es_saludo(texto):
-    saludos = ["hola", "saludos", "buenos días", "buenas tardes", "buenas noches", "bienvenidos" , "como esta", "gracias", "super" , "genial", "holis", "que fue", "quien eres", "como te llamas", "cual es tu mombre", "quien eres", "hi",  ]
-    texto = texto.lower(),
-    
+    saludos = ["hola", "saludos", "buenos días", "buenas tardes", "buenas noches", "bienvenidos", "como esta", "gracias", "super", "genial", "holis", "que fue", "quien eres", "como te llamas", "cual es tu mombre", "quien eres", "hi"]
+    texto = str(texto).lower()  
+
     return any(re.search(r'\b' + saludo + r'\b', texto) for saludo in saludos)
+
 
 def es_tema_educacion_basica(input_text):
     palabras_clave_educacion_basica = cargar_palabras_clave_desde_archivo("palabras_clave.txt")
