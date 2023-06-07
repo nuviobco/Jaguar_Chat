@@ -415,7 +415,7 @@ def resolver_operacion(texto):
         return None
 
 def es_seguimiento(texto):
-    seguimientos = ["¿algo más?", "ayudame en algo más", "como", "se relaciona", "pero me dijiste", "continua", "completa la respuesta anterior", "termina", "puedes repetir", "calcula", "entonces", "nuevamente", "repite pero", "y", "porque", "respuesta anterior", "sigue conversaciones", "respondiste", "pero", "sustantivos presentes en la respuesta anterior"]
+    seguimientos = ["¿algo más?", "ayudame completando", "como", "se relaciona", "pero me dijiste", "continua", "completa la respuesta anterior", "termina", "puedes repetir", "calcula", "entonces", "nuevamente", "repite pero", "y", "porque", "respuesta anterior", "sigue conversaciones", "respondiste", "pero", "sustantivos presentes en la respuesta anterior"]
     texto = texto.lower()
     
     for seguimiento in seguimientos:
