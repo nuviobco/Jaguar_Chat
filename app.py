@@ -415,7 +415,7 @@ def resolver_operacion(texto):
         return None
 
 def es_seguimiento(texto):
-    seguimientos = ["¿algo más?", "ayudame en algo más", "como", "se relaciona", "pero me dijiste", "puedes repetir", "calcula", "entonces", "nuevamente", "repite pero", "y", "porque", "respuesta anterior", "sigue conversaciones", "respondiste"]
+    seguimientos = ["¿algo más?", "ayudame en algo más", "como", "se relaciona", "pero me dijiste", "puedes repetir", "calcula", "entonces", "nuevamente", "repite pero", "y", "porque", "respuesta anterior", "sigue conversaciones", "respondiste", "pero", "sustantivos presentes en la respuesta anterior"]
     texto = texto.lower()
     
     for seguimiento in seguimientos:
@@ -452,7 +452,7 @@ def generate_response():
         return openai.Completion.create(
             engine="text-davinci-003",
             prompt=f"hola, buenos días, todo, buenas tardes, responde afirmaciones, buenas noches, saludos, qué, cómo, donde, cuándo, calcula, cuanto es, cuanto mide, de donde viene, por favor, cuantos grados, cuantos tipos, por qué, quien, de qué forma, de qué manera, dame, ejercicios, concepto, definición, cuál es, cuales son, como se clasifican, clasificación de, especies de, figurar, desarrolar, cuando nació, ser muy amigable en el contexto de la educación básica en: matemáticas (resolver, suma, resta, multiplicación, división, álgebra, geometría, fracciones, decimales, porcentajes, resolución de problemas, estadística, cómo se calcula, como se escribe, cúal es la fórmula, que ejercicos, resolver, etc.), lengua y literatura (gramática, ortografía, tiempos verbales, vocabulario, lectura, escritura creativa, análisis de textos literarios, poesía, etc.), ciencias naturales (biología, física, química, medio ambiente, cambio climático, energía, tecnología, salud, etc.), estudios sociales (historia, geografía, ciudades, capitales, paises, continentes, simón bolívar, colonia, independencia, eloy alfaro, provincias, provincias de ecuador, rios, montañas, volcanes, islas, américa latina, civismo, cultura, derechos humanos, democracia, economía, etc.), habilidades comunicativas en inglés (vocabulario, gramática, conversación, lectura, escritura, pronunciación, etc.). saludar, agradecer, felicitar, agradecer. responde: {prompt}",
-            max_tokens=210,
+            max_tokens=250,
             n=1,
             stop=None,
             temperature=0.5,
