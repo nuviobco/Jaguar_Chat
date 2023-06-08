@@ -444,7 +444,7 @@ def generate_response():
         col_usuarios.update_one({"_id": current_user.id}, {"$set": {"tokens_usados": 0}})
         usuario = col_usuarios.find_one({"_id": current_user.id})
 
-    limite_tokens = 550
+    limite_tokens = 1500
     if usuario.get('tokens_usados', 0) >= limite_tokens:
         return jsonify({"error": "Límite de tokens alcanzado", "tokens_usados": usuario['tokens_usados']}), 402
 
