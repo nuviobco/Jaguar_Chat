@@ -28,7 +28,7 @@ from pymongo import MongoClient
 from itsdangerous import URLSafeSerializer
 from bson.objectid import ObjectId
 from dotenv import load_dotenv
-from werkzeug.urls import url_quote
+
 
 load_dotenv()
 
